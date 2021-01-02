@@ -3679,7 +3679,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomNameTxt: {fileID: 1162962728}
   roomPWTxt: {fileID: 753969807}
-  roomPrefab: {fileID: 4138923250132328073, guid: 509914360513eaa4e970280513911f86, type: 3}
+  roomPrefab: {fileID: 4138923250132328073, guid: cc6c99945525cf64ba27dfe054ec78e6, type: 3}
   roomList: {fileID: 1075594335}
   checkPWpop: {fileID: 481239850}
   pwPopAnim: {fileID: 481239852}

@@ -62,9 +62,6 @@ public class Character : MonoBehaviour
                 {
                     if (TileDistance <= 6f)                                                                                            //캐릭터와 타일간 거리가 1.5Xa 이하일시 움직일수 있음 (거리 한칸당 1.24?정도 되드라)
                     {
-                        //transform.localPosition = TileCs.GetTileVec2;
-                        //transform.localPosition = Vector2.Lerp(gameObject.transform.localPosition, TileCs.GetTileVec2, 0.1f);
-
                         bCharMove = false;
                     }
                 }
@@ -85,6 +82,7 @@ public class Character : MonoBehaviour
             transform.localPosition = TileCs.GetTileVec2;
         }
     }
+
 }
 
 

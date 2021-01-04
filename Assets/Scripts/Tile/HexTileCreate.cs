@@ -8,17 +8,11 @@ public class HexTileCreate : MonoBehaviour
 {
     public GameObject parentObject;
     public GameObject hextile;
-    public Tile tilestate;
-
-    // 타일 맵 크기
-    private const int mapWidth = 20;
-    private const int mapHeight = 5;
+    public Tile tilestate;      // 프림
 
     // 타일 간격
     public const float tileXOffset = 1.24f;
     public const float tileYOffset = 1.08f;
-
-    public int tempX;
 
     string[] mapReadLines = File.ReadAllLines(@"Assets/mapinfo.txt");
     char[] mapReadChar;
@@ -28,24 +22,27 @@ public class HexTileCreate : MonoBehaviour
         CreateHexTileMap();
     }
 
+    void OnApplicationQuit()
+    {
+        tilestate.PosX = 0;
+        tilestate.PosY = 0;
+    }
+
     /**
      * @brief 헥사 타일맵 생성, 타일 posX posY 설정
      */
     void CreateHexTileMap()
     {
-        for (int x = 0; x < mapHeight; x++)
+        for (int x = 0; x < GameMng.I.GetMapHeight; x++)
         {
             mapReadChar = mapReadLines[x].ToCharArray();
-            for (int y = 0; y < mapWidth; y++)
+            for (int y = 0; y < GameMng.I.GetMapWidth; y++)
             {
-                tilestate.Code = mapReadChar[y];
-                if (!tempX.Equals(x))
-                {
-                    tilestate.PosY = 0;
-                }
+                tilestate._code = (int)Char.GetNumericValue(mapReadChar[y]);
                 GameObject child = Instantiate(hextile) as GameObject;
                 child.transform.parent = parentObject.transform;
 
+                GameMng.I.mapTile[x,y] = child.transform.GetComponent<Tile>();      // 각각의 타일 스크립트 GameMng.I.mapTile 2차원 배열에 저장
                 if (y % 2 == 0)
                 {
                     child.transform.position = new Vector2(x * tileXOffset, y * tileYOffset);
@@ -54,10 +51,10 @@ public class HexTileCreate : MonoBehaviour
                 {
                     child.transform.position = new Vector2(x * tileXOffset + tileXOffset / 2, y * tileYOffset);
                 }
-                tempX = x;
                 tilestate.PosY++;
             }
-            tilestate.PosX++; ;
+            tilestate.PosY = 0;
+            tilestate.PosX++;
         }
     }
 }

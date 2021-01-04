@@ -15,12 +15,14 @@ public class MainCameraScrp : MonoBehaviour
     private float fMinzoom = 8f;
     [SerializeField]
     private float fMaxzoom = 4.5f;
-
-    // ----
-    // 드래그 동작에 쓰임
-    private Vector3 touchStart;
     private float scrollData;
 
+    // ----
+    // 카메라 움직임 쓰임
+    [SerializeField]
+    private Vector3 lLmitPos;
+    public float fMoveSpeed = 10f;
+    private const float fBoderthickness = 10f;      // 마우스가 스크린 밖에 닿는 범위( 두께 )
     void Start()
     {
         MainCamera = Camera.main;
@@ -50,15 +52,27 @@ public class MainCameraScrp : MonoBehaviour
      */
     void CameraMove()
     {
-       if(Input.GetMouseButtonDown(0))
+        Vector3 pos = this.transform.position;
+        if (Input.GetKey("w") || Input.mousePosition.y >= Screen.height - fBoderthickness)
         {
-            touchStart = MainCamera.ScreenToWorldPoint(Input.mousePosition);
+            pos.y += fMoveSpeed * Time.deltaTime;
         }
+        if (Input.GetKey("s") || Input.mousePosition.y <= fBoderthickness)
+        {
+            pos.y -= fMoveSpeed * Time.deltaTime;
+        }
+        if (Input.GetKey("d") || Input.mousePosition.x >= Screen.width - fBoderthickness)
+        {
+            pos.x += fMoveSpeed * Time.deltaTime;
+        }
+        if (Input.GetKey("a") || Input.mousePosition.x <= fBoderthickness)
+        {
+            pos.x -= fMoveSpeed * Time.deltaTime;
+        }
+        pos.z = -20;
 
-       if(Input.GetMouseButton(0))
-        {
-            Vector3 direction = touchStart - MainCamera.ScreenToWorldPoint(Input.mousePosition);
-            MainCamera.transform.position += direction; 
-        }
+        pos.x = Mathf.Clamp(pos.x, -lLmitPos.x, lLmitPos.x);
+        pos.y = Mathf.Clamp(pos.y, -lLmitPos.y, lLmitPos.y);
+        this.transform.position = pos;
     }
 }

@@ -9,10 +9,11 @@ public class Worker : Unit
         _hp = 0;
         _cost = 0;
         _damage = 0;
+        _code = 1;
     }
 
     void Update()
     {
-        
+        CharClickMove(this.gameObject);
     }
 }

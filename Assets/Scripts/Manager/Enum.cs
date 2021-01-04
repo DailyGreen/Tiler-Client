@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum E_CustomCode     // 건물
 {
-    E_BUILDING = -1,    // 것물 짓는 중
+    E_BUILDING = -1,    // 건물 짓는 중
     E_NONE = 0,
     E_CASTLE = 1,       // 성
     E_REFINERY,         // 정제소

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3044242763324709724}
   - component: {fileID: 3044242763324709725}
   - component: {fileID: 6697925874385727783}
+  - component: {fileID: 1740379398}
   m_Layer: 0
   m_Name: grass_05
   m_TagString: Tile
@@ -72,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: bc99b45fef3fb5c4997099792909ebe0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3ef21efafde12d740babff416570ade2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -80,7 +81,7 @@ SpriteRenderer:
   m_Size: {x: 1.2, y: 1.4}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!60 &6697925874385727783
@@ -99,17 +100,40 @@ PolygonCollider2D:
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.2, y: 1.4}
+    newSize: {x: 1.2, y: 1.4}
+    adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0, y: 1}
-      - {x: -0.95105654, y: 0.30901697}
-      - {x: -0.5877852, y: -0.80901706}
-      - {x: 0.58778536, y: -0.80901694}
-      - {x: 0.9510565, y: 0.30901712}
+    - - {x: 0, y: 0.68}
+      - {x: -0.6, y: 0.35}
+      - {x: -0.6, y: -0.35}
+      - {x: 0, y: -0.7}
+      - {x: 0.6, y: -0.35}
+      - {x: 0.6, y: 0.35}
+--- !u!114 &1740379398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3044242763324709726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 761f94fc2668e9546b44e4ecc37405b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  posX: 0
+  posY: 0
+  code: 0
+  tileSprite:
+  - {fileID: 21300000, guid: 3ef21efafde12d740babff416570ade2, type: 3}
+  - {fileID: 21300000, guid: c17dbb4a160abb4488f0253064625821, type: 3}
+  - {fileID: 21300000, guid: 944937f66719c1546a859f18c7ae37ab, type: 3}
+  - {fileID: 21300000, guid: 94a80911aec957f4b8e56f8f1740842d, type: 3}
+  tileSpriteRend: {fileID: 3044242763324709725}
+  _unitCode: 0

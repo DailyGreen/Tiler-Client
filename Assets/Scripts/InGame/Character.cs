@@ -76,11 +76,11 @@ public class Character : MonoBehaviour
 
     void CharMove()
     {
-        if (Vector2.Distance(gameObject.transform.localPosition, TileGams.transform.localPosition) >= 0.01f)
+        if ((Vector2.Distance(gameObject.transform.localPosition, TileGams.transform.localPosition) >= 0.01f) && TileDistance <= 6f) 
         {
             transform.localPosition = Vector2.Lerp(gameObject.transform.localPosition, TileCs.GetTileVec2, fCharSpeed * Time.deltaTime);
         }
-        else
+        else if((Vector2.Distance(gameObject.transform.localPosition, TileGams.transform.localPosition) <= 0.01f) && TileDistance <= 6f)
         {
             transform.localPosition = TileCs.GetTileVec2;
         }

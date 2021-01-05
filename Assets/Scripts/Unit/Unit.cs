@@ -14,7 +14,7 @@ public class Unit : Object
 
     // 유닛 움직일때 필요한 변수들
     Tile TileCs = null;
-    Tile beforTile = null;
+    public Tile NowTile = null;                                                                   //현재 타일 정보를 알아오는 변수
     GameObject TileGams = null;
 
     Vector2 pos;
@@ -28,7 +28,7 @@ public class Unit : Object
     [SerializeField]
     private float TileDistance = 0.0f;
     [SerializeField]
-    private bool bCharMove = false;
+    public bool bCharMove = false;
 
     int resultx;
     int resulty;
@@ -36,19 +36,19 @@ public class Unit : Object
 
     int Checkroad()
     {
-        if (beforTile != null)
+        if (NowTile != null)
         {
-            resultx = TileCs.PosX + beforTile.PosX;
-            resulty = TileCs.PosY + beforTile.PosY;
+            resultx = TileCs.PosX + NowTile.PosX;
+            resulty = TileCs.PosY + NowTile.PosY;
         }
         result = resultx + resulty;
         if (result <= 2 || result >= -2)
         {
-            if (TileCs.PosX.Equals(beforTile.PosX))
+            if (TileCs.PosX.Equals(NowTile.PosX))
             {
                 return 1;   // 위로 올라감
             }
-            else if(TileCs.PosY.Equals(beforTile.PosY))
+            else if(TileCs.PosY.Equals(NowTile.PosY))
             {
                 return 2;   // x 축따라감
             }
@@ -73,13 +73,13 @@ public class Unit : Object
 
             if (hit.collider.tag.Equals("Tile"))
             {
-                if (beforTile != null)
+                if (NowTile != null)
                 {
-                    beforTile._unitObj = null;        // 떠났을때 지워짐
+                    NowTile._unitObj = null;        // 떠났을때 지워짐
                 }
 
                 TileCs = hit.collider.gameObject.GetComponent<Tile>();
-                beforTile = TileCs;
+                //NowTile = TileCs;
 
                 TileGams = hit.collider.gameObject;
                 TileDistance = Vector2.Distance(CharGame.transform.localPosition, TileGams.transform.localPosition);                  // 타일이 눌렸을때 캐릭터와 클릭한 타일간 거리 계산

@@ -16,10 +16,21 @@ public class Tile : Object
 
     public Unit _unitObj;
 
+    public bool _bTest = false;
+
     void Start()
     {
+        _bTest = true;
         tile = this.GetComponent<GameObject>();
         this.tileSpriteRend.sprite = tileSprite[this._code];
+    }
+
+    private void Update()
+    {
+        if (_unitObj != null)
+        {
+            _unitObj.NowTile = this;
+        }
     }
 
     /**

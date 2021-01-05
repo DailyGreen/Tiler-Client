@@ -20,14 +20,14 @@ public class RangeScrp : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        MoveRange();
-        AttackRange();
+        //MoveRange();
+        //AttackRange();
     }
 
     /**
     * @brief 이동 범위 계산
     */
-    void MoveRange()
+    public void MoveRange()
     {
         //일반적인 타일들
         if ((GameMng.I.NowTile.PosX - 1) >= 0 && (GameMng.I.NowTile.PosY + 1) <= 19)                     //좌상
@@ -92,21 +92,24 @@ public class RangeScrp : MonoBehaviour
         {
             MoveRangeTr[3].position = GameMng.I.mapTile[GameMng.I.NowTile.PosX + 1, GameMng.I.NowTile.PosY].transform.position;
         }
-
-        if (!GameMng.I.bUnitMoveCheck)                                                                   //이동이 종료되면
+    }
+    /**
+* @brief 범위 타일 위치 리셋
+*/
+    public void RangeTileReset()
+    {
+        for (int i = 0; i < MoveRangeTr.Length; i++)
         {
-            for (int i = 0; i < MoveRangeTr.Length; i++)
-            {
-                MoveRangeTr[i].transform.localPosition = Vector2.zero;                           //범위타일 위치 초기화
-            }
+            MoveRangeTr[i].transform.localPosition = Vector2.zero;                           //범위타일 위치 초기화
         }
     }
+
     /**
 * @brief 공격 범위 계산
 */
     void AttackRange()
     {
-        
+
     }
 
 }

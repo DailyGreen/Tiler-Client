@@ -20,8 +20,6 @@ public class Farm : Built
     void Update()
     {
         MakingFood();
-        if (Input.GetMouseButtonDown(1))
-            Building(this.gameObject);
     }
 
     /**

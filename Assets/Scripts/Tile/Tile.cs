@@ -15,11 +15,14 @@ public class Tile : Object
     SpriteRenderer tileSpriteRend;
 
     public Unit _unitObj;
+    public Built _builtObj;
 
     void Start()
     {
         tile = this.GetComponent<GameObject>();
         this.tileSpriteRend.sprite = tileSprite[this._code];
+        _name = "독도는";
+        _desc = "우리땅";
     }
 
     /**

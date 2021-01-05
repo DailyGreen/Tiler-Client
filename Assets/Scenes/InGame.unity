@@ -985,7 +985,7 @@ MonoBehaviour:
   MainCamera: {fileID: 0}
   fMinzoom: 8
   fMaxzoom: 4.5
-  lLmitPos: {x: 0, y: 0, z: 0}
+  lLmitPos: {x: 5, y: 5, z: 0}
   fMoveSpeed: 10
 --- !u!1 &1655282529
 GameObject:

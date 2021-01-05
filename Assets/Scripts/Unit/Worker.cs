@@ -23,6 +23,7 @@ public class Worker : Unit
     {
         RangeScrp RangSc = GameObject.Find("RangeParent").GetComponent<RangeScrp>();
         RangSc.MoveRange();
+        Debug.Log("캐릭터 이동");
     }
 
     public static void buildMine()

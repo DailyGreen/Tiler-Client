@@ -20,11 +20,17 @@ public class GameMng : MonoBehaviour
     UnityEngine.UI.Text objectDescTxt;        // 선택 오브젝트 디테일
     [SerializeField]
     UnityEngine.UI.Text hpText;                 // HP 디테일
-
+    [SerializeField]
+    UnityEngine.UI.Text damageText;                 // 데미지 디테일
+    
     [SerializeField]
     UnityEngine.UI.Text goldText;               // 골드
     [SerializeField]
     UnityEngine.UI.Text memText;                // 인원
+
+
+    [SerializeField]
+    UnityEngine.UI.Button[] actList;                 // 행동 리스트
 
     private const int mapWidth = 20;
     private const int mapHeight = 5;
@@ -143,7 +149,7 @@ public class GameMng : MonoBehaviour
 
     /**
      * @brief 오브젝트를 클릭했을때
-     * @param 으로 클릭한 오브젝트가 뭔지 알려줘야됨
+     * @param tile 클릭한 타일 오브젝트
      */
     public void clickTile(Tile tile)
     {
@@ -157,6 +163,71 @@ public class GameMng : MonoBehaviour
         objectNameTxt.text = tile._unitObj._name;
         objectDescTxt.text = tile._unitObj._desc;
         hpText.text = tile._unitObj._hp + "";
+        damageText.text = tile._unitObj._damage + "";
+
+        // 행동을 가진 오브젝트는 actList 를 뿌려줘야 함
+        // 1. _unitObj 로 부터 해당 유닛이 가진 행동의 량을 가져옴
+        for (int i = 0; i < tile._unitObj._activity.Count; i++)
+        {
+            // 2. 그만큼 actList 를 active 함
+            actList[i].gameObject.SetActive(true);
+            UnityEngine.UI.Text[] childsTxt = actList[i].GetComponentsInChildren<UnityEngine.UI.Text>();
+            try
+            {
+                // 3. actList 의 내용들을 변경해 줘야함
+                checkActivity(tile._unitObj._activity[i], actList[i], childsTxt[0], childsTxt[1]);
+            }
+            catch
+            {
+                Debug.LogError("childTxt 의 인덱스 값이 옳지 않음");
+            }
+        }
     }
+
+    /**
+     * @brief 어떤 행동인지 체크
+     * @param activity 행동 코드
+     * @param actName 행동 이름
+     * @param actDesc 행동 설명
+     */
+    public void checkActivity(ACTIVITY activity, UnityEngine.UI.Button actButton, UnityEngine.UI.Text actName, UnityEngine.UI.Text actDesc)
+    {
+        switch(activity)
+        {
+            case ACTIVITY.BUILD_MINE:
+                actName.text = "광산";
+                actDesc.text = "한 턴 소요";
+                actButton.onClick.AddListener(delegate { Worker.buildMine(); });
+                break;
+            case ACTIVITY.BUILD_FARM:
+                actName.text = "농장";
+                actDesc.text = "한 턴 소요";
+                actButton.onClick.AddListener(delegate { Worker.buildFarm(); });
+                break;
+            case ACTIVITY.BUILD_ATTACK_BUILDING:
+                actName.text = "터렛";
+                actDesc.text = "두 턴 소요";
+                actButton.onClick.AddListener(delegate { Worker.buildAttackBuilding(); });
+                break;
+            case ACTIVITY.BUILD_CREATE_UNIT_BUILDING:
+                actName.text = "유닛 건물";
+                actDesc.text = "두 턴 소요";
+                actButton.onClick.AddListener(delegate { Worker.buildCreateUnitBuilding(); });
+                break;
+            case ACTIVITY.BUILD_SHIELD_BUILDING:
+                actName.text = "방어 건물";
+                actDesc.text = "두 턴 소요";
+                actButton.onClick.AddListener(delegate { Worker.buildShieldBuilding(); });
+                break;
+            case ACTIVITY.BUILD_UPGRADE_BUILDING:
+                actName.text = "강화 건물";
+                actDesc.text = "세 턴 소요";
+                actButton.onClick.AddListener(delegate { Worker.buildUpgradeBuilding(); });
+                break;
+            default:
+                break;
+        }
+    }
+
     public Tile[,] mapTile = new Tile[mapHeight, mapWidth];
 }

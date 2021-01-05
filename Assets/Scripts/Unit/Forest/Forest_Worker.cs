@@ -8,6 +8,9 @@ public class Forest_Worker : Worker
     {
         _name = "¿œ≤€";
         _desc = "µÎ¡˜«ÿ ∫∏¿Œ¥Ÿ.";
+        _hp = 10;
+        _damage = 10; 
+        _code = 1;
     }
 
     void Update()

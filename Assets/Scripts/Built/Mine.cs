@@ -4,26 +4,14 @@ using UnityEngine;
 
 public class Mine : Built
 {
-    public int stack;   // 보유 골드량
-    public int making;  // 생산 골드량
-
+    public int making;  // 골드 생산량
+    public static int cost = 1;   // 건설 비용
     // Start is called before the first frame update
     void Start()
-    {
-        Init();
-    }
-
-    /**
-     * @brief 초기화
-     * 
-     */
-    void Init ()
     {
         _name = "광산";
         _desc = "골드를 캘 수 있다";
         _hp = 10;
-        _cost = 0;
-        stack = 0;
         making = 5;
     }
 
@@ -31,7 +19,8 @@ public class Mine : Built
     void Update()
     {
         MakingGold();
-        Building(this.gameObject);
+        if (Input.GetMouseButtonDown(0))
+            Building(this.gameObject);
     }
 
     /**
@@ -40,7 +29,7 @@ public class Mine : Built
      */
     void MakingGold()
     {
-        if (Input.GetKey("g"))
-            stack += making;
+        if (Input.GetKeyDown("g"))
+            GameMng.I.addGold(making);
     }
 }

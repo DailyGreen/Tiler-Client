@@ -15,6 +15,7 @@ public class Tile : Object
     SpriteRenderer tileSpriteRend;
 
     public Unit _unitObj;
+    public Built _builtObj;
 
     void Start()
     {

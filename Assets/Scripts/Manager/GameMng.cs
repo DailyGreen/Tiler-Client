@@ -26,6 +26,12 @@ public class GameMng : MonoBehaviour
     [SerializeField]
     UnityEngine.UI.Text memText;                // 인원
 
+    // 레이케스트 위한 변수
+    Vector2 pos;
+    Ray2D ray;
+    RaycastHit2D hit;
+    public Tile GetTileCs = null;
+
     private const int mapWidth = 20;
     private const int mapHeight = 5;
     public int GetMapWidth
@@ -159,4 +165,21 @@ public class GameMng : MonoBehaviour
         hpText.text = tile._unitObj._hp + "";
     }
     public Tile[,] mapTile = new Tile[mapHeight, mapWidth];
+
+    /**
+    * @brief 레이케스트 레이저 생성 및 hit 리턴
+    */
+    public RaycastHit2D MouseLaycast()
+    {
+        pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        ray = new Ray2D(pos, Vector2.zero);
+        
+        hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+        if (hit.collider.tag.Equals("Tile"))
+            GetTileCs = hit.collider.gameObject.GetComponent<Tile>();
+
+        return hit;
+    }
 }

@@ -28,7 +28,7 @@ public class Unit : Object
     [SerializeField]
     private float TileDistance = 0.0f;
     [SerializeField]
-    private bool bCharMove = false;
+    public bool bCharMove = false;
 
     int resultx;
     int resulty;

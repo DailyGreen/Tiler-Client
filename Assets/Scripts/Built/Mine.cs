@@ -13,9 +13,10 @@ public class Mine : Built
         Init();
     }
 
-    /// <summary>
-    /// 초기화 함수
-    /// </summary>
+    /**
+     * @brief 초기화
+     * 
+     */
     void Init ()
     {
         _name = "광산";
@@ -30,11 +31,13 @@ public class Mine : Built
     void Update()
     {
         MakingGold();
+        Building(this.gameObject);
     }
 
-    /// <summary>
-    /// 골드를 제조함
-    /// </summary>
+    /**
+     * @brief 골드 생산
+     * 
+     */
     void MakingGold()
     {
         if (Input.GetKey("g"))

@@ -1,0 +1,113 @@
+[33mcommit 11f5b9e3e2d80f2d395b40e445ea72ec6b202f63[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: swkang99 <kseongwoo99@gmail.com>
+Date:   Tue Jan 5 03:01:28 2021 +0900
+
+    add some texts
+
+[33mcommit 116dbe16cad8a905b73b760445ad377ec511b64b[m
+Merge: a279780 642a019
+Author: Minstone <hhh57463@naver.com>
+Date:   Mon Jan 4 20:57:16 2021 +0900
+
+    Merge pull request #5 from hhh57463/master
+    
+    [병합] #4 병합완료
+
+[33mcommit 642a01978f28dbb1de8f142e2811b53119cab0c0[m
+Author: hhh57463 <hhh57463@naver.com>
+Date:   Mon Jan 4 20:55:59 2021 +0900
+
+    [병합] #4 병합완료
+
+[33mcommit a2797805669277c204ce4bcb652b5e8c7a354f42[m
+Merge: a046d62 e3b5fe8
+Author: Sun <taeyang9300@daum.net>
+Date:   Mon Jan 4 19:15:50 2021 +0900
+
+    Merge pull request #3 from hhh57463/master
+    
+    [추가] 캐릭터 타일 이동
+
+[33mcommit e3b5fe8b175ec5be966bc00bbbeba592da46db3d[m
+Author: hhh57463 <hhh57463@naver.com>
+Date:   Mon Jan 4 18:47:54 2021 +0900
+
+    [수정] 타일 최대거리 무시 수정
+
+[33mcommit 8102c6ca418209676e9b75a2c55281478485193c[m
+Author: hhh57463 <hhh57463@naver.com>
+Date:   Mon Jan 4 18:38:19 2021 +0900
+
+    [추가] 캐릭터 타일 이동
+
+[33mcommit a046d62a37692e0f767b7bb631e3ed369a06f28f[m
+Merge: f534690 0f6773a
+Author: Ye-Chan Kang <kyechan99@gmail.com>
+Date:   Mon Jan 4 02:49:33 2021 +0900
+
+    Merge pull request #2 from hhh57463/master
+    
+    [수정] README.md 수정
+
+[33mcommit 0f6773a75631277f5068033551c6dac812f7cdd4[m
+Author: hhh57463 <hhh57463@naver.com>
+Date:   Mon Jan 4 02:46:27 2021 +0900
+
+    [수정] README.md 수정
+
+[33mcommit f5346905b531766d5a7f8eb8bcdd418cee3b6a6d[m
+Merge: 6a80f25 f27d260
+Author: Huduck <hhh57463@naver.com>
+Date:   Mon Jan 4 02:15:45 2021 +0900
+
+    Merge pull request #1 from Lazyevilsquid/master
+    
+    [병합] InGame 캐릭터, 타일
+
+[33mcommit f27d2606eac13c751c5d614db50002e3ceb6fb4b[m
+Author: lazyevilsquid <taeyang9300@daum.net>
+Date:   Mon Jan 4 02:10:05 2021 +0900
+
+    [수정] README.md
+
+[33mcommit be0e33d93c0946734a463dd976679917e9f8db60[m
+Author: lazyevilsquid <taeyang9300@daum.net>
+Date:   Mon Jan 4 02:06:02 2021 +0900
+
+    [병합] InGame 캐릭터, 타일
+
+[33mcommit 9681e822d81a27824b5259d4183d2e93c1a87fb7[m
+Author: lazyevilsquid <taeyang9300@daum.net>
+Date:   Mon Jan 4 01:53:44 2021 +0900
+
+    [추가] 카메라 줌, 이동
+
+[33mcommit 6a80f2557a02816a3cfe396f17a1b3b376ec4aa9[m
+Author: lazyevilsquid <taeyang9300@daum.net>
+Date:   Sun Jan 3 18:08:16 2021 +0900
+
+    gitignore cleanup
+
+[33mcommit 8bb0fc0c619b5e898f3bd2f0ee57cde87a2d503f[m
+Author: lazyevilsquid <taeyang9300@daum.net>
+Date:   Sun Jan 3 17:47:31 2021 +0900
+
+    gitignore
+
+[33mcommit 2a9040cd9dda1193e72544e8108d39b8765e629e[m
+Author: lazyevilsquid <taeyang9300@daum.net>
+Date:   Sun Jan 3 01:04:16 2021 +0900
+
+    Project CleanUp
+
+[33mcommit cce71d8e7e881c4dce102cf9d4d7dcbf3e256705[m
+Author: lazyevilsquid <taeyang9300@daum.net>
+Date:   Sat Jan 2 18:39:21 2021 +0900
+
+    add .gitignore
+
+[33mcommit 23eb35f511ce42439a575788db7bf0e2f8c31bf9[m
+Author: lazyevilsquid <taeyang9300@daum.net>
+Date:   Sat Jan 2 18:36:17 2021 +0900
+
+    First commit

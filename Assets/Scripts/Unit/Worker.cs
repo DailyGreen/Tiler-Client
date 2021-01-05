@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class Worker : Unit
 {
+    RaycastHit2D hit;
     void Start()
     {
         _name = "일꾼";
         _desc = "일해라 노예야";
         _cost = 0;
+        _activity.Add(ACTIVITY.MOVE);
         _activity.Add(ACTIVITY.BUILD_MINE);
         _activity.Add(ACTIVITY.BUILD_FARM);
         _activity.Add(ACTIVITY.BUILD_ATTACK_BUILDING);
@@ -17,40 +19,55 @@ public class Worker : Unit
         _activity.Add(ACTIVITY.BUILD_UPGRADE_BUILDING);
     }
 
-    void Update()
+    public static void Move()
     {
-        GameMng.I.UnitClickMove(this.gameObject, this);
+        RangeScrp RangSc = GameObject.Find("RangeParent").GetComponent<RangeScrp>();
+        RangSc.MoveRange();
+        Debug.Log("캐릭터 이동");
     }
 
     public static void buildMine()
     {
-        Debug.Log("광산 생성");
+        RangeScrp RangSc = GameObject.Find("RangeParent").GetComponent<RangeScrp>();
+        RangSc.MoveRange();
+        
     }
 
     public static void buildFarm()
     {
-        Debug.Log("농장 생성");
+        RangeScrp RangSc = GameObject.Find("RangeParent").GetComponent<RangeScrp>();
+        RangSc.MoveRange();
     }
 
     public static void buildAttackBuilding()
     {
+        RangeScrp RangSc = GameObject.Find("RangeParent").GetComponent<RangeScrp>();
+        RangSc.MoveRange();
         Debug.Log("터렛 생성");
     }
 
     public static void buildCreateUnitBuilding()
     {
+        RangeScrp RangSc = GameObject.Find("RangeParent").GetComponent<RangeScrp>();
+        RangSc.MoveRange();
         Debug.Log("유닛 건물 생성");
     }
 
     public static void buildShieldBuilding()
     {
+        RangeScrp RangSc = GameObject.Find("RangeParent").GetComponent<RangeScrp>();
+        RangSc.MoveRange();
         Debug.Log("방어 건물 생성");
     }
 
     public static void buildUpgradeBuilding()
     {
+        RangeScrp RangSc = GameObject.Find("RangeParent").GetComponent<RangeScrp>();
+        RangSc.MoveRange();
         Debug.Log("강화 건물 생성");
     }
+
+    
 }
 
 /* 

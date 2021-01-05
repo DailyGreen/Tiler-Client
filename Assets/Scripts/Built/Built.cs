@@ -4,28 +4,15 @@ using UnityEngine;
 
 public class Built : Object
 {
-    /*
-     * 건물 고유  스탯
-     * 반드시 상속받는 자식의 Start 에서 값을 변경해 주시길 바랍니다.
-     */
-    public int _hp = 0;
+    public int _hp = 0;     // 건물 내구도
+    public int _turn = 0;   // 건설시 소모하는 턴수
 
-    public RaycastHit2D hit;
+    
 
     /**
      * @brief 건물을 생성
-     * @param 생성할 child 게임오브젝트
+     * @param GameObject built     생성할 건물 게임오브젝트
+     * @param int cost             생성할 건물의 건설비용
      */
-    public void Building(GameObject built)
-    {
-        hit = GameMng.I.MouseLaycast();
-        if (GameMng.I.GetTileCs._builtObj == null)
-        {
-           
-            {
-                Instantiate(built, GameMng.I.GetTileCs.transform);
-                GameMng.I.GetTileCs._builtObj = this;
-            }
-        }
-    }
+    
 }

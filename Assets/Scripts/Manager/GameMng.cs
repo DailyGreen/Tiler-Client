@@ -13,6 +13,8 @@ public class GameMng : MonoBehaviour
     public int _nowMem = 0;
     public int _maxMem = 0;
 
+    public UnitMng _UnitGM;
+
     //public bool wantToBuilt = false;
     [SerializeField]
     UnityEngine.UI.Text objectNameTxt;          // 선택 오브젝트 이름
@@ -34,7 +36,7 @@ public class GameMng : MonoBehaviour
 
     private const int mapWidth = 20;            // 맵 가로
     private const int mapHeight = 5;            // 맵 높이
-    
+
     public Tile[,] mapTile = new Tile[mapHeight, mapWidth];     // 타일의 2차원 배열 값
 
     // ---- 맵의 가로 세로 크기 읽기
@@ -77,7 +79,7 @@ public class GameMng : MonoBehaviour
 
     public void init()
     {
-        _gold = 0;
+        _gold = 100;
         _nowMem = 0;
         _maxMem = 0;
     }
@@ -198,35 +200,40 @@ public class GameMng : MonoBehaviour
     {
         switch (activity)
         {
+            case ACTIVITY.MOVE:
+                actName.text = "이동";
+                actDesc.text = "한 턴 소요";
+                actButton.onClick.AddListener(delegate { _UnitGM.act = activity; Worker.Move(); });
+                break;
             case ACTIVITY.BUILD_MINE:
                 actName.text = "광산";
                 actDesc.text = "한 턴 소요";
-                actButton.onClick.AddListener(delegate { Worker.buildMine(); });
+                actButton.onClick.AddListener(delegate { _UnitGM.act = activity; Worker.buildMine(); });
                 break;
             case ACTIVITY.BUILD_FARM:
                 actName.text = "농장";
                 actDesc.text = "한 턴 소요";
-                actButton.onClick.AddListener(delegate { Worker.buildFarm(); });
+                actButton.onClick.AddListener(delegate { _UnitGM.act = activity; Worker.buildFarm(); });
                 break;
             case ACTIVITY.BUILD_ATTACK_BUILDING:
                 actName.text = "터렛";
                 actDesc.text = "두 턴 소요";
-                actButton.onClick.AddListener(delegate { Worker.buildAttackBuilding(); });
+                actButton.onClick.AddListener(delegate { _UnitGM.act = activity; Worker.buildAttackBuilding(); });
                 break;
             case ACTIVITY.BUILD_CREATE_UNIT_BUILDING:
                 actName.text = "유닛 건물";
                 actDesc.text = "두 턴 소요";
-                actButton.onClick.AddListener(delegate { Worker.buildCreateUnitBuilding(); });
+                actButton.onClick.AddListener(delegate { _UnitGM.act = activity; Worker.buildCreateUnitBuilding(); });
                 break;
             case ACTIVITY.BUILD_SHIELD_BUILDING:
                 actName.text = "방어 건물";
                 actDesc.text = "두 턴 소요";
-                actButton.onClick.AddListener(delegate { Worker.buildShieldBuilding(); });
+                actButton.onClick.AddListener(delegate { _UnitGM.act = activity; Worker.buildShieldBuilding(); });
                 break;
             case ACTIVITY.BUILD_UPGRADE_BUILDING:
                 actName.text = "강화 건물";
                 actDesc.text = "세 턴 소요";
-                actButton.onClick.AddListener(delegate { Worker.buildUpgradeBuilding(); });
+                actButton.onClick.AddListener(delegate { _UnitGM.act = activity; Worker.buildUpgradeBuilding(); });
                 break;
             default:
                 break;
@@ -236,7 +243,7 @@ public class GameMng : MonoBehaviour
     // 레이케스트 위한 변수
     Vector2 pos;
     Ray2D ray;
-    RaycastHit2D hit;
+    public RaycastHit2D hit;
     // 클릭시 Tile.cs 받아오는 곳
     public Tile GetTileCs = null;
 
@@ -250,17 +257,21 @@ public class GameMng : MonoBehaviour
         ray = new Ray2D(pos, Vector2.zero);
 
         hit = Physics2D.Raycast(ray.origin, ray.direction);
-        if (hit.collider.tag.Equals("Tile")) 
-        {
-            GetTileCs = hit.collider.gameObject.GetComponent<Tile>(); 
-        }
 
+        if (hit.collider != null)
+        {
+            if (hit.collider.tag.Equals("Tile"))
+                GetTileCs = hit.collider.gameObject.GetComponent<Tile>();
+        }
         return hit;
     }
 
     // 유닛 움직일때 필요한 변수들
     public Tile NowTile = null;
     GameObject TileGams = null;
+    //범위 타일 스크립트 변수
+    [SerializeField]
+    RangeScrp RangeSc = null;
 
     [SerializeField]
     private const float fUnitSpeed = 3.0f;
@@ -276,26 +287,28 @@ public class GameMng : MonoBehaviour
      */
     public void UnitClickMove(GameObject unitGame, Unit unitscrp)
     {
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(0))
         {
             hit = MouseLaycast();
-
-            if (hit.collider.tag.Equals("Tile"))
+            if (hit.collider != null)
             {
-                if (NowTile != null)
+                if (hit.collider.tag.Equals("Tile"))
                 {
-                    NowTile._unitObj = null;        // 떠났을때 지워짐
-                }
+                    if (NowTile != null)
+                    {
+                        NowTile._unitObj = null;        // 떠났을때 지워짐
+                    }
 
-                GetTileCs = hit.collider.gameObject.GetComponent<Tile>();
-                NowTile = GetTileCs;
+                    GetTileCs = hit.collider.gameObject.GetComponent<Tile>();
+                    NowTile = GetTileCs;
 
-                TileGams = hit.collider.gameObject;
-                TileDistance = Vector2.Distance(unitGame.transform.localPosition, TileGams.transform.localPosition);                  // 타일이 눌렸을때 캐릭터와 클릭한 타일간 거리 계산
-
-                if (!bUnitMoveCheck)
-                {
-                    bUnitMoveCheck = true;
+                    TileGams = hit.collider.gameObject;
+                    TileDistance = Vector2.Distance(unitGame.transform.localPosition, TileGams.transform.localPosition);                  // 타일이 눌렸을때 캐릭터와 클릭한 타일간 거리 계산
+                    RangeSc.RangeTileReset();                                                                                             // 범위 타일 위치 초기화
+                    if (!bUnitMoveCheck)
+                    {
+                        bUnitMoveCheck = true;
+                    }
                 }
             }
         }

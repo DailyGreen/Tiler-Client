@@ -20,8 +20,6 @@ public class Mine : Built
     void Update()
     {
         MakingGold();
-        if (Input.GetMouseButtonDown(0))
-            Building(this.gameObject);
     }
 
     /**

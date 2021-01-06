@@ -8,6 +8,8 @@ public class UnitMng : MonoBehaviour
 
     public Farm farm = null;
 
+    public Turret turret = null;
+
     public ACTIVITY act = 0;
 
     public Worker worker = null;
@@ -28,6 +30,9 @@ public class UnitMng : MonoBehaviour
                     break;
                 case ACTIVITY.BUILD_FARM:
                     Building(farm, Farm.cost);
+                    break;
+                case ACTIVITY.BUILD_ATTACK_BUILDING:
+                    Building(turret, Turret.cost);
                     break;
             }
         }

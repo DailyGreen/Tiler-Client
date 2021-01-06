@@ -10,6 +10,7 @@ public class Worker : Unit
         _name = "老槽";
         _desc = "老秦扼 畴抗具";
         _cost = 0;
+        _code = (int)UNIT.WORKER;
         _activity.Add(ACTIVITY.MOVE);
         _activity.Add(ACTIVITY.BUILD_MINE);
         _activity.Add(ACTIVITY.BUILD_FARM);
@@ -43,7 +44,6 @@ public class Worker : Unit
     {
         RangeScrp RangSc = GameObject.Find("RangeParent").GetComponent<RangeScrp>();
         RangSc.MoveRange();
-        Debug.Log("磐房 积己");
     }
 
     public static void buildCreateUnitBuilding()

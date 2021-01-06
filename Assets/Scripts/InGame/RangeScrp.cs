@@ -111,7 +111,7 @@ public class RangeScrp : MonoBehaviour
     /**
 * @brief 공격 범위 계산
 */
-    void AttackRange()
+    public void AttackRange()
     {
         if ((GameMng.I.NowTile.PosY % 2) == 1)
         {

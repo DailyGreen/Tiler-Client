@@ -34,12 +34,9 @@ public class MainCameraScrp : MonoBehaviour
         CameraMove();
         MouseScrollzoom();
         // 클릭시 타일 이름 내용 가져오는곳 (임시)\
-        if (Input.GetMouseButtonDown(0) && GameMng.I.MouseLaycast().collider != null)
+        if (Input.GetMouseButtonDown(0))
         {
-            if (GameMng.I.MouseLaycast().collider.tag.Equals("Tile"))
-            {
-                GameMng.I.clickTile(GameMng.I.GetTileCs);
-            }
+            GameMng.I.clickTile(GameMng.I.GetTileCs);
         }
     }
 

@@ -13,6 +13,7 @@ public class Mine : Built
         _name = "±¤»ê";
         _desc = "°ñµå¸¦ Ä¶ ¼ö ÀÖ´Ù";
         _hp = 10;
+        _code = (int)BUILT.MINE;
         making = 5;
     }
 

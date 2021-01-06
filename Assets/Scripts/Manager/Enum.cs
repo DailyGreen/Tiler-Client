@@ -29,5 +29,10 @@ public enum UNIT
 
 public enum BUILT
 {
-    MINE = 200
+    MINE = 200,
+    FARM,
+    ATTACK_BUILDING,
+    CREATE_UNIT_BUILDING,
+    SHIELD_BUILDING,
+    UPGRADE_BUILDING
 }

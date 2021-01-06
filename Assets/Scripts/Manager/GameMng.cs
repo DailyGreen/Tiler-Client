@@ -253,7 +253,7 @@ public class GameMng : MonoBehaviour
     /**
     * @brief 레이케스트 레이저 생성 및 hit 리턴
     */
-    public RaycastHit2D MouseLaycast()
+    public void MouseLaycast()
     {
         pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
@@ -263,10 +263,9 @@ public class GameMng : MonoBehaviour
 
         if (hit.collider != null)
         {
-            if (hit.collider.tag.Equals("Tile"))
-                GetTileCs = hit.collider.gameObject.GetComponent<Tile>();
+            GetTileCs = hit.collider.gameObject.GetComponent<Tile>();
+            Debug.Log(GetTileCs._code);
         }
-        return hit;
     }
 
     // 유닛 움직일때 필요한 변수들
@@ -274,7 +273,7 @@ public class GameMng : MonoBehaviour
     GameObject TileGams = null;
     //범위 타일 스크립트 변수
     [SerializeField]
-    RangeScrp RangeSc = null;
+    public RangeScrp RangeSc = null;
 
     [SerializeField]
     private const float fUnitSpeed = 3.0f;
@@ -292,7 +291,7 @@ public class GameMng : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            hit = MouseLaycast();
+            MouseLaycast();
             if (hit.collider != null)
             {
                 if (hit.collider.tag.Equals("Tile"))

@@ -13,6 +13,7 @@ public class Farm : Built
         _name = "농장";
         _desc = "식량을 생산한다";
         _hp = 10;
+        _code = (int)BUILT.FARM;
         making = 2;
     }
 

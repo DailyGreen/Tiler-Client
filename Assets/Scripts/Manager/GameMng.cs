@@ -164,12 +164,15 @@ public class GameMng : MonoBehaviour
         {
             objectNameTxt.text = tile._name;
             objectDescTxt.text = tile._desc;
+            NetworkMng.getInstance._soundGM.tileClick();
             return;
         }
         objectNameTxt.text = tile._unitObj._name;
         objectDescTxt.text = tile._unitObj._desc;
         hpText.text = tile._unitObj._hp + "";
+        NetworkMng.getInstance._soundGM.unitClick(UNIT.WORKER);
         //damageText.text = tile._unitObj._damage + "";
+
 
         // 행동을 가진 오브젝트는 actList 를 뿌려줘야 함
         // 1. _unitObj 로 부터 해당 유닛이 가진 행동의 량을 가져옴

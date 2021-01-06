@@ -25,7 +25,7 @@ public class MainCameraScrp : MonoBehaviour
     private const float fBoderthickness = 10f;      // 마우스가 스크린 밖에 닿는 범위( 두께 )
     void Start()
     {
-        MainCamera = Camera.main;
+        //MainCamera = Camera.main;
         zoomSize = MainCamera.orthographicSize;
     }
 

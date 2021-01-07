@@ -8,10 +8,47 @@ public class Forest_Worker : Worker
     {
         _name = "¿œ≤€";
         _desc = "µÎ¡˜«ÿ ∫∏¿Œ¥Ÿ.";
+        _cost = 0;
+        _activity.Add(ACTIVITY.MOVE);
+        _activity.Add(ACTIVITY.BUILD_MINE);
+        _activity.Add(ACTIVITY.BUILD_FARM);
+        _activity.Add(ACTIVITY.BUILD_ATTACK_BUILDING);
+        _activity.Add(ACTIVITY.BUILD_CREATE_UNIT_BUILDING);
+        _activity.Add(ACTIVITY.BUILD_SHIELD_BUILDING);
+        _activity.Add(ACTIVITY.BUILD_UPGRADE_BUILDING);
     }
 
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            _anim.SetBool("isWorking", false);
+            _anim.SetBool("isRunning", false);
+        }
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            Debug.Log("sdf");
+            walking();
+        }
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            Debug.Log("sdf");
+            working();
+        }
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            _anim.SetBool("isDying", true);
+        }
+    }
+
+    public void walking()
+    {
+        _anim.SetBool("isWorking", false);
+        _anim.SetBool("isRunning", true);
+    }
+    public void working()
+    {
+        _anim.SetBool("isRunning", false);
+        _anim.SetBool("isWorking", true);
     }
 }

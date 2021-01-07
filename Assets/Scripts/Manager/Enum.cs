@@ -12,7 +12,9 @@ public enum TILE
  */
 public enum ACTIVITY
 {
-    MOVE = 100,                   // 이동
+    NONE = 100,
+    ACTING,                     // 행동중
+    MOVE,                       // 이동
     BUILD_MINE,                 // 광산 짓기
     BUILD_FARM,                 // 농장 짓기
     BUILD_ATTACK_BUILDING,      // 공격 건물 짓기

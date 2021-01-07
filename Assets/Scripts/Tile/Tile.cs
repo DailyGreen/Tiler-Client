@@ -62,4 +62,12 @@ public class Tile : Object
             return new Vector2(this.transform.position.x, this.transform.position.y);
         }
     }
+
+
+    public static bool isEmptyTile(Tile t)
+    {
+        if (t._unitObj == null && t._builtObj == null)
+            return true;
+        return false;
+    }
 }

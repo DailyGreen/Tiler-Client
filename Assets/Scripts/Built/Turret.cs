@@ -7,7 +7,6 @@ public class Turret : Built
     public int attack;   // 공격력
     public static int cost = 5;   // 건설 비용
 
-    // Start is called before the first frame update
     void Start()
     {
         _name = "터렛";
@@ -17,7 +16,6 @@ public class Turret : Built
         attack = 2;
     }
 
-    // Update is called once per frame
     void Update()
     {
         Attack();
@@ -27,10 +25,10 @@ public class Turret : Built
     {
         if (Input.GetMouseButtonDown(0))
         {
-            GameMng.I.MouseLaycast();
-            if (GameMng.I.GetTileCs._code == (int)BUILT.ATTACK_BUILDING)
+            GameMng.I.mouseRaycast();
+            if (GameMng.I.selectedTile._code == (int)BUILT.ATTACK_BUILDING)
             {
-                GameMng.I.RangeSc.AttackRange();
+                GameMng.I._range.attackRange();
             }
         }
     }

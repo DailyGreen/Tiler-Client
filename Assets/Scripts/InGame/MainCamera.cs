@@ -2,31 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MainCameraScrp : MonoBehaviour
+public class MainCamera : MonoBehaviour
 {
     [SerializeField]
-    private Camera MainCamera;
+    private Camera _camera;
 
     // 카메라 줌에 쓰이는 변수들
     private float zoomSize;
     private const float zoomScale = 10f;
     private const float zoomLerpSpeed = 10f;
     [SerializeField]
-    private float fMinzoom = 8f;
+    private float minZoom = 8f;
     [SerializeField]
-    private float fMaxzoom = 4.5f;
+    private float maxZoom = 4.5f;
     private float scrollData;
 
     // ----
     // 카메라 움직임 쓰임
     [SerializeField]
-    private Vector3 lLmitPos;
+    private Vector3 limitPos;
     public float fMoveSpeed = 10f;
-    private const float fBoderthickness = 10f;      // 마우스가 스크린 밖에 닿는 범위( 두께 )
+    private const float borderThickness = 10f;      // 마우스가 스크린 밖에 닿는 범위( 두께 )
     void Start()
     {
         //MainCamera = Camera.main;
-        zoomSize = MainCamera.orthographicSize;
+        zoomSize = _camera.orthographicSize;
     }
 
     void LateUpdate()
@@ -34,9 +34,10 @@ public class MainCameraScrp : MonoBehaviour
         CameraMove();
         MouseScrollzoom();
         // 클릭시 타일 이름 내용 가져오는곳 (임시)\
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && GameMng.I._UnitGM.act == ACTIVITY.NONE)
         {
-            GameMng.I.clickTile(GameMng.I.GetTileCs);
+            GameMng.I.mouseRaycast();
+            GameMng.I.clickTile(GameMng.I.selectedTile);
         }
     }
 
@@ -48,8 +49,8 @@ public class MainCameraScrp : MonoBehaviour
         scrollData = Input.GetAxis("Mouse ScrollWheel");
 
         zoomSize -= scrollData * zoomScale;
-        zoomSize = Mathf.Clamp(zoomSize, fMaxzoom, fMinzoom);
-        MainCamera.orthographicSize = Mathf.Lerp(MainCamera.orthographicSize, zoomSize, Time.deltaTime * zoomLerpSpeed);
+        zoomSize = Mathf.Clamp(zoomSize, maxZoom, minZoom);
+        _camera.orthographicSize = Mathf.Lerp(_camera.orthographicSize, zoomSize, Time.deltaTime * zoomLerpSpeed);
     }
 
     /**
@@ -58,26 +59,26 @@ public class MainCameraScrp : MonoBehaviour
     void CameraMove()
     {
         Vector3 pos = this.transform.position;
-        if (Input.GetKey("w") || Input.mousePosition.y >= Screen.height - fBoderthickness)
+        if (Input.GetKey("w") || Input.mousePosition.y >= Screen.height - borderThickness)
         {
             pos.y += fMoveSpeed * Time.deltaTime;
         }
-        if (Input.GetKey("s") || Input.mousePosition.y <= fBoderthickness)
+        if (Input.GetKey("s") || Input.mousePosition.y <= borderThickness)
         {
             pos.y -= fMoveSpeed * Time.deltaTime;
         }
-        if (Input.GetKey("d") || Input.mousePosition.x >= Screen.width - fBoderthickness)
+        if (Input.GetKey("d") || Input.mousePosition.x >= Screen.width - borderThickness)
         {
             pos.x += fMoveSpeed * Time.deltaTime;
         }
-        if (Input.GetKey("a") || Input.mousePosition.x <= fBoderthickness)
+        if (Input.GetKey("a") || Input.mousePosition.x <= borderThickness)
         {
             pos.x -= fMoveSpeed * Time.deltaTime;
         }
         pos.z = -20;
 
-        pos.x = Mathf.Clamp(pos.x, -lLmitPos.x, lLmitPos.x);
-        pos.y = Mathf.Clamp(pos.y, -lLmitPos.y, lLmitPos.y);
+        pos.x = Mathf.Clamp(pos.x, -limitPos.x, limitPos.x);
+        pos.y = Mathf.Clamp(pos.y, -limitPos.y, limitPos.y);
         this.transform.position = pos;
     }
 }

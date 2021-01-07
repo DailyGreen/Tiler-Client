@@ -18,18 +18,18 @@ public class Turret : Built
 
     void Update()
     {
-        Attack();
+        //Attack();
     }
 
-    void Attack()
+    public void Attack()
     {
-        if (Input.GetMouseButtonDown(0))
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //GameMng.I.mouseRaycast();
+        if (GameMng.I.targetTile._code == (int)BUILT.ATTACK_BUILDING)
         {
-            GameMng.I.mouseRaycast();
-            if (GameMng.I.selectedTile._code == (int)BUILT.ATTACK_BUILDING)
-            {
-                GameMng.I._range.attackRange();
-            }
+            GameMng.I._range.attackRange();
         }
+        //}
     }
 }

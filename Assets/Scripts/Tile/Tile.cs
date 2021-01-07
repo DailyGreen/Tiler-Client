@@ -66,7 +66,7 @@ public class Tile : Object
 
     public static bool isEmptyTile(Tile t)
     {
-        if (t._unitObj == null && t._builtObj == null)
+        if (t._unitObj == null && t._builtObj == null && t._code == 0)      //
             return true;
         return false;
     }

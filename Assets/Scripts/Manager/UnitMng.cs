@@ -39,8 +39,17 @@ public class UnitMng : MonoBehaviour
         {
             act = ACTIVITY.NONE;
             GameMng.I._range.rangeTileReset();
+            GameMng.I._range.AttackrangeTileReset();                                                //추가
             GameMng.I.cleanActList();
             GameMng.I.cleanSelected();
+        }
+        if (Input.GetMouseButtonDown(0) && act == ACTIVITY.NONE)
+        {
+            GameMng.I.mouseRaycast(true);
+            if (GameMng.I.targetTile._builtObj != null)
+            {
+                GameMng.I.targetTile._builtObj.GetComponent<Turret>().Attack();
+            }
         }
     }
 
@@ -53,7 +62,7 @@ public class UnitMng : MonoBehaviour
             GameMng.I.cleanActList();
             GameMng.I._range.rangeTileReset();  // 범위 타일 위치 초기화
             GameMng.I.distanceOfTiles = Vector2.Distance(GameMng.I.selectedTile._unitObj.transform.localPosition, GameMng.I.targetTile.transform.localPosition);
-            if (GameMng.I.hit.collider.tag.Equals("Tile") && GameMng.I.distanceOfTiles <= 1.5f && Tile.isEmptyTile(GameMng.I.targetTile))
+            if (GameMng.I.hit.collider.tag.Equals("Tile") && GameMng.I.distanceOfTiles <= 1.5f && Tile.isEmptyTile(GameMng.I.targetTile) && GameMng.I.targetTile._unitObj == null) 
             {
                 act = ACTIVITY.ACTING;
                 if (GameMng.I.selectedTile._unitObj.transform.localPosition.x < GameMng.I.targetTile.transform.localPosition.x)                                                                 //가는 방향 회전 오른쪽
@@ -69,9 +78,8 @@ public class UnitMng : MonoBehaviour
                 }
                 StartCoroutine("Moving");
             }
-            else
-            {
-                // 범위가 아닌 다른 곳을 누름
+            else                                     // 범위가 아닌 다른 곳을 누름
+            {             
                 act = ACTIVITY.NONE;
                 GameMng.I.selectedTile = GameMng.I.targetTile;
                 GameMng.I.targetTile = null;
@@ -100,16 +108,18 @@ public class UnitMng : MonoBehaviour
 
     public void Building(int cost, int index)
     {
-        GameMng.I.mouseRaycast();
-        if (GameMng.I.selectedTile._builtObj == null)
+        GameMng.I.mouseRaycast(true);                       //캐릭터 정보와 타일 정보를 알아와야해서 false에서 true로 변경
+        if (GameMng.I.targetTile._builtObj == null && GameMng.I.targetTile._code == 0 && GameMng.I.targetTile._unitObj == null && Vector2.Distance(GameMng.I.selectedTile.transform.localPosition, GameMng.I.targetTile.transform.localPosition) <= 1.5f)
         {
+            Debug.Log("건설 준비 완료");
             if (GameMng.I._gold > cost)
             {
-                GameObject Child = Instantiate(builtObj[index - 200], GameMng.I.selectedTile.transform) as GameObject;
-                GameMng.I.selectedTile._builtObj = Child.GetComponent<Built>();
-                GameMng.I.selectedTile._code = index;
+                GameObject Child = Instantiate(builtObj[index - 200], GameMng.I.targetTile.transform) as GameObject;
+                GameMng.I.targetTile._builtObj = Child.GetComponent<Built>();
+                GameMng.I.targetTile._code = index;
                 GameMng.I.minGold(cost);
                 GameMng.I._range.rangeTileReset();
+                act = ACTIVITY.NONE;
             }
         }
     }

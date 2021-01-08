@@ -15,9 +15,9 @@ public class GameMng : MonoBehaviour
     public int _gold = 0;
     public int _nowMem = 0;
     public int _maxMem = 0;
-    private const int mapWidth = 20;            // 맵 가로
-    private const int mapHeight = 5;            // 맵 높이
-    public Tile[,] mapTile = new Tile[mapHeight, mapWidth];     // 타일의 2차원 배열 값
+    private const int mapWidth = 50;            // 맵 가로
+    private const int mapHeight = 50;            // 맵 높이
+    public Tile[,] mapTile = new Tile[mapWidth, mapHeight];     // 타일의 2차원 배열 값
     public float unitSpeed = 3.0f;
     public float distanceOfTiles = 0.0f;
 
@@ -25,6 +25,7 @@ public class GameMng : MonoBehaviour
      * 게임 서브 매니저
      */
     public UnitMng _UnitGM;
+    public BuiltMng _BuiltGM;
     public RangeControl _range;
 
     /**********
@@ -173,8 +174,9 @@ public class GameMng : MonoBehaviour
     */
     public void clickTile(Tile tile)
     {
+        cleanActList();
         // 유닛이 없다면 정적인 타일이란 뜻
-        if (tile._unitObj == null)
+        if (tile._unitObj == null && tile._builtObj == null)
         {
             cleanActList();
             objectNameTxt.text = tile._name;
@@ -182,15 +184,23 @@ public class GameMng : MonoBehaviour
             NetworkMng.getInstance._soundGM.tileClick();
             return;
         }
-        objectNameTxt.text = tile._unitObj._name;
-        objectDescTxt.text = tile._unitObj._desc;
-        hpText.text = tile._unitObj._hp + "";
+        Object obj;
+
+        if (tile._unitObj)
+            obj = tile._unitObj;
+        else
+            obj = tile._builtObj;
+
+        objectNameTxt.text = obj._name;
+        objectDescTxt.text = obj._desc;
+
+        hpText.text = (tile._unitObj ? tile._unitObj._hp : tile._builtObj._hp) + "";
         NetworkMng.getInstance._soundGM.unitClick(UNIT.WORKER);
         //damageText.text = tile._unitObj._damage + "";
 
         // 행동을 가진 오브젝트는 actList 를 뿌려줘야 함
         // 1. _unitObj 로 부터 해당 유닛이 가진 행동의 량을 가져옴
-        for (int i = 0; i < tile._unitObj._activity.Count; i++)
+        for (int i = 0; i < obj._activity.Count; i++)
         {
             // 2. 그만큼 actList 를 active 함
             actList[i].gameObject.SetActive(true);
@@ -198,7 +208,7 @@ public class GameMng : MonoBehaviour
             try
             {
                 // 3. actList 의 내용들을 변경해 줘야함
-                checkActivity(tile._unitObj._activity[i], actList[i], childsTxt[0], childsTxt[1]);
+                checkActivity(obj._activity[i], actList[i], childsTxt[0], childsTxt[1]);
             }
             catch
             {
@@ -252,6 +262,10 @@ public class GameMng : MonoBehaviour
                 actName.text = "강화 건물";
                 actDesc.text = "세 턴 소요";
                 actButton.onClick.AddListener(delegate { _UnitGM.act = activity; Worker.buildUpgradeBuilding(); });
+                break;
+            case ACTIVITY.WORKER_UNIT_CREATE:
+                actName.text = "일꾼 생성";
+                actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; Castle.CreateUnit(); });
                 break;
             default:
                 break;

@@ -33,16 +33,16 @@ public class HexTileCreate : MonoBehaviour
      */
     void CreateHexTileMap()
     {
-        for (int x = 0; x < GameMng.I.GetMapHeight; x++)
+        for (int y = 0; y < GameMng.I.GetMapHeight; y++)
         {
-            mapReadChar = mapReadLines[x].ToCharArray();
-            for (int y = 0; y < GameMng.I.GetMapWidth; y++)
+            mapReadChar = mapReadLines[y].ToCharArray();
+            for (int x = 0; x < GameMng.I.GetMapWidth; x++)
             {
-                tilestate._code = (int)Char.GetNumericValue(mapReadChar[y]);
+                tilestate._code = (int)Char.GetNumericValue(mapReadChar[x]);
                 GameObject child = Instantiate(hextile) as GameObject;
                 child.transform.parent = parentObject.transform;
 
-                GameMng.I.mapTile[x,y] = child.transform.GetComponent<Tile>();      // 각각의 타일 스크립트 GameMng.I.mapTile 2차원 배열에 저장
+                GameMng.I.mapTile[y, x] = child.transform.GetComponent<Tile>();      // 각각의 타일 스크립트 GameMng.I.mapTile 2차원 배열에 저장
                 if (y % 2 == 0)
                 {
                     child.transform.position = new Vector2(x * tileXOffset, y * tileYOffset);
@@ -51,10 +51,11 @@ public class HexTileCreate : MonoBehaviour
                 {
                     child.transform.position = new Vector2(x * tileXOffset + tileXOffset / 2, y * tileYOffset);
                 }
-                tilestate.PosY++;
+
+                tilestate.PosX++;
             }
-            tilestate.PosY = 0;
-            tilestate.PosX++;
+            tilestate.PosX = 0;
+            tilestate.PosY++;
         }
     }
 }

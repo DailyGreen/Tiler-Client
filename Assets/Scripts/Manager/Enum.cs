@@ -4,7 +4,12 @@ using UnityEngine;
 
 public enum TILE
 {
-
+    GRASS = 0,
+    SAND,
+    DIRT,
+    MARS,
+    STONE,
+    CAN_MOVE,
 }
 
 /*
@@ -20,7 +25,8 @@ public enum ACTIVITY
     BUILD_ATTACK_BUILDING,      // 공격 건물 짓기
     BUILD_CREATE_UNIT_BUILDING, // 유닛 생성 건물 짓기
     BUILD_SHIELD_BUILDING,      // 방어 건물 짓기
-    BUILD_UPGRADE_BUILDING      // 업그레이드 건물 짓기
+    BUILD_UPGRADE_BUILDING,     // 업그레이드 건물 짓기
+    WORKER_UNIT_CREATE,          // 워커 유닛 생성
 }
 
 public enum UNIT
@@ -36,5 +42,6 @@ public enum BUILT
     ATTACK_BUILDING,
     CREATE_UNIT_BUILDING,
     SHIELD_BUILDING,
-    UPGRADE_BUILDING
+    UPGRADE_BUILDING,
+    CASTLE
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class UnitMng : MonoBehaviour
 {
@@ -17,7 +18,9 @@ public class UnitMng : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && act != ACTIVITY.ACTING)
+        //Debug.Log(Vector2.Distance(GameMng.I.mapTile[GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosY].transform.localPosition,
+        //    GameMng.I.mapTile[GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosY].transform.localPosition));
+        if (Input.GetMouseButtonDown(0) && act != ACTIVITY.ACTING && GameMng.I._BuiltGM.act == ACTIVITY.NONE && !EventSystem.current.IsPointerOverGameObject())
         {
             switch (act)
             {
@@ -39,17 +42,9 @@ public class UnitMng : MonoBehaviour
         {
             act = ACTIVITY.NONE;
             GameMng.I._range.rangeTileReset();
-            GameMng.I._range.AttackrangeTileReset();                                                //추가
+            GameMng.I._range.AttackrangeTileReset();                                                     //추가
             GameMng.I.cleanActList();
             GameMng.I.cleanSelected();
-        }
-        if (Input.GetMouseButtonDown(0) && act == ACTIVITY.NONE)
-        {
-            GameMng.I.mouseRaycast(true);
-            if (GameMng.I.targetTile._builtObj != null)
-            {
-                GameMng.I.targetTile._builtObj.GetComponent<Turret>().Attack();
-            }
         }
     }
 
@@ -59,11 +54,13 @@ public class UnitMng : MonoBehaviour
 
         if (GameMng.I.hit.collider != null)
         {
+            Debug.Log("캐릭터 이동 준비");
             GameMng.I.cleanActList();
             GameMng.I._range.rangeTileReset();  // 범위 타일 위치 초기화
-            GameMng.I.distanceOfTiles = Vector2.Distance(GameMng.I.selectedTile._unitObj.transform.localPosition, GameMng.I.targetTile.transform.localPosition);
-            if (GameMng.I.hit.collider.tag.Equals("Tile") && GameMng.I.distanceOfTiles <= 1.5f && Tile.isEmptyTile(GameMng.I.targetTile) && GameMng.I.targetTile._unitObj == null) 
+            GameMng.I.distanceOfTiles = Vector2.Distance(GameMng.I.selectedTile._unitObj.transform.position, GameMng.I.targetTile.transform.position);
+            if (GameMng.I.hit.collider.tag.Equals("Tile") && GameMng.I.distanceOfTiles <= 1.5f && Tile.isEmptyTile(GameMng.I.targetTile))
             {
+                Debug.Log("캐릭터 이동 시작");
                 act = ACTIVITY.ACTING;
                 if (GameMng.I.selectedTile._unitObj.transform.localPosition.x < GameMng.I.targetTile.transform.localPosition.x)                                                                 //가는 방향 회전 오른쪽
                 {
@@ -71,6 +68,7 @@ public class UnitMng : MonoBehaviour
                 }
                 else if (GameMng.I.selectedTile._unitObj.transform.localPosition.x == GameMng.I.targetTile.transform.localPosition.x)                                                           //방향 변동 X
                 {
+
                 }
                 else
                 {
@@ -79,10 +77,11 @@ public class UnitMng : MonoBehaviour
                 StartCoroutine("Moving");
             }
             else                                     // 범위가 아닌 다른 곳을 누름
-            {             
+            {
+                Debug.Log("else로 빠짐");
                 act = ACTIVITY.NONE;
-                GameMng.I.selectedTile = GameMng.I.targetTile;
-                GameMng.I.targetTile = null;
+                //GameMng.I.selectedTile = GameMng.I.targetTile;
+                //GameMng.I.targetTile = null;
             }
         }
     }
@@ -111,7 +110,6 @@ public class UnitMng : MonoBehaviour
         GameMng.I.mouseRaycast(true);                       //캐릭터 정보와 타일 정보를 알아와야해서 false에서 true로 변경
         if (GameMng.I.targetTile._builtObj == null && GameMng.I.targetTile._code == 0 && GameMng.I.targetTile._unitObj == null && Vector2.Distance(GameMng.I.selectedTile.transform.localPosition, GameMng.I.targetTile.transform.localPosition) <= 1.5f)
         {
-            Debug.Log("건설 준비 완료");
             if (GameMng.I._gold > cost)
             {
                 GameObject Child = Instantiate(builtObj[index - 200], GameMng.I.targetTile.transform) as GameObject;

@@ -16,6 +16,15 @@ public class Forest_Worker : Worker
         _activity.Add(ACTIVITY.BUILD_CREATE_UNIT_BUILDING);
         _activity.Add(ACTIVITY.BUILD_SHIELD_BUILDING);
         _activity.Add(ACTIVITY.BUILD_UPGRADE_BUILDING);
+
+        StartCoroutine("creating");
+
+    }
+
+    IEnumerator creating()
+    {
+        yield return new WaitForSeconds(1);
+        GameMng.I._BuiltGM.act = ACTIVITY.NONE;
     }
 
     void Update()

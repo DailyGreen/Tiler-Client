@@ -23,13 +23,10 @@ public class Turret : Built
 
     public void Attack()
     {
-        //if (Input.GetMouseButtonDown(0))
-        //{
-        //GameMng.I.mouseRaycast();
-        if (GameMng.I.targetTile._code == (int)BUILT.ATTACK_BUILDING)
+        Debug.Log("터렛을 클릭하였습니다.");
+        if (GameMng.I.selectedTile._code == (int)BUILT.ATTACK_BUILDING)
         {
             GameMng.I._range.attackRange();
         }
-        //}
     }
 }

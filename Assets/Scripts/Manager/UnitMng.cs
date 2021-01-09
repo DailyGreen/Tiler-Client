@@ -108,7 +108,7 @@ public class UnitMng : MonoBehaviour
     public void Building(int cost, int index)
     {
         GameMng.I.mouseRaycast(true);                       //캐릭터 정보와 타일 정보를 알아와야해서 false에서 true로 변경
-        if (GameMng.I.targetTile._builtObj == null && GameMng.I.targetTile._code == 0 && GameMng.I.targetTile._unitObj == null && Vector2.Distance(GameMng.I.selectedTile.transform.localPosition, GameMng.I.targetTile.transform.localPosition) <= 1.5f)
+        if (GameMng.I.targetTile._builtObj == null && GameMng.I.targetTile._code < (int)TILE.CAN_MOVE && GameMng.I.targetTile._unitObj == null && Vector2.Distance(GameMng.I.selectedTile.transform.localPosition, GameMng.I.targetTile.transform.localPosition) <= 1.5f)
         {
             if (GameMng.I._gold > cost)
             {
@@ -117,6 +117,7 @@ public class UnitMng : MonoBehaviour
                 GameMng.I.targetTile._code = index;
                 GameMng.I.minGold(cost);
                 GameMng.I._range.rangeTileReset();
+                GameMng.I.targetTile._builtObj.uniqueNumber = NetworkMng.getInstance.uniqueNumber;
                 act = ACTIVITY.NONE;
             }
         }

@@ -11,4 +11,5 @@ public class Unit : Object
     public int _hp = 0;
     public int _damage = 0;
     public int _cost = 0;
+    public int uniqueNumber;
 }

@@ -24,16 +24,16 @@ public class RangeControl : MonoBehaviour
     */
     public void moveRange()
     {
-        if ((GameMng.I.selectedTile.PosY % 2) == 1)
+        if ((GameMng.I.selectedTile.PosY % 2).Equals(1))
         {
             if (GameMng.I.selectedTile.PosY < nHeight)
             {
-                if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX]._code < (int)TILE.CAN_MOVE)    // 좌상
+                if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX]._code < (int)TILE.CAN_MOVE)
                     moveRangeTr[0].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX].transform.position;
             }
             if (GameMng.I.selectedTile.PosY < nHeight && GameMng.I.selectedTile.PosX < nwidth)
             {
-                if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX + 1]._code < (int)TILE.CAN_MOVE)     // 우상
+                if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX + 1]._code < (int)TILE.CAN_MOVE)
                     moveRangeTr[1].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX + 1].transform.position;
             }
             if (GameMng.I.selectedTile.PosY > 0)
@@ -89,8 +89,8 @@ public class RangeControl : MonoBehaviour
         }
     }
     /**
-* @brief 범위 타일 위치 리셋
-*/
+    * @brief 범위 타일 위치 리셋
+    */
     public void rangeTileReset()
     {
         for (int i = 0; i < moveRangeTr.Length; i++)
@@ -100,8 +100,8 @@ public class RangeControl : MonoBehaviour
     }
 
     /**
-* @brief 공격 범위 계산
-*/
+    * @brief 공격 범위 계산
+    */
     public void attackRange()
     {
         if ((GameMng.I.targetTile.PosY % 2) == 1)
@@ -169,8 +169,8 @@ public class RangeControl : MonoBehaviour
         }
     }
     /**
-* @brief 공격 범위 타일 위치 리셋
-*/
+    * @brief 공격 범위 타일 위치 리셋
+    */
     public void AttackrangeTileReset()
     {
         for (int i = 0; i < attackRangeTr.Length; i++)

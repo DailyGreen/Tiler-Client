@@ -1163,6 +1163,8 @@ MonoBehaviour:
   parentObject: {fileID: 1670251633}
   hextile: {fileID: 3044242763324709726, guid: d7075d4c83a9ded4e80a3900b1bfbc8b, type: 3}
   tilestate: {fileID: 1740379398, guid: d7075d4c83a9ded4e80a3900b1bfbc8b, type: 3}
+  castle: {fileID: 3015001381892330010, guid: 01603de81d6f5db45bd9d350120093da, type: 3}
+  tilecild: {fileID: 0}
 --- !u!4 &1670251635
 Transform:
   m_ObjectHideFlags: 0

@@ -127,13 +127,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 761f94fc2668e9546b44e4ecc37405b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _code: 0
+  _name: 
+  _desc: 
+  _activity: 
   posX: 0
   posY: 0
-  code: 0
   tileSprite:
   - {fileID: 21300000, guid: 3ef21efafde12d740babff416570ade2, type: 3}
-  - {fileID: 21300000, guid: c17dbb4a160abb4488f0253064625821, type: 3}
-  - {fileID: 21300000, guid: 944937f66719c1546a859f18c7ae37ab, type: 3}
   - {fileID: 21300000, guid: 94a80911aec957f4b8e56f8f1740842d, type: 3}
+  - {fileID: 21300000, guid: 29bd7f6048d04e741900e369fef496bb, type: 3}
+  - {fileID: 21300000, guid: 289202d4dbe7e764d903b5ec7b1c908d, type: 3}
+  - {fileID: 21300000, guid: c17dbb4a160abb4488f0253064625821, type: 3}
+  - {fileID: 21300000, guid: 2a9a942a3dc771241a81022e8bfc1f7b, type: 3}
+  - {fileID: 21300000, guid: 8ba4a4c5c1f9a3b4b8e3acfbe550e8b5, type: 3}
+  - {fileID: 21300000, guid: 6cfdce3bc722d974c8f01704ff5f19da, type: 3}
   tileSpriteRend: {fileID: 3044242763324709725}
-  _unitCode: 0
+  _unitObj: {fileID: 0}
+  _builtObj: {fileID: 0}

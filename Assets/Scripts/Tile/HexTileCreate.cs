@@ -9,6 +9,8 @@ public class HexTileCreate : MonoBehaviour
     public GameObject parentObject;
     public GameObject hextile;
     public Tile tilestate;      // 프림
+    public GameObject castle;
+    public GameObject tilecild;
 
     // 타일 간격
     public const float tileXOffset = 1.24f;
@@ -16,6 +18,7 @@ public class HexTileCreate : MonoBehaviour
 
     string[] mapReadLines = File.ReadAllLines(@"Assets/mapinfo.txt");
     char[] mapReadChar;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,7 +32,7 @@ public class HexTileCreate : MonoBehaviour
     }
 
     /**
-     * @brief 헥사 타일맵 생성, 타일 posX posY 설정
+     * @brief 헥사 타일맵 생성, 타일 posX posY 설정, 시작 위치 설정
      */
     void CreateHexTileMap()
     {
@@ -43,6 +46,15 @@ public class HexTileCreate : MonoBehaviour
                 child.transform.parent = parentObject.transform;
 
                 GameMng.I.mapTile[y, x] = child.transform.GetComponent<Tile>();      // 각각의 타일 스크립트 GameMng.I.mapTile 2차원 배열에 저장
+
+                // mapinfo.txt  에 start_point 코드일때 성을 Instantiate 하고 tile._builtObj 에 성 스크립트 넣어준후 완성된 코드를 tile._code 에 저장 (임시)
+                if (tilestate._code.Equals((int)TILE.START_POINT))
+                {
+                    tilecild = Instantiate(castle, GameMng.I.mapTile[y, x].transform) as GameObject;
+                    GameMng.I.mapTile[y, x]._builtObj = tilecild.GetComponent<Built>();
+                    GameMng.I.mapTile[y, x]._code = (int)BUILT.CASTLE;
+                }
+                
                 if (y % 2 == 0)
                 {
                     child.transform.position = new Vector2(x * tileXOffset, y * tileYOffset);

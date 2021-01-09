@@ -7,7 +7,6 @@ public class Castle : Built
     // Start is called before the first frame update
     void Start()
     {
-        transform.parent.gameObject.GetComponent<Tile>()._code = (int)BUILT.CASTLE;
         _name = "己";
         _desc = "老槽阑 积己茄促";
         _hp = 15;

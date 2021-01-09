@@ -20,7 +20,11 @@ public class Tile : Object
     void Start()
     {
         tile = this.GetComponent<GameObject>();
-        this.tileSpriteRend.sprite = tileSprite[this._code];
+        if (!this._code.Equals((int)TILE.START_POINT))
+        {
+            if (this._code < (int)ACTIVITY .ACTING && this._code > (int)TILE.CAN_MOVE) { this.tileSpriteRend.sprite = tileSprite[this._code - 1]; }
+            else if(this._code < (int)TILE.CAN_MOVE) { this.tileSpriteRend.sprite = tileSprite[this._code]; }
+        }
         _name = "독도는";
         _desc = "우리땅";
     }
@@ -66,7 +70,7 @@ public class Tile : Object
 
     public static bool isEmptyTile(Tile t)
     {
-        if (t._unitObj == null && t._builtObj == null && t._code < (int)TILE.CAN_MOVE)      //
+        if (t._unitObj == null && t._builtObj == null && t._code < (int)TILE.CAN_MOVE)
             return true;
         return false;
     }

@@ -9,7 +9,11 @@ public enum TILE
     DIRT,
     MARS,
     STONE,
-    CAN_MOVE,
+    CAN_MOVE,           // 이전까지 움직일수 있는 타일
+    SEA_01,
+    SEA_02,
+    SEA_03,
+    START_POINT,        // 9
 }
 
 /*

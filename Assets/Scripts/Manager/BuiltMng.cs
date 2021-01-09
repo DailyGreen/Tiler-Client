@@ -55,6 +55,7 @@ public class BuiltMng : MonoBehaviour
             GameMng.I.targetTile._unitObj = Child.GetComponent<Worker>();
             GameMng.I._range.rangeTileReset();
             act = ACTIVITY.ACTING;
+            GameMng.I.targetTile._unitObj.uniqueNumber = NetworkMng.getInstance.uniqueNumber;
             GameMng.I.cleanActList();
             GameMng.I.cleanSelected();
         }

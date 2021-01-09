@@ -9,6 +9,12 @@ using System;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine;
+public struct UserInfo
+{
+    public string nickName;     // 이름
+    public int tribe;           // 종족
+    public int startPos;        // 성 시작지점
+}
 
 public class NetworkMng : MonoBehaviour
 {
@@ -18,6 +24,8 @@ public class NetworkMng : MonoBehaviour
     byte[] buf = new byte[4096];
     int recvLen = 0;
     public int myRoom = 0;
+    public int uniqueNumber = 0;        // 나 자신을 가리키는 고유 숫자
+    public Dictionary<string, UserInfo> _users = new Dictionary<string, UserInfo>();  // 플레이 하는 유저들 정보
 
     public GameObject mainPanel;
     public GameObject loadingPanel;
@@ -26,6 +34,7 @@ public class NetworkMng : MonoBehaviour
 
     public string nickName;
     public List<User> v_user = new List<User>();
+    public int firstPlayerUniqueNumber = -1;
 
     public RoomMng _roomGM;
     public SoundMng _soundGM;
@@ -242,9 +251,32 @@ public class NetworkMng : MonoBehaviour
         }
         else if (txt[0].Equals("GAME_START"))
         {
+            Debug.Log(msg);
+
+            uniqueNumber = int.Parse(txt[1]);
+
             Debug.Log("GAME START !!!");
             _soundGM.waitBGM();
+            Debug.Log("txt 메세지 사이즈 (2개 + 3*인원수 여야됨) : " + txt.Length);
+
+            // 2: 고유번호, 3: 닉네임, 4: 첫 시작 위치
+            for (int k = 0; k < (txt.Length - 2) / 3; k++)
+            {
+                UserInfo userInfo = new UserInfo
+                {
+                    nickName = txt[3 + k * 3],
+                    startPos = int.Parse(txt[4 + k * 3])
+                };
+                _users.Add(txt[2 + k * 3], userInfo);
+            }
+            firstPlayerUniqueNumber = int.Parse(txt[2]);
+
             SceneManager.LoadScene("InGame");
+
+        }
+        else if (txt[0].Equals("TURN"))
+        {
+            GameMng.I.turnManage(txt[1]);
         }
         // 직접 방 생성후 이동
         else if (txt[0].Equals("CHANGE_ROOM"))

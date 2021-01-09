@@ -30,7 +30,7 @@ public enum ACTIVITY
     BUILD_CREATE_UNIT_BUILDING, // 유닛 생성 건물 짓기
     BUILD_SHIELD_BUILDING,      // 방어 건물 짓기
     BUILD_UPGRADE_BUILDING,     // 업그레이드 건물 짓기
-    WORKER_UNIT_CREATE,          // 워커 유닛 생성
+    WORKER_UNIT_CREATE,         // 워커 유닛 생성
 }
 
 public enum UNIT
@@ -44,8 +44,8 @@ public enum BUILT
     MINE = 200,
     FARM,
     ATTACK_BUILDING,
+    CASTLE,
     CREATE_UNIT_BUILDING,
     SHIELD_BUILDING,
-    UPGRADE_BUILDING,
-    CASTLE
+    UPGRADE_BUILDING
 }

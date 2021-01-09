@@ -15,11 +15,15 @@ public class GameMng : MonoBehaviour
     public int _gold = 0;
     public int _nowMem = 0;
     public int _maxMem = 0;
-    private const int mapWidth = 50;            // 맵 가로
-    private const int mapHeight = 50;            // 맵 높이
-    public Tile[,] mapTile = new Tile[mapWidth, mapHeight];     // 타일의 2차원 배열 값
+    private const int mapWidth = 50;                             // 맵 가로
+    private const int mapHeight = 50;                            // 맵 높이
+    public Tile[,] mapTile = new Tile[mapWidth, mapHeight];      // 타일의 2차원 배열 값
     public float unitSpeed = 3.0f;
     public float distanceOfTiles = 0.0f;
+
+    public int myTurnCount = 0;                     // 내 차례
+    public int myMaxTurnCount = 10;                 // 최대 차례
+    public bool myTurn = false;                     // 내 차례인지
 
     /**********
      * 게임 서브 매니저
@@ -34,7 +38,12 @@ public class GameMng : MonoBehaviour
     public RaycastHit2D hit;
     public Tile selectedTile = null;
     public Tile targetTile = null;
-
+    /**********
+     * UI적용을 위한 변수
+     */
+    [SerializeField]
+    Sprite[] objSprite;                         //UI 이미지 적용을 위한 스프라이트 
+    //0:광산 1: 농장 2: 터렛 3: 성 4: 풀 5: 모래 6: 흙 7: 화성? 8: 돌 9: 바다 10: 일꾼
 
     /**********
      * 게임 인터페이스
@@ -42,7 +51,7 @@ public class GameMng : MonoBehaviour
     [SerializeField]
     UnityEngine.UI.Text objectNameTxt;          // 선택 오브젝트 이름
     [SerializeField]
-    UnityEngine.UI.Text objectDescTxt;        // 선택 오브젝트 디테일
+    UnityEngine.UI.Text objectDescTxt;          // 선택 오브젝트 디테일
     [SerializeField]
     UnityEngine.UI.Text hpText;                 // HP 디테일
     [SerializeField]
@@ -53,6 +62,14 @@ public class GameMng : MonoBehaviour
     UnityEngine.UI.Button[] actList;            // 행동
     [SerializeField]
     UnityEngine.UI.Text damageText;             // 데미지
+    [SerializeField]
+    UnityEngine.UI.Image objImage;              // 오브젝트이미지
+    [SerializeField]
+    UnityEngine.UI.Image[] logoImage;           //메인바 로고 이미지         0: HP로고 1: 데미지 로고
+    [SerializeField]
+    UnityEngine.UI.Text turnCountText;          // 턴 수
+    [SerializeField]
+    UnityEngine.UI.Text turnDescText;           // 누구 턴인지 설명
 
     // ---- 맵의 가로 세로 크기 읽기
     public int GetMapWidth
@@ -97,6 +114,8 @@ public class GameMng : MonoBehaviour
         _gold = 100;
         _nowMem = 0;
         _maxMem = 0;
+        if (NetworkMng.getInstance.uniqueNumber == NetworkMng.getInstance.firstPlayerUniqueNumber)
+            myTurn = true;
     }
 
     /**
@@ -167,11 +186,37 @@ public class GameMng : MonoBehaviour
     {
         this.countDel -= Method;
     }
+    public void imActing()
+    {
+        this.myTurnCount++;
+
+        if (this.myMaxTurnCount == this.myTurnCount)
+        {
+            this.myTurnCount = 0;
+            // 턴 교체
+            // 원래라면 인원수에 따라 바뀌지만 테스트 용으로 2인플레이라 생각하고 turn 바꿔주는중
+            this.myTurn = !this.myTurn;
+        }
+        this.turnCountText.text = this.myTurnCount + " / " + this.myMaxTurnCount;
+        this.turnDescText.text = this.myTurn ? "내 차례" : "상대 차례";
+    }
+
+    public void turnManage(string uniqueNumber)
+    {
+        if (NetworkMng.getInstance.uniqueNumber == int.Parse(uniqueNumber))
+        {
+            this.myTurn = true;
+            this.turnDescText.text = "내 차례";
+            return;
+        }
+        this.myTurn = false;
+        this.turnDescText.text = NetworkMng.getInstance._users[uniqueNumber] + " 차례";
+    }
 
     /**
-    * @brief 오브젝트를 클릭했을때
-    * @param tile 클릭한 타일 오브젝트
-    */
+     * @brief 오브젝트를 클릭했을때
+     * @param tile 클릭한 타일 오브젝트
+     */
     public void clickTile(Tile tile)
     {
         cleanActList();
@@ -181,20 +226,91 @@ public class GameMng : MonoBehaviour
             cleanActList();
             objectNameTxt.text = tile._name;
             objectDescTxt.text = tile._desc;
+            hpText.enabled = false;
+            damageText.enabled = false;
+            logoImage[0].enabled = false;                                                   //Hp로고 이미지 꺼둠
+            logoImage[1].enabled = false;                                                   //데미지 로고 이미지 꺼둠
             NetworkMng.getInstance._soundGM.tileClick();
+            switch(tile._code)                                                              //클릭한 타일의 코드에 따른 스프라이트값 조정
+            {
+                case (int)TILE.GRASS:
+                    objImage.sprite = objSprite[4];
+                    break;
+                case (int)TILE.SAND:
+                    objImage.sprite = objSprite[5];
+                    break;
+                case (int)TILE.DIRT:
+                    objImage.sprite = objSprite[6];
+                    break;
+                case (int)TILE.MARS:
+                    objImage.sprite = objSprite[7];
+                    break;
+                case (int)TILE.STONE:
+                    objImage.sprite = objSprite[8];
+                    break;
+                case (int)TILE.SEA_01:
+                    objImage.sprite = objSprite[9];
+                    break;
+                case (int)TILE.SEA_02:
+                    objImage.sprite = objSprite[9];
+                    break;
+                case (int)TILE.SEA_03:
+                    objImage.sprite = objSprite[9];
+                    break;
+            }
             return;
         }
         Object obj;
 
         if (tile._unitObj)
+        {
             obj = tile._unitObj;
+            objImage.sprite = objSprite[10];                                            //스프라이트 일꾼으로 변경 (나중에 유닛 추가시 switch로 변경)
+            hpText.enabled = true;                                                      //----------------------------------------------------------------------
+            damageText.enabled = true;                                                  //hp,데미지 로고, text 켜기
+            logoImage[0].enabled = true;
+            logoImage[1].enabled = true;                                                //----------------------------------------------------------------------
+        }
         else
+        {
             obj = tile._builtObj;
+            switch(tile._builtObj._code)                                                //타일에 있는 건물의 코드의 따른 스프라이트 변경, 로고 text 켜고 끄기
+            {
+                case (int)BUILT.MINE:
+                    objImage.sprite = objSprite[0];
+                    hpText.enabled = true;
+                    damageText.enabled = false;
+                    logoImage[0].enabled = true;
+                    logoImage[1].enabled = false;
+                    break;
+                case (int)BUILT.FARM:
+                    objImage.sprite = objSprite[1];
+                    hpText.enabled = true;
+                    damageText.enabled = false;
+                    logoImage[0].enabled = true;
+                    logoImage[1].enabled = false;
+                    break;
+                case (int)BUILT.ATTACK_BUILDING:
+                    objImage.sprite = objSprite[2];
+                    hpText.enabled = true;
+                    damageText.enabled = true;
+                    logoImage[0].enabled = true;
+                    logoImage[1].enabled = true;
+                    break;
+                case (int)BUILT.CASTLE:
+                    objImage.sprite = objSprite[3];
+                    hpText.enabled = true;
+                    damageText.enabled = false;
+                    logoImage[0].enabled = true;
+                    logoImage[1].enabled = false;
+                    break;
+            }
+        }
 
         objectNameTxt.text = obj._name;
         objectDescTxt.text = obj._desc;
 
-        hpText.text = (tile._unitObj ? tile._unitObj._hp : tile._builtObj._hp) + "";
+        hpText.text = (tile._unitObj ? tile._unitObj._hp : tile._builtObj._hp) + "" + " / " + (tile._unitObj ? tile._unitObj._hp : tile._builtObj._hp); //나중에 최대체력, 현재체력 구분할 것
         NetworkMng.getInstance._soundGM.unitClick(UNIT.WORKER);
         //damageText.text = tile._unitObj._damage + "";
 

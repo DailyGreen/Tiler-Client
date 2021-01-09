@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class UnitMng : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class UnitMng : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && act != ACTIVITY.ACTING)
+        if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject() && act != ACTIVITY.ACTING)
         {
             switch (act)
             {
@@ -35,7 +36,7 @@ public class UnitMng : MonoBehaviour
                     break;
             }
         }
-        else if (Input.GetMouseButtonUp(1) && act != ACTIVITY.ACTING)
+        else if (Input.GetMouseButtonUp(1) && !EventSystem.current.IsPointerOverGameObject() && act != ACTIVITY.ACTING)
         {
             act = ACTIVITY.NONE;
             GameMng.I._range.rangeTileReset();
@@ -43,7 +44,7 @@ public class UnitMng : MonoBehaviour
             GameMng.I.cleanActList();
             GameMng.I.cleanSelected();
         }
-        if (Input.GetMouseButtonDown(0) && act == ACTIVITY.NONE)
+        if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject() && act == ACTIVITY.NONE)
         {
             GameMng.I.mouseRaycast(true);
             if (GameMng.I.targetTile._builtObj != null)
@@ -103,6 +104,7 @@ public class UnitMng : MonoBehaviour
             GameMng.I.selectedTile._unitObj.transform.localPosition = GameMng.I.targetTile.transform.localPosition;
             GameMng.I.targetTile._unitObj = GameMng.I.selectedTile._unitObj;
             GameMng.I.selectedTile._unitObj = null;
+            GameMng.I.imActing();
         }
     }
 

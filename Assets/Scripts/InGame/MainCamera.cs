@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class MainCamera : MonoBehaviour
 {
@@ -31,10 +32,10 @@ public class MainCamera : MonoBehaviour
 
     void LateUpdate()
     {
-        CameraMove();
+        CameraMove();   
         MouseScrollzoom();
         // 클릭시 타일 이름 내용 가져오는곳 (임시)\
-        if (Input.GetMouseButtonDown(0) && GameMng.I._UnitGM.act == ACTIVITY.NONE)
+        if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject() && GameMng.I._UnitGM.act == ACTIVITY.NONE)
         {
             GameMng.I.mouseRaycast();
             GameMng.I.clickTile(GameMng.I.selectedTile);

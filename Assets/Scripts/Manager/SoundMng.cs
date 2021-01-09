@@ -14,10 +14,20 @@ public class SoundMng : MonoBehaviour
     AudioClip[] effectClip;
 
     [SerializeField]
-    AudioSource _effect;
+    AudioClip[] tileClip;
 
-    float audioVolume = 1;
-    float effectVolume = 1;
+    [SerializeField]
+    AudioClip[] unitClip;
+
+    [SerializeField]
+    AudioSource _effect;
+    [SerializeField]
+    AudioSource _tile;
+    [SerializeField]
+    AudioSource _unit;
+
+    float audioVolume = .5f;
+    float effectVolume = .5f;
 
     void Start()
     {
@@ -28,6 +38,7 @@ public class SoundMng : MonoBehaviour
     {
         effectVolume = vol;
         _effect.volume = vol;
+        _unit.volume = vol;
     }
     public void changeAudioVolume(float vol)
     {
@@ -69,16 +80,16 @@ public class SoundMng : MonoBehaviour
     }
     public void tileClick()
     {
-        _effect.clip = effectClip[1];
-        _effect.volume = effectVolume;
-        _effect.Play();
+        _tile.clip = tileClip[0];
+        _tile.volume = effectVolume;
+        _tile.Play();
     }
 
     public void unitClick(UNIT unitCode)
     {
-        _effect.clip = effectClip[2];
-        _effect.volume = effectVolume;
-        _effect.Play();
+        _unit.clip = unitClip[0];
+        _unit.volume = effectVolume;
+        _unit.Play();
     }
 
     IEnumerator changeTo(AudioClip clip)

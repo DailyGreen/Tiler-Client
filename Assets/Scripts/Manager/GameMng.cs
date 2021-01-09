@@ -21,6 +21,10 @@ public class GameMng : MonoBehaviour
     public float unitSpeed = 3.0f;
     public float distanceOfTiles = 0.0f;
 
+    public int myTurnCount = 0;
+    public int myMaxTurnCount = 10;
+    public bool myTurn = false;
+
     /**********
      * 게임 서브 매니저
      */
@@ -41,7 +45,7 @@ public class GameMng : MonoBehaviour
     [SerializeField]
     UnityEngine.UI.Text objectNameTxt;          // 선택 오브젝트 이름
     [SerializeField]
-    UnityEngine.UI.Text objectDescTxt;        // 선택 오브젝트 디테일
+    UnityEngine.UI.Text objectDescTxt;          // 선택 오브젝트 디테일
     [SerializeField]
     UnityEngine.UI.Text hpText;                 // HP 디테일
     [SerializeField]
@@ -52,6 +56,10 @@ public class GameMng : MonoBehaviour
     UnityEngine.UI.Button[] actList;            // 행동
     [SerializeField]
     UnityEngine.UI.Text damageText;             // 데미지
+    [SerializeField]
+    UnityEngine.UI.Text turnCountText;          // 턴 수
+    [SerializeField]
+    UnityEngine.UI.Text turnDescText;           // 누구 턴인지 설명
 
     // ---- 맵의 가로 세로 크기 읽기
     public int GetMapWidth
@@ -96,6 +104,8 @@ public class GameMng : MonoBehaviour
         _gold = 100;
         _nowMem = 0;
         _maxMem = 0;
+        if (NetworkMng.getInstance.uniqueNumber == NetworkMng.getInstance.firstPlayerUniqueNumber)
+            myTurn = true;
     }
 
     /**
@@ -168,13 +178,43 @@ public class GameMng : MonoBehaviour
     }
 
     /**
+     * @brief 카운팅이 드는 행동을 했을때 호출
+     */
+    public void imActing()
+    {
+        this.myTurnCount++;
+
+        if (this.myMaxTurnCount == this.myTurnCount)
+        {
+            this.myTurnCount = 0;
+            // 턴 교체
+            // 원래라면 인원수에 따라 바뀌지만 테스트 용으로 2인플레이라 생각하고 turn 바꿔주는중
+            this.myTurn = !this.myTurn;
+        }
+        this.turnCountText.text = this.myTurnCount + " / " + this.myMaxTurnCount;
+        this.turnDescText.text = this.myTurn ? "내 차례" : "상대 차례";
+    }
+
+    public void turnManage(string uniqueNumber)
+    {
+        if (NetworkMng.getInstance.uniqueNumber == int.Parse(uniqueNumber))
+        {
+            this.myTurn = true;
+            this.turnDescText.text = "내 차례";
+            return;
+        }
+        this.myTurn = false;
+        this.turnDescText.text = NetworkMng.getInstance._users[uniqueNumber] + " 차례";
+    }
+
+    /**
     * @brief 오브젝트를 클릭했을때
     * @param tile 클릭한 타일 오브젝트
     */
     public void clickTile(Tile tile)
     {
-        // 유닛이 없다면 정적인 타일이란 뜻
-        if (tile._unitObj == null)
+        // 유닛이나 건물이 없다면 정적인 타일이란 뜻
+        if (Tile.isEmptyTile(tile))
         {
             cleanActList();
             objectNameTxt.text = tile._name;
@@ -182,10 +222,20 @@ public class GameMng : MonoBehaviour
             NetworkMng.getInstance._soundGM.tileClick();
             return;
         }
-        objectNameTxt.text = tile._unitObj._name;
-        objectDescTxt.text = tile._unitObj._desc;
-        hpText.text = tile._unitObj._hp + "";
+
+        Object obj;
+        if (tile._unitObj)
+            obj = tile._unitObj;
+        else
+            obj = tile._builtObj;
+
+        objectNameTxt.text = obj._name;
+        objectDescTxt.text = obj._desc;
+
+        hpText.text = (tile._unitObj ? tile._unitObj._hp : tile._builtObj._hp) + "";
+
         NetworkMng.getInstance._soundGM.unitClick(UNIT.WORKER);
+
         //damageText.text = tile._unitObj._damage + "";
 
         // 행동을 가진 오브젝트는 actList 를 뿌려줘야 함

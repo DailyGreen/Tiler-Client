@@ -15,6 +15,7 @@ public class Farm : Built
         _hp = 10;
         _code = (int)BUILT.FARM;
         making = 2;
+        _activity.Add(ACTIVITY.DESTROY_BUILT);
     }
 
     // Update is called once per frame

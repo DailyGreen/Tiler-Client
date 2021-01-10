@@ -31,6 +31,7 @@ public enum ACTIVITY
     BUILD_SHIELD_BUILDING,      // 방어 건물 짓기
     BUILD_UPGRADE_BUILDING,     // 업그레이드 건물 짓기
     WORKER_UNIT_CREATE,         // 워커 유닛 생성
+    DESTROY_BUILT,              // 건물 파괴
 }
 
 public enum UNIT

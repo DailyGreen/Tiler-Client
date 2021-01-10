@@ -14,16 +14,16 @@ public class Turret : Built
         _hp = 7;
         _code = (int)BUILT.ATTACK_BUILDING;
         attack = 2;
+        _activity.Add(ACTIVITY.DESTROY_BUILT);
     }
 
     void Update()
     {
-        //Attack();
+
     }
 
     public void Attack()
     {
-        Debug.Log("터렛을 클릭하였습니다.");
         if (GameMng.I.selectedTile._code == (int)BUILT.ATTACK_BUILDING)
         {
             GameMng.I._range.attackRange();

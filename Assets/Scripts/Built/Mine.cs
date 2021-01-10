@@ -15,6 +15,7 @@ public class Mine : Built
         _hp = 10;
         _code = (int)BUILT.MINE;
         making = 5;
+        _activity.Add(ACTIVITY.DESTROY_BUILT);
     }
 
     // Update is called once per frame

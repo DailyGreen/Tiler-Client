@@ -151,8 +151,8 @@ public class RangeControl : MonoBehaviour
             }
             if (GameMng.I.selectedTile.PosX > 0)                                                                                                                             //공격범위가 한곳이 안나오면 이 잘 못
             {
-                if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX]._unitObj != null)
-                    attackRangeTr[0].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX].transform.position;
+                if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX - 1]._unitObj != null)
+                    attackRangeTr[0].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX - 1].transform.position;
                 if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY, GameMng.I.selectedTile.PosX - 1]._unitObj != null)
                     attackRangeTr[2].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY, GameMng.I.selectedTile.PosX - 1].transform.position;
             }

@@ -42,7 +42,7 @@ public class GameMng : MonoBehaviour
      * UI적용을 위한 변수
      */
     [SerializeField]
-    Sprite[] objSprite;                         //UI 이미지 적용을 위한 스프라이트 
+    Sprite[] objSprite;                         // UI 이미지 적용을 위한 스프라이트 
     //0:광산 1: 농장 2: 터렛 3: 성 4: 풀 5: 모래 6: 흙 7: 화성? 8: 돌 9: 바다 10: 일꾼
 
     /**********
@@ -107,6 +107,13 @@ public class GameMng : MonoBehaviour
     void Start()
     {
         init();
+        hpText.enabled = false;                                             // 게임 시작시 클릭된 유닛 보여주는 ui 꺼둠
+        damageText.enabled = false;
+        logoImage[0].enabled = false;
+        logoImage[1].enabled = false;
+        objImage.enabled = false;
+        objectNameTxt.enabled = false;
+        objectDescTxt.enabled = false;
     }
 
     public void init()
@@ -235,27 +242,51 @@ public class GameMng : MonoBehaviour
             {
                 case (int)TILE.GRASS:
                     objImage.sprite = objSprite[4];
+                    objImage.enabled = true;
+                    objectNameTxt.enabled = true;
+                    objectDescTxt.enabled = true;
                     break;
                 case (int)TILE.SAND:
                     objImage.sprite = objSprite[5];
+                    objImage.enabled = true;
+                    objectNameTxt.enabled = true;
+                    objectDescTxt.enabled = true;
                     break;
                 case (int)TILE.DIRT:
                     objImage.sprite = objSprite[6];
+                    objImage.enabled = true;
+                    objectNameTxt.enabled = true;
+                    objectDescTxt.enabled = true;
                     break;
                 case (int)TILE.MARS:
                     objImage.sprite = objSprite[7];
+                    objImage.enabled = true;
+                    objectNameTxt.enabled = true;
+                    objectDescTxt.enabled = true;
                     break;
                 case (int)TILE.STONE:
                     objImage.sprite = objSprite[8];
+                    objImage.enabled = true;
+                    objectNameTxt.enabled = true;
+                    objectDescTxt.enabled = true;
                     break;
                 case (int)TILE.SEA_01:
                     objImage.sprite = objSprite[9];
+                    objImage.enabled = true;
+                    objectNameTxt.enabled = true;
+                    objectDescTxt.enabled = true;
                     break;
                 case (int)TILE.SEA_02:
                     objImage.sprite = objSprite[9];
+                    objImage.enabled = true;
+                    objectNameTxt.enabled = true;
+                    objectDescTxt.enabled = true;
                     break;
                 case (int)TILE.SEA_03:
                     objImage.sprite = objSprite[9];
+                    objImage.enabled = true;
+                    objectNameTxt.enabled = true;
+                    objectDescTxt.enabled = true;
                     break;
             }
             return;
@@ -265,16 +296,19 @@ public class GameMng : MonoBehaviour
         if (tile._unitObj)
         {
             obj = tile._unitObj;
-            objImage.sprite = objSprite[10];                                            //스프라이트 일꾼으로 변경 (나중에 유닛 추가시 switch로 변경)
-            hpText.enabled = true;                                                      //----------------------------------------------------------------------
-            damageText.enabled = true;                                                  //hp,데미지 로고, text 켜기
+            objImage.sprite = objSprite[10];                                            // 스프라이트 일꾼으로 변경 (나중에 유닛 추가시 switch로 변경)
+            hpText.enabled = true;                                                      // ----------------------------------------------------------------------
+            damageText.enabled = true;                                                  // UI, text 켜기
             logoImage[0].enabled = true;
-            logoImage[1].enabled = true;                                                //----------------------------------------------------------------------
+            logoImage[1].enabled = true;                                                // ----------------------------------------------------------------------
+            objImage.enabled = true;
+            objectNameTxt.enabled = true;
+            objectDescTxt.enabled = true;
         }
         else
         {
             obj = tile._builtObj;
-            switch(tile._builtObj._code)                                                //타일에 있는 건물의 코드의 따른 스프라이트 변경, 로고 text 켜고 끄기
+            switch(tile._builtObj._code)                                                // 타일에 있는 건물의 코드의 따른 스프라이트 변경, 로고 text 켜고 끄기
             {
                 case (int)BUILT.MINE:
                     objImage.sprite = objSprite[0];
@@ -282,6 +316,9 @@ public class GameMng : MonoBehaviour
                     damageText.enabled = false;
                     logoImage[0].enabled = true;
                     logoImage[1].enabled = false;
+                    objImage.enabled = true;
+                    objectNameTxt.enabled = true;
+                    objectDescTxt.enabled = true;
                     break;
                 case (int)BUILT.FARM:
                     objImage.sprite = objSprite[1];
@@ -289,6 +326,9 @@ public class GameMng : MonoBehaviour
                     damageText.enabled = false;
                     logoImage[0].enabled = true;
                     logoImage[1].enabled = false;
+                    objImage.enabled = true;
+                    objectNameTxt.enabled = true;
+                    objectDescTxt.enabled = true;
                     break;
                 case (int)BUILT.ATTACK_BUILDING:
                     objImage.sprite = objSprite[2];
@@ -296,6 +336,9 @@ public class GameMng : MonoBehaviour
                     damageText.enabled = true;
                     logoImage[0].enabled = true;
                     logoImage[1].enabled = true;
+                    objImage.enabled = true;
+                    objectNameTxt.enabled = true;
+                    objectDescTxt.enabled = true;
                     break;
                 case (int)BUILT.CASTLE:
                     objImage.sprite = objSprite[3];
@@ -303,6 +346,9 @@ public class GameMng : MonoBehaviour
                     damageText.enabled = false;
                     logoImage[0].enabled = true;
                     logoImage[1].enabled = false;
+                    objImage.enabled = true;
+                    objectNameTxt.enabled = true;
+                    objectDescTxt.enabled = true;
                     break;
             }
         }
@@ -310,7 +356,7 @@ public class GameMng : MonoBehaviour
         objectNameTxt.text = obj._name;
         objectDescTxt.text = obj._desc;
 
-        hpText.text = (tile._unitObj ? tile._unitObj._hp : tile._builtObj._hp) + "" + " / " + (tile._unitObj ? tile._unitObj._hp : tile._builtObj._hp); //나중에 최대체력, 현재체력 구분할 것
+        hpText.text = (tile._unitObj ? tile._unitObj._hp : tile._builtObj._hp) + "" + " / " + (tile._unitObj ? tile._unitObj._hp : tile._builtObj._hp); // 나중에 최대체력, 현재체력 구분할 것
         NetworkMng.getInstance._soundGM.unitClick(UNIT.WORKER);
         //damageText.text = tile._unitObj._damage + "";
 
@@ -383,6 +429,10 @@ public class GameMng : MonoBehaviour
                 actName.text = "일꾼 생성";
                 actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; Castle.CreateUnit(); });
                 break;
+            case ACTIVITY.DESTROY_BUILT:
+                actName.text = "건물 파괴";
+                actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; _BuiltGM.DestroyBuilt(); });
+                break;
             default:
                 break;
         }
@@ -417,6 +467,13 @@ public class GameMng : MonoBehaviour
             actList[i].onClick.RemoveAllListeners();
             actList[i].gameObject.SetActive(false);
         }
+        objImage.enabled = false;
+        hpText.enabled = false;
+        damageText.enabled = false;
+        objectNameTxt.enabled = false;
+        objectDescTxt.enabled = false;
+        logoImage[0].enabled = false;
+        logoImage[1].enabled = false;
     }
 
     /**

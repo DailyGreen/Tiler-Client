@@ -211,7 +211,14 @@ public class GameMng : MonoBehaviour
             return;
         }
         this.myTurn = false;
-        this.turnDescText.text = NetworkMng.getInstance._users[uniqueNumber] + " 차례";
+        for (int i = 0; i < NetworkMng.getInstance.v_user.Count; i++)
+        {
+            if (NetworkMng.getInstance.v_user[i].uniqueNumber.Equals(uniqueNumber))
+            {
+                this.turnDescText.text = NetworkMng.getInstance.v_user[i].nickName + " 차례";
+                break;
+            }
+        }
     }
 
     /**
@@ -406,6 +413,11 @@ public class GameMng : MonoBehaviour
                 actName.text = "건물 파괴";
                 actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; _BuiltGM.DestroyBuilt(); });
                 break;
+            case ACTIVITY.ATTACK:                                                               // 임시입니다!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                actName.text = "공격";
+                actDesc.text = "두 턴 소요";
+                actButton.onClick.AddListener(delegate { _UnitGM.act = activity; Worker.unitAttacking(); });
+                break;
             default:
                 break;
         }
@@ -465,4 +477,10 @@ public class GameMng : MonoBehaviour
         selectedTile = null;
         targetTile = null;
     }
+
+    public void uiClickBT()
+    {
+        NetworkMng.getInstance._soundGM.uiBTClick();
+    }
 }
+

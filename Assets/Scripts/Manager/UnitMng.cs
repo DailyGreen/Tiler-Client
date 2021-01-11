@@ -122,4 +122,31 @@ public class UnitMng : MonoBehaviour
             }
         }
     }
+
+    public void UnitAttack()
+    {
+        GameMng.I.mouseRaycast(true);
+        if (GameMng.I.targetTile._unitObj != null || GameMng.I.targetTile._builtObj != null)
+        {
+            if (GameMng.I.targetTile._unitObj != null)
+            {
+                GameMng.I.targetTile._unitObj._hp -= GameMng.I.selectedTile._unitObj._damage;
+                if (GameMng.I.targetTile._unitObj._hp <= 0)
+                {
+                    Destroy(GameMng.I.targetTile._unitObj.gameObject);
+                }
+            }
+            else if (GameMng.I.targetTile._builtObj != null)
+            {
+                GameMng.I.targetTile._builtObj._hp -= GameMng.I.selectedTile._unitObj._damage;
+                if (GameMng.I.targetTile._builtObj._hp <= 0)
+                {
+                    Destroy(GameMng.I.targetTile._builtObj.gameObject);
+                }
+            }
+            GameMng.I.cleanActList();
+            GameMng.I.cleanSelected();
+            act = ACTIVITY.NONE;
+        }
+    }
 }

@@ -17,5 +17,7 @@ public class Object : MonoBehaviour
     public string _name = "";       // 오브젝트 고유 명칭
     public string _desc = "";       // 오브젝트 설명
 
+    public int uniqueNumber;      // 플레이어 구별 코드
+
     public List<ACTIVITY> _activity = new List<ACTIVITY>();
 }

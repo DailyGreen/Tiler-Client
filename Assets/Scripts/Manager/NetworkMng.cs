@@ -27,7 +27,6 @@ public class NetworkMng : MonoBehaviour
     int recvLen = 0;
     public int myRoom = 0;
     public int uniqueNumber = 0;        // 나 자신을 가리키는 고유 숫자
-    public Dictionary<string, UserInfo> _users = new Dictionary<string, UserInfo>();  // 플레이 하는 유저들 정보
 
     public GameObject mainPanel;
     public GameObject loadingPanel;
@@ -263,26 +262,29 @@ public class NetworkMng : MonoBehaviour
         {
             Debug.Log(msg);
 
-            uniqueNumber = int.Parse(txt[1]);
+            //uniqueNumber = int.Parse(txt[1]);
 
             Debug.Log("GAME START !!!");
             _soundGM.waitBGM();
             Debug.Log("txt 메세지 사이즈 (2개 + 3*인원수 여야됨) : " + txt.Length);
 
-            // 2: 고유번호, 3: 닉네임, 4: 첫 시작 위치
-            for (int k = 0; k < (txt.Length - 2) / 3; k++)
+            // 1: 고유번호, 2: 첫 시작 위치
+            for (int k = 0; k < (txt.Length - 1) / 2; k++)
             {
-                UserInfo userInfo = new UserInfo
+                for (int j = 0; j < v_user.Count; j++)
                 {
-                    nickName = txt[3 + k * 3],
-                    startPos = int.Parse(txt[4 + k * 3])
-                };
-                _users.Add(txt[2 + k * 3], userInfo);
+                    if (v_user[j].uniqueNumber == int.Parse(txt[1 + k * 2]))
+                    {
+                        UserInfo info = v_user[j];
+                        info.startPos = int.Parse(txt[2 + k * 2]);
+                        v_user[j] = info;
+                        break;
+                    }
+                }
             }
-            firstPlayerUniqueNumber = int.Parse(txt[2]);
 
+            firstPlayerUniqueNumber = int.Parse(txt[1]);
             SceneManager.LoadScene("InGame");
-
         }
         else if (txt[0].Equals("TURN"))
         {

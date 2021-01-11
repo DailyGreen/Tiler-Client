@@ -22,7 +22,7 @@ public class Tile : Object
         tile = this.GetComponent<GameObject>();
         if (!this._code.Equals((int)TILE.START_POINT))
         {
-            if (this._code < (int)ACTIVITY .ACTING && this._code > (int)TILE.CAN_MOVE) { this.tileSpriteRend.sprite = tileSprite[this._code - 1]; }
+            if (this._code < (int)ACTIVITY .ACTING && this._code > (int)TILE.CAN_MOVE) { this.tileSpriteRend.sprite = tileSprite[this._code - 2]; }
             else if(this._code < (int)TILE.CAN_MOVE) { this.tileSpriteRend.sprite = tileSprite[this._code]; }
         }
         _name = "µ¶µµ´Â";

@@ -7,7 +7,6 @@ public class Farm : Built
     public int making;  // 식량 생산량
     public static int cost = 4;   // 건설 비용
 
-    // Start is called before the first frame update
     void Start()
     {
         _name = "농장";
@@ -15,9 +14,9 @@ public class Farm : Built
         _hp = 10;
         _code = (int)BUILT.FARM;
         making = 2;
+        _activity.Add(ACTIVITY.DESTROY_BUILT);
     }
 
-    // Update is called once per frame
     void Update()
     {
         MakingFood();

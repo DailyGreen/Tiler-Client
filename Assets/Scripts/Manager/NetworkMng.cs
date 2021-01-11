@@ -241,6 +241,12 @@ public class NetworkMng : MonoBehaviour
         // 방에 있던 사람 중 누군가 나감
         else if (txt[0].Equals("SOMEONE_EXIT"))
         {
+            if (uniqueNumber.Equals(int.Parse(txt[1])))
+            {
+                v_user.Clear();
+                return;
+            }
+
             int i;
             for (i = 0; i < v_user.Count; i++)
             {
@@ -252,15 +258,6 @@ public class NetworkMng : MonoBehaviour
             v_user.RemoveAt(i);
 
             _roomGM.roomRefresh();
-            //v_user.Clear();
-
-            //if (!txt[1].Equals("_"))
-            //{
-            //    User tempUser = new User();
-            //    tempUser.nickName = txt[1];
-            //    v_user.Add(tempUser);
-            //}
-            //_roomGM.roomRefresh();
         }
         else if (txt[0].Equals("GAME_START"))
         {
@@ -311,28 +308,8 @@ public class NetworkMng : MonoBehaviour
         {
             if (txt[1].Equals("IN"))
             {
-                //v_user.Clear();
-
-                //if (!txt[3].Equals("_"))
-                //{
-                //    User tempUser = new User();
-                //    tempUser.nickName = txt[3];
-                //    v_user.Add(tempUser);
-                //}
-                //if (!txt[4].Equals("_"))
-                //{
-                //    User tempUser = new User();
-                //    tempUser.nickName = txt[4];
-                //    v_user.Add(tempUser);
-                //}
-
-                Debug.Log("ER MSG : " + msg);
                 for (int k = 0; k < (txt.Length - 2) / 4; k++)
                 {
-                    Debug.Log("nick : " + txt[3 + k * 4]);
-                    Debug.Log("uniq : " + txt[4 + k * 4]);
-                    Debug.Log("tribe : " + txt[5 + k * 4]);
-                    Debug.Log("color : " + txt[6 + k * 4]);
                     UserInfo userInfo = new UserInfo
                     {
                         nickName = txt[3 + k * 4],
@@ -342,8 +319,6 @@ public class NetworkMng : MonoBehaviour
                     };
                     v_user.Add(userInfo);
                 }
-
-
                 _roomGM.intoRoom(txt[2]);
                 _roomGM.roomRefresh();
             }
@@ -373,10 +348,6 @@ public class NetworkMng : MonoBehaviour
         // 누군가 들어올때 받음
         else if (txt[0].Equals("SOMEONE_ENTER"))
         {
-            Debug.Log("SOMEONE ENTER");
-            //User tempUser = new User();
-            //tempUser.nickName = txt[1];
-
             UserInfo tempUser = new UserInfo
             {
                 nickName = txt[1],

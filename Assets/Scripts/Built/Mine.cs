@@ -7,7 +7,6 @@ public class Mine : Built
     public int making;  // 골드 생산량
     public static int cost = 1;   // 건설 비용
 
-    // Start is called before the first frame update
     void Start()
     {
         _name = "광산";
@@ -15,9 +14,9 @@ public class Mine : Built
         _hp = 10;
         _code = (int)BUILT.MINE;
         making = 5;
+        _activity.Add(ACTIVITY.DESTROY_BUILT);
     }
 
-    // Update is called once per frame
     void Update()
     {
         MakingGold();

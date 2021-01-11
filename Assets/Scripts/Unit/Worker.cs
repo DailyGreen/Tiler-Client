@@ -59,4 +59,10 @@ public class Worker : Unit
         GameMng.I._range.moveRange();
         Debug.Log("강화 건물 생성");
     }
+
+    public static void unitAttacking()
+    {
+        GameMng.I._range.attackRange();
+        Debug.Log("공격 준비 완료");
+    }
 }

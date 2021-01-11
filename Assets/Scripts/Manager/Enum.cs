@@ -12,11 +12,11 @@ public enum TILE
     DIRT,
     MARS,
     STONE,
+    START_POINT,        // 5
     CAN_MOVE,           // 이전까지 움직일수 있는 타일
     SEA_01,
     SEA_02,
     SEA_03,
-    START_POINT,        // 9
 }
 
 /*
@@ -35,6 +35,7 @@ public enum ACTIVITY
     BUILD_UPGRADE_BUILDING,     // 업그레이드 건물 짓기
     WORKER_UNIT_CREATE,         // 워커 유닛 생성
     DESTROY_BUILT,              // 건물 파괴
+    ATTACK,                     // 공격
 }
 
 public enum UNIT

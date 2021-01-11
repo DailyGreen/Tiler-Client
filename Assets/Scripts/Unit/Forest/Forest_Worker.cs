@@ -16,7 +16,7 @@ public class Forest_Worker : Worker
         _activity.Add(ACTIVITY.BUILD_CREATE_UNIT_BUILDING);
         _activity.Add(ACTIVITY.BUILD_SHIELD_BUILDING);
         _activity.Add(ACTIVITY.BUILD_UPGRADE_BUILDING);
-
+        //_activity.Add(ACTIVITY.ATTACK);             // 임시입니다!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         StartCoroutine("creating");
 
     }

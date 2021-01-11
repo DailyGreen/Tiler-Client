@@ -12,6 +12,9 @@ public class HexTileCreate : MonoBehaviour
     public GameObject castle;
     public GameObject tilecild;
 
+    public Tile[] starttile = new Tile[24];
+    int index = 0;
+
     // 타일 간격
     public const float tileXOffset = 1.24f;
     public const float tileYOffset = 1.08f;
@@ -23,6 +26,7 @@ public class HexTileCreate : MonoBehaviour
     void Start()
     {
         CreateHexTileMap();
+        CastleCreate();
     }
 
     void OnApplicationQuit()
@@ -47,14 +51,13 @@ public class HexTileCreate : MonoBehaviour
 
                 GameMng.I.mapTile[y, x] = child.transform.GetComponent<Tile>();      // 각각의 타일 스크립트 GameMng.I.mapTile 2차원 배열에 저장
 
-                // mapinfo.txt  에 start_point 코드일때 성을 Instantiate 하고 tile._builtObj 에 성 스크립트 넣어준후 완성된 코드를 tile._code 에 저장 (임시)
+                // mapinfo.txt  에 start_point 코드일때 starttile 에 타일 스크립트 넣어줌
                 if (tilestate._code.Equals((int)TILE.START_POINT))
                 {
-                    tilecild = Instantiate(castle, GameMng.I.mapTile[y, x].transform) as GameObject;
-                    GameMng.I.mapTile[y, x]._builtObj = tilecild.GetComponent<Built>();
-                    GameMng.I.mapTile[y, x]._code = (int)BUILT.CASTLE;
+                    starttile[index] = GameMng.I.mapTile[y, x];
+                    index++;
                 }
-                
+
                 if (y % 2 == 0)
                 {
                     child.transform.position = new Vector2(x * tileXOffset, y * tileYOffset);
@@ -68,6 +71,20 @@ public class HexTileCreate : MonoBehaviour
             }
             tilestate.PosX = 0;
             tilestate.PosY++;
+        }
+    }
+
+    /**
+     * @brief NetworkMng 에서 값 받아와 성 생성 후 고유번호 분리
+     */
+    void CastleCreate()
+    {
+        for (int i = 0; i < NetworkMng.getInstance.v_user.Count; i++)
+        {
+            tilecild = Instantiate(castle, starttile[NetworkMng.getInstance.v_user[i].startPos].transform) as GameObject;
+            starttile[NetworkMng.getInstance.v_user[i].startPos]._builtObj = tilecild.GetComponent<Built>();
+            starttile[NetworkMng.getInstance.v_user[i].startPos].uniqueNumber = NetworkMng.getInstance.v_user[i].uniqueNumber;
+            starttile[NetworkMng.getInstance.v_user[i].startPos]._code = (int)BUILT.CASTLE;
         }
     }
 }

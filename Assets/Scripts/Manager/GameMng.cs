@@ -114,6 +114,7 @@ public class GameMng : MonoBehaviour
         _gold = 100;
         _nowMem = 0;
         _maxMem = 0;
+        setMainInterface(false);
         if (NetworkMng.getInstance.uniqueNumber == NetworkMng.getInstance.firstPlayerUniqueNumber)
             myTurn = true;
     }
@@ -221,17 +222,25 @@ public class GameMng : MonoBehaviour
     {
         cleanActList();
         // 유닛이 없다면 정적인 타일이란 뜻
+        
         if (tile._unitObj == null && tile._builtObj == null)
         {
             cleanActList();
+
             objectNameTxt.text = tile._name;
             objectDescTxt.text = tile._desc;
             hpText.enabled = false;
             damageText.enabled = false;
             logoImage[0].enabled = false;                                                   //Hp로고 이미지 꺼둠
             logoImage[1].enabled = false;                                                   //데미지 로고 이미지 꺼둠
+            
             NetworkMng.getInstance._soundGM.tileClick();
-            switch(tile._code)                                                              //클릭한 타일의 코드에 따른 스프라이트값 조정
+
+            objImage.enabled = true;
+            objectNameTxt.enabled = true;
+            objectDescTxt.enabled = true;
+
+            switch (tile._code)                                                              //클릭한 타일의 코드에 따른 스프라이트값 조정
             {
                 case (int)TILE.GRASS:
                     objImage.sprite = objSprite[4];
@@ -265,16 +274,14 @@ public class GameMng : MonoBehaviour
         if (tile._unitObj)
         {
             obj = tile._unitObj;
-            objImage.sprite = objSprite[10];                                            //스프라이트 일꾼으로 변경 (나중에 유닛 추가시 switch로 변경)
-            hpText.enabled = true;                                                      //----------------------------------------------------------------------
-            damageText.enabled = true;                                                  //hp,데미지 로고, text 켜기
-            logoImage[0].enabled = true;
-            logoImage[1].enabled = true;                                                //----------------------------------------------------------------------
+            objImage.sprite = objSprite[10];    // 스프라이트 일꾼으로 변경 (나중에 유닛 추가시 switch로 변경)
+
+            setMainInterface(true);
         }
         else
         {
             obj = tile._builtObj;
-            switch(tile._builtObj._code)                                                //타일에 있는 건물의 코드의 따른 스프라이트 변경, 로고 text 켜고 끄기
+            switch(tile._builtObj._code)        //타일에 있는 건물의 코드의 따른 스프라이트 변경, 로고 text 켜고 끄기
             {
                 case (int)BUILT.MINE:
                     objImage.sprite = objSprite[0];
@@ -282,6 +289,9 @@ public class GameMng : MonoBehaviour
                     damageText.enabled = false;
                     logoImage[0].enabled = true;
                     logoImage[1].enabled = false;
+                    objImage.enabled = true;
+                    objectNameTxt.enabled = true;
+                    objectDescTxt.enabled = true;
                     break;
                 case (int)BUILT.FARM:
                     objImage.sprite = objSprite[1];
@@ -289,6 +299,9 @@ public class GameMng : MonoBehaviour
                     damageText.enabled = false;
                     logoImage[0].enabled = true;
                     logoImage[1].enabled = false;
+                    objImage.enabled = true;
+                    objectNameTxt.enabled = true;
+                    objectDescTxt.enabled = true;
                     break;
                 case (int)BUILT.ATTACK_BUILDING:
                     objImage.sprite = objSprite[2];
@@ -296,6 +309,9 @@ public class GameMng : MonoBehaviour
                     damageText.enabled = true;
                     logoImage[0].enabled = true;
                     logoImage[1].enabled = true;
+                    objImage.enabled = true;
+                    objectNameTxt.enabled = true;
+                    objectDescTxt.enabled = true;
                     break;
                 case (int)BUILT.CASTLE:
                     objImage.sprite = objSprite[3];
@@ -303,6 +319,9 @@ public class GameMng : MonoBehaviour
                     damageText.enabled = false;
                     logoImage[0].enabled = true;
                     logoImage[1].enabled = false;
+                    objImage.enabled = true;
+                    objectNameTxt.enabled = true;
+                    objectDescTxt.enabled = true;
                     break;
             }
         }
@@ -383,6 +402,10 @@ public class GameMng : MonoBehaviour
                 actName.text = "일꾼 생성";
                 actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; Castle.CreateUnit(); });
                 break;
+            case ACTIVITY.DESTROY_BUILT:
+                actName.text = "건물 파괴";
+                actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; _BuiltGM.DestroyBuilt(); });
+                break;
             default:
                 break;
         }
@@ -417,6 +440,21 @@ public class GameMng : MonoBehaviour
             actList[i].onClick.RemoveAllListeners();
             actList[i].gameObject.SetActive(false);
         }
+        setMainInterface(false);
+    }
+
+    /**
+     * @brief 메인인터페이스 설정
+     */
+    public void setMainInterface(bool isShow)
+    {
+        hpText.enabled = isShow;
+        objImage.enabled = isShow;
+        damageText.enabled = isShow;
+        objectNameTxt.enabled = isShow;
+        objectDescTxt.enabled = isShow;
+        logoImage[0].enabled = isShow;
+        logoImage[1].enabled = isShow;
     }
 
     /**

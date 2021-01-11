@@ -37,6 +37,7 @@ public class MainCamera : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && GameMng.I._UnitGM.act == ACTIVITY.NONE && GameMng.I._BuiltGM.act == ACTIVITY.NONE && !EventSystem.current.IsPointerOverGameObject())
         {
             GameMng.I.mouseRaycast();
+            if (GameMng.I.selectedTile)
             GameMng.I.clickTile(GameMng.I.selectedTile);
         }
     }

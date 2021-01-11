@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Castle : Built
 {
-    // Start is called before the first frame update
     void Start()
     {
         uniqueNumber = NetworkMng.getInstance.uniqueNumber;                                         //성의 유니크 넘버를 정해줌
@@ -15,16 +14,11 @@ public class Castle : Built
         _activity.Add(ACTIVITY.WORKER_UNIT_CREATE);
     }
 
-    // Update is called once per frame
     void Update()
     {
 
     }
 
-    //public void CastleInfo()
-    //{
-    //    Debug.Log("성의 정보를 보여줍니다.");
-    //}
     public static void CreateUnit()
     {
         if (GameMng.I.selectedTile._code == (int)BUILT.CASTLE)

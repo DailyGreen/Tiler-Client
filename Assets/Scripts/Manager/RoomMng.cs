@@ -40,6 +40,14 @@ public class RoomMng : MonoBehaviour
     public UnityEngine.UI.Text[] playersName;
     [SerializeField]
     UnityEngine.UI.Button gameStartBT;
+    [SerializeField]
+    UnityEngine.UI.Image[] tribeImages;
+    [SerializeField]
+    UnityEngine.UI.Image[] colorImages;
+    [SerializeField]
+    UnityEngine.UI.Button[] colorBT;
+    [SerializeField]
+    Sprite[] tribeSprites;
 
     //public string roomName;
     string nowMem;  // 현재 방에 있는 유저 수
@@ -59,6 +67,15 @@ public class RoomMng : MonoBehaviour
         if (!roomNameTxt.text.Equals(""))
         {
             NetworkMng.getInstance.SendMsg(string.Format("CREATE_ROOM:{0}:{1}:{2}", roomNameTxt.text, roomPWTxt.text, 3));
+
+            UserInfo userInfo = new UserInfo
+            {
+                nickName = NetworkMng.getInstance.nickName,
+                uniqueNumber = NetworkMng.getInstance.uniqueNumber,
+                tribe = 0,
+                color = 0
+            };
+            NetworkMng.getInstance.v_user.Add(userInfo);
         }
     }
 
@@ -171,7 +188,7 @@ public class RoomMng : MonoBehaviour
             playersName[i].text = "";
         }
         NetworkMng.getInstance.v_user.Clear();
-        NetworkMng.getInstance.SendMsg(string.Format("ROOM_EXIT"));
+        NetworkMng.getInstance.SendMsg(string.Format("ROOM_EXIT:{0}", NetworkMng.getInstance.uniqueNumber));
         roomPanel.SetActive(false);
         NetworkMng.getInstance._soundGM.loginBGM();
         //lobbyPanel.SetActive(true);
@@ -210,11 +227,76 @@ public class RoomMng : MonoBehaviour
     {
         for (int i = 1; i < players.Length; i++)
             players[i].SetActive(false);
+
+        int countingMember = 1;
+
+        // 색 순서만큼
+        for (int i = 0; i < 9; i++)
+        {
+            colorBT[i].interactable = true;
+        }
+
+        Color color;
         for (int i = 0; i < NetworkMng.getInstance.v_user.Count; i++)
         {
-            players[1 + i].SetActive(true);
-            playersName[1 + i].text = NetworkMng.getInstance.v_user[i].nickName;
+            ColorUtility.TryParseHtmlString(CustomColor.TransColor((COLOR)NetworkMng.getInstance.v_user[i].color), out color);
+            colorBT[NetworkMng.getInstance.v_user[i].color].interactable = false;
+
+            // 다른사람꺼
+            if (!NetworkMng.getInstance.v_user[i].uniqueNumber.Equals(NetworkMng.getInstance.uniqueNumber))
+            {
+                players[countingMember].SetActive(true);
+                playersName[countingMember].text = NetworkMng.getInstance.v_user[i].nickName;
+                tribeImages[countingMember].sprite = tribeSprites[NetworkMng.getInstance.v_user[i].tribe];
+                colorImages[countingMember].color = color;
+                countingMember++;
+            }
+            // 내꺼
+            else
+            {
+                tribeImages[0].sprite = tribeSprites[NetworkMng.getInstance.v_user[i].tribe];
+                colorImages[0].color = color;
+            }
         }
-        nowMem = (1 + NetworkMng.getInstance.v_user.Count) + "";
+        nowMem = (NetworkMng.getInstance.v_user.Count) + "";
+    }
+
+    public void wantChangeTribe(int tribeNum)
+    {
+        NetworkMng.getInstance.SendMsg(string.Format("TRIBE:{0}", tribeNum));
+    }
+    public void wantChangeColor (int colorNum)
+    {
+        NetworkMng.getInstance.SendMsg(string.Format("COLOR:{0}", colorNum));
+    }
+
+    public void changeTribe(int uniqueCode, int tribeNum)
+    {
+        for (int i = 0; i < NetworkMng.getInstance.v_user.Count; i++)
+        {
+            if (NetworkMng.getInstance.v_user[i].uniqueNumber.Equals(uniqueCode))
+            {
+                UserInfo info = NetworkMng.getInstance.v_user[i];
+                info.tribe = tribeNum;
+                NetworkMng.getInstance.v_user[i] = info;
+                break;
+            }
+        }
+        roomRefresh();
+    }
+
+    public void changeColor(int uniqueCode, int colorNum)
+    {
+        for (int i = 0; i < NetworkMng.getInstance.v_user.Count; i++)
+        {
+            if (NetworkMng.getInstance.v_user[i].uniqueNumber.Equals(uniqueCode))
+            {
+                UserInfo info = NetworkMng.getInstance.v_user[i];
+                info.color = colorNum;
+                NetworkMng.getInstance.v_user[i] = info;
+                break;
+            }
+        }
+        roomRefresh();
     }
 }

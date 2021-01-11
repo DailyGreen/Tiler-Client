@@ -14,11 +14,7 @@ public class Turret : Built
         _hp = 7;
         _code = (int)BUILT.ATTACK_BUILDING;
         attack = 2;
-    }
-
-    void Update()
-    {
-        //Attack();
+        _activity.Add(ACTIVITY.DESTROY_BUILT);
     }
 
     public void Attack()

@@ -12,7 +12,9 @@ using UnityEngine;
 public struct UserInfo
 {
     public string nickName;     // 이름
+    public int uniqueNumber;    // 종족
     public int tribe;           // 종족
+    public int color;           // 색
     public int startPos;        // 성 시작지점
 }
 
@@ -33,7 +35,7 @@ public class NetworkMng : MonoBehaviour
     public Animator loadingAnim;
 
     public string nickName;
-    public List<User> v_user = new List<User>();
+    public List<UserInfo> v_user = new List<UserInfo>();
     public int firstPlayerUniqueNumber = -1;
 
     public RoomMng _roomGM;
@@ -239,15 +241,26 @@ public class NetworkMng : MonoBehaviour
         // 방에 있던 사람 중 누군가 나감
         else if (txt[0].Equals("SOMEONE_EXIT"))
         {
-            v_user.Clear();
-
-            if (!txt[1].Equals("_"))
+            int i;
+            for (i = 0; i < v_user.Count; i++)
             {
-                User tempUser = new User();
-                tempUser.nickName = txt[1];
-                v_user.Add(tempUser);
+                if (v_user[i].uniqueNumber.Equals(int.Parse(txt[1])))
+                {
+                    break;
+                }
             }
+            v_user.RemoveAt(i);
+
             _roomGM.roomRefresh();
+            //v_user.Clear();
+
+            //if (!txt[1].Equals("_"))
+            //{
+            //    User tempUser = new User();
+            //    tempUser.nickName = txt[1];
+            //    v_user.Add(tempUser);
+            //}
+            //_roomGM.roomRefresh();
         }
         else if (txt[0].Equals("GAME_START"))
         {
@@ -298,21 +311,40 @@ public class NetworkMng : MonoBehaviour
         {
             if (txt[1].Equals("IN"))
             {
-                v_user.Clear();
+                //v_user.Clear();
 
-                if (!txt[2].Equals("_"))
+                //if (!txt[3].Equals("_"))
+                //{
+                //    User tempUser = new User();
+                //    tempUser.nickName = txt[3];
+                //    v_user.Add(tempUser);
+                //}
+                //if (!txt[4].Equals("_"))
+                //{
+                //    User tempUser = new User();
+                //    tempUser.nickName = txt[4];
+                //    v_user.Add(tempUser);
+                //}
+
+                Debug.Log("ER MSG : " + msg);
+                for (int k = 0; k < (txt.Length - 2) / 4; k++)
                 {
-                    User tempUser = new User();
-                    tempUser.nickName = txt[2];
-                    v_user.Add(tempUser);
+                    Debug.Log("nick : " + txt[3 + k * 4]);
+                    Debug.Log("uniq : " + txt[4 + k * 4]);
+                    Debug.Log("tribe : " + txt[5 + k * 4]);
+                    Debug.Log("color : " + txt[6 + k * 4]);
+                    UserInfo userInfo = new UserInfo
+                    {
+                        nickName = txt[3 + k * 4],
+                        uniqueNumber = int.Parse(txt[4 + k * 4]),
+                        tribe = int.Parse(txt[5 + k * 4]),
+                        color = int.Parse(txt[6 + k * 4])
+                    };
+                    v_user.Add(userInfo);
                 }
-                if (!txt[3].Equals("_"))
-                {
-                    User tempUser = new User();
-                    tempUser.nickName = txt[3];
-                    v_user.Add(tempUser);
-                }
-                _roomGM.intoRoom(txt[4]);
+
+
+                _roomGM.intoRoom(txt[2]);
                 _roomGM.roomRefresh();
             }
             else if (txt[1].Equals("LIMIT"))
@@ -324,12 +356,34 @@ public class NetworkMng : MonoBehaviour
                 myRoom = 0;
             }
         }
+        else if (txt[0].Equals("TRIBE"))
+        {
+            // 종족을 변경하는 유저의 코드와 변경하는 종족의 코드
+            _roomGM.changeTribe(int.Parse(txt[1]), int.Parse(txt[2]));
+        }
+        else if (txt[0].Equals("COLOR"))
+        {
+            // 색상을 변경하는 유저의 코드와 변경하는 색상의 코드
+            _roomGM.changeColor(int.Parse(txt[1]), int.Parse(txt[2]));
+        }
+        else if (txt[0].Equals("UNIQUE"))
+        {
+            uniqueNumber = int.Parse(txt[1]);
+        }
         // 누군가 들어올때 받음
         else if (txt[0].Equals("SOMEONE_ENTER"))
         {
             Debug.Log("SOMEONE ENTER");
-            User tempUser = new User();
-            tempUser.nickName = txt[1];
+            //User tempUser = new User();
+            //tempUser.nickName = txt[1];
+
+            UserInfo tempUser = new UserInfo
+            {
+                nickName = txt[1],
+                uniqueNumber = int.Parse(txt[2]),
+                tribe = int.Parse(txt[3]),
+                color = int.Parse(txt[4])
+            };
             v_user.Add(tempUser);
             _roomGM.roomRefresh();
         }
@@ -344,7 +398,7 @@ public class NetworkMng : MonoBehaviour
         {
             // 광장이 아니였을 때
             if (myRoom != 0)
-                SendMsg(string.Format("ROOM_EXIT"));
+                SendMsg(string.Format("ROOM_EXIT:{0}", NetworkMng.getInstance.uniqueNumber));
             SendMsg("DISCONNECT");
             Thread.Sleep(500);
             socket.Close();

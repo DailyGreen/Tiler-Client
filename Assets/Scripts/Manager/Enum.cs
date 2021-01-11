@@ -49,3 +49,45 @@ public enum BUILT
     SHIELD_BUILDING,
     UPGRADE_BUILDING
 }
+
+public enum COLOR
+{
+    COLOR_0 = 0,
+    COLOR_1,
+    COLOR_2,
+    COLOR_3,
+    COLOR_4,
+    COLOR_5,
+    COLOR_6,
+    COLOR_7,
+    COLOR_8
+}
+
+public class CustomColor
+{
+    public static string TransColor(COLOR color)
+    {
+        switch (color)
+        {
+            case COLOR.COLOR_0:
+                return "#CA3E77";
+            case COLOR.COLOR_1:
+                return "#4474C5";
+            case COLOR.COLOR_2:
+                return "#44C59B";
+            case COLOR.COLOR_3:
+                return "#E05A5D";
+            case COLOR.COLOR_4:
+                return "#FBFF3B";
+            case COLOR.COLOR_5:
+                return "#676767";
+            case COLOR.COLOR_6:
+                return "#69E4E5";
+            case COLOR.COLOR_7:
+                return "#A969E5";
+            case COLOR.COLOR_8:
+                return "#FFA340";
+        }
+        return "#000000";
+    }
+}

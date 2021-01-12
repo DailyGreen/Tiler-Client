@@ -83,7 +83,7 @@ public class HexTileCreate : MonoBehaviour
         {
             tilecild = Instantiate(castle, starttile[NetworkMng.getInstance.v_user[i].startPos].transform) as GameObject;
             starttile[NetworkMng.getInstance.v_user[i].startPos]._builtObj = tilecild.GetComponent<Built>();
-            starttile[NetworkMng.getInstance.v_user[i].startPos].uniqueNumber = NetworkMng.getInstance.v_user[i].uniqueNumber;
+            starttile[NetworkMng.getInstance.v_user[i].startPos]._builtObj._uniqueNumber = NetworkMng.getInstance.v_user[i].uniqueNumber;
             starttile[NetworkMng.getInstance.v_user[i].startPos]._code = (int)BUILT.CASTLE;
         }
     }

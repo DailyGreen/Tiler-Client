@@ -173,10 +173,10 @@ MonoBehaviour:
   _code: 0
   _name: 
   _desc: 
-  uniqueNumber: 0
   _activity: 
   _hp: 0
   _turn: 0
+  uniqueNumber: 0
   mine: {fileID: 8580512831075059770}
   farm: {fileID: 1097345920049463511}
   turret: {fileID: 2141912703}
@@ -629,6 +629,7 @@ MonoBehaviour:
   - {fileID: 1183078787756156523}
   - {fileID: 403906070}
   damageText: {fileID: 1183078788740182469}
+  maskImage: {fileID: 1183078787168141920}
   objImage: {fileID: 1183078788525569882}
   logoImage:
   - {fileID: 1183078788951263358}

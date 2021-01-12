@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Built : Object
+public class Built : DynamicObject
 {
-    public int _hp = 0;     // 건물 내구도
     public int _turn = 0;   // 건설시 소모하는 턴수
+
     void Start()
     {
         _code = 199;

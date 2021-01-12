@@ -117,7 +117,7 @@ public class UnitMng : MonoBehaviour
                 GameMng.I.targetTile._code = index;
                 GameMng.I.minGold(cost);
                 GameMng.I._range.rangeTileReset();
-                GameMng.I.targetTile._builtObj.uniqueNumber = NetworkMng.getInstance.uniqueNumber;
+                GameMng.I.targetTile._builtObj._uniqueNumber = NetworkMng.getInstance.uniqueNumber;
                 act = ACTIVITY.NONE;
             }
         }

@@ -310,6 +310,7 @@ public class NetworkMng : MonoBehaviour
         {
             if (txt[1].Equals("IN"))
             {
+                Debug.Log(txt);
                 for (int k = 0; k < (txt.Length - 2) / 4; k++)
                 {
                     UserInfo userInfo = new UserInfo

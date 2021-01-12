@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class Forest_Worker : Worker
 {
-    void Start()
+    void Awake()
     {
         _name = "¿œ≤€";
         _desc = "µÎ¡˜«ÿ ∫∏¿Œ¥Ÿ.";
         _cost = 0;
+        _code = (int)UNIT.WORKER;
         _activity.Add(ACTIVITY.MOVE);
         _activity.Add(ACTIVITY.BUILD_MINE);
         _activity.Add(ACTIVITY.BUILD_FARM);

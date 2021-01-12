@@ -21,7 +21,7 @@ public class Castle : Built
 
     public static void CreateUnit()
     {
-        if (GameMng.I.selectedTile._code == (int)BUILT.CASTLE)
+        if (GameMng.I.selectedTile._code == (int)BUILT.CASTLE) 
         {
             GameMng.I._BuiltGM.act = ACTIVITY.WORKER_UNIT_CREATE;
             GameMng.I._range.moveRange();

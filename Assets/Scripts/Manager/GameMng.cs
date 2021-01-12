@@ -63,6 +63,8 @@ public class GameMng : MonoBehaviour
     [SerializeField]
     UnityEngine.UI.Text damageText;             // 데미지
     [SerializeField]
+    UnityEngine.UI.Image maskImage;             // 오브젝트 이미지 배경
+    [SerializeField]
     UnityEngine.UI.Image objImage;              // 오브젝트이미지
     [SerializeField]
     UnityEngine.UI.Image[] logoImage;           //메인바 로고 이미지         0: HP로고 1: 데미지 로고
@@ -222,25 +224,26 @@ public class GameMng : MonoBehaviour
     }
 
     /**
-     * @brief 오브젝트를 클릭했을때
-     * @param tile 클릭한 타일 오브젝트
-     */
+    * @brief 오브젝트를 클릭했을때
+    * @param tile 클릭한 타일 오브젝트
+    */
     public void clickTile(Tile tile)
     {
         cleanActList();
         // 유닛이 없다면 정적인 타일이란 뜻
-        
+
         if (tile._unitObj == null && tile._builtObj == null)
         {
             cleanActList();
 
+            maskImage.color = Color.white;
             objectNameTxt.text = tile._name;
             objectDescTxt.text = tile._desc;
             hpText.enabled = false;
             damageText.enabled = false;
             logoImage[0].enabled = false;                                                   //Hp로고 이미지 꺼둠
             logoImage[1].enabled = false;                                                   //데미지 로고 이미지 꺼둠
-            
+
             NetworkMng.getInstance._soundGM.tileClick();
 
             objImage.enabled = true;
@@ -276,7 +279,7 @@ public class GameMng : MonoBehaviour
             }
             return;
         }
-        Object obj;
+        DynamicObject obj;
 
         if (tile._unitObj)
         {
@@ -288,7 +291,7 @@ public class GameMng : MonoBehaviour
         else
         {
             obj = tile._builtObj;
-            switch(tile._builtObj._code)        //타일에 있는 건물의 코드의 따른 스프라이트 변경, 로고 text 켜고 끄기
+            switch (tile._builtObj._code)        //타일에 있는 건물의 코드의 따른 스프라이트 변경, 로고 text 켜고 끄기
             {
                 case (int)BUILT.MINE:
                     objImage.sprite = objSprite[0];
@@ -340,21 +343,38 @@ public class GameMng : MonoBehaviour
         NetworkMng.getInstance._soundGM.unitClick(UNIT.WORKER);
         //damageText.text = tile._unitObj._damage + "";
 
-        // 행동을 가진 오브젝트는 actList 를 뿌려줘야 함
-        // 1. _unitObj 로 부터 해당 유닛이 가진 행동의 량을 가져옴
-        for (int i = 0; i < obj._activity.Count; i++)
+        Color color;
+        if (tile._builtObj != null || tile._unitObj != null)
         {
-            // 2. 그만큼 actList 를 active 함
-            actList[i].gameObject.SetActive(true);
-            UnityEngine.UI.Text[] childsTxt = actList[i].GetComponentsInChildren<UnityEngine.UI.Text>();
-            try
+            for (int i = 0; i < NetworkMng.getInstance.v_user.Count; i++)
             {
-                // 3. actList 의 내용들을 변경해 줘야함
-                checkActivity(obj._activity[i], actList[i], childsTxt[0], childsTxt[1]);
+                if (obj._uniqueNumber.Equals(NetworkMng.getInstance.v_user[i].uniqueNumber))
+                {
+                    Debug.Log("in");
+                    ColorUtility.TryParseHtmlString(CustomColor.TransColor((COLOR)NetworkMng.getInstance.v_user[i].color), out color);
+                    maskImage.color = color;
+                }
             }
-            catch
+        }
+
+        if (obj._uniqueNumber.Equals(NetworkMng.getInstance.uniqueNumber))
+        {
+            // 행동을 가진 오브젝트는 actList 를 뿌려줘야 함
+            // 1. _unitObj 로 부터 해당 유닛이 가진 행동의 량을 가져옴
+            for (int i = 0; i < obj._activity.Count; i++)
             {
-                Debug.LogError("childTxt 의 인덱스 값이 옳지 않음");
+                // 2. 그만큼 actList 를 active 함
+                actList[i].gameObject.SetActive(true);
+                UnityEngine.UI.Text[] childsTxt = actList[i].GetComponentsInChildren<UnityEngine.UI.Text>();
+                try
+                {
+                    // 3. actList 의 내용들을 변경해 줘야함
+                    checkActivity(obj._activity[i], actList[i], childsTxt[0], childsTxt[1]);
+                }
+                catch
+                {
+                    Debug.LogError("childTxt 의 인덱스 값이 옳지 않음");
+                }
             }
         }
     }
@@ -407,7 +427,7 @@ public class GameMng : MonoBehaviour
                 break;
             case ACTIVITY.WORKER_UNIT_CREATE:
                 actName.text = "일꾼 생성";
-                actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; Castle.CreateUnit(); });
+                actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; Castle.CreateUnitBtn(); });
                 break;
             case ACTIVITY.DESTROY_BUILT:
                 actName.text = "건물 파괴";

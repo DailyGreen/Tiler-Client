@@ -38,12 +38,6 @@ public enum ACTIVITY
     ATTACK,                     // 공격
 }
 
-public enum UNIT
-{
-    WORKER = 100
-}
-
-
 public enum BUILT
 {
     MINE = 200,
@@ -52,7 +46,13 @@ public enum BUILT
     CASTLE,
     CREATE_UNIT_BUILDING,
     SHIELD_BUILDING,
-    UPGRADE_BUILDING
+    UPGRADE_BUILDING,
+    AIRDROP
+}
+
+public enum UNIT
+{
+    WORKER = 300
 }
 
 public enum COLOR

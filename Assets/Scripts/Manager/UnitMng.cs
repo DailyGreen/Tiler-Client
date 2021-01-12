@@ -36,6 +36,9 @@ public class UnitMng : MonoBehaviour
                 case ACTIVITY.BUILD_ATTACK_BUILDING:
                     Building(Turret.cost, (int)BUILT.ATTACK_BUILDING);
                     break;
+                case ACTIVITY.ATTACK:
+                    UnitAttack();
+                    break;
             }
         }
         else if (Input.GetMouseButtonUp(1) && act != ACTIVITY.ACTING)
@@ -102,6 +105,7 @@ public class UnitMng : MonoBehaviour
             GameMng.I.selectedTile._unitObj.transform.localPosition = GameMng.I.targetTile.transform.localPosition;
             GameMng.I.targetTile._unitObj = GameMng.I.selectedTile._unitObj;
             GameMng.I.selectedTile._unitObj = null;
+            GameMng.I.selectedTile._code = (int)TILE.CAN_MOVE - 1;
         }
     }
 
@@ -117,7 +121,7 @@ public class UnitMng : MonoBehaviour
                 GameMng.I.targetTile._code = index;
                 GameMng.I.minGold(cost);
                 GameMng.I._range.rangeTileReset();
-                GameMng.I.targetTile._builtObj.uniqueNumber = NetworkMng.getInstance.uniqueNumber;
+                GameMng.I.targetTile._builtObj._uniqueNumber = NetworkMng.getInstance.uniqueNumber;
                 act = ACTIVITY.NONE;
             }
         }
@@ -139,9 +143,27 @@ public class UnitMng : MonoBehaviour
             else if (GameMng.I.targetTile._builtObj != null)
             {
                 GameMng.I.targetTile._builtObj._hp -= GameMng.I.selectedTile._unitObj._damage;
+                if (GameMng.I.targetTile._builtObj._code == (int)BUILT.AIRDROP)
+                {
+                    Debug.Log("asdf");
+                    int nKind = Random.Range(1, 3);            // 1: 식량 2: 골드
+                    int nResult = Random.Range(20, 60);
+                    Debug.Log(nKind + ", " + nResult);
+                    if (nKind == 1)
+                    {
+                        GameMng.I._gold += nResult;
+                    }
+                    else if (nKind == 2)
+                    {
+                        Debug.Log("식량 + " + nKind);
+                    }
+
+                    GameMng.I.targetTile._builtObj._hp -= 1;
+                }
                 if (GameMng.I.targetTile._builtObj._hp <= 0)
                 {
                     Destroy(GameMng.I.targetTile._builtObj.gameObject);
+                    GameMng.I.targetTile._builtObj = null;
                 }
             }
             GameMng.I.cleanActList();

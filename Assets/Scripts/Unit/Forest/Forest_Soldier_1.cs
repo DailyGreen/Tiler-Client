@@ -2,23 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Forest_Worker : Worker
+public class Forest_Soldier_1 : Unit
 {
+    public Animator _anim;
+
     void Start()
     {
-        _name = "일꾼";
-        _desc = "듬직해 보인다.";
+        _name = "전사 2";
+        _desc = "나는... 강하다...";
         _cost = 0;
         _activity.Add(ACTIVITY.MOVE);
-        _activity.Add(ACTIVITY.BUILD_MINE);
-        _activity.Add(ACTIVITY.BUILD_FARM);
-        _activity.Add(ACTIVITY.BUILD_ATTACK_BUILDING);
-        _activity.Add(ACTIVITY.BUILD_CREATE_UNIT_BUILDING);
-        _activity.Add(ACTIVITY.BUILD_SHIELD_BUILDING);
-        _activity.Add(ACTIVITY.BUILD_UPGRADE_BUILDING);
-        //_activity.Add(ACTIVITY.ATTACK);             // 임시입니다!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        _activity.Add(ACTIVITY.ATTACK);
         StartCoroutine("creating");
-
     }
 
     IEnumerator creating()

@@ -19,7 +19,7 @@ public class Castle : Built
 
     }
 
-    public static void CreateUnit()
+    public static void CreateUnitBtn()
     {
         if (GameMng.I.selectedTile._code == (int)BUILT.CASTLE)
         {

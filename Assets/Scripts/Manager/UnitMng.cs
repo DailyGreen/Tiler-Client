@@ -36,6 +36,9 @@ public class UnitMng : MonoBehaviour
                 case ACTIVITY.BUILD_ATTACK_BUILDING:
                     Building(Turret.cost, (int)BUILT.ATTACK_BUILDING);
                     break;
+                case ACTIVITY.ATTACK:
+                    UnitAttack();
+                    break;
             }
         }
         else if (Input.GetMouseButtonUp(1) && act != ACTIVITY.ACTING)
@@ -139,8 +142,26 @@ public class UnitMng : MonoBehaviour
             else if (GameMng.I.targetTile._builtObj != null)
             {
                 GameMng.I.targetTile._builtObj._hp -= GameMng.I.selectedTile._unitObj._damage;
+                if (GameMng.I.targetTile._builtObj._code == (int)BUILT.AIRDROP)
+                {
+                    Debug.Log("asdf");
+                    int nKind = Random.Range(1, 3);            // 1: 식량 2: 골드
+                    int nResult = Random.Range(20, 60);
+                    Debug.Log(nKind + ", " + nResult);
+                    if (nKind == 1)
+                    {
+                        GameMng.I._gold += nResult;
+                    }
+                    else if(nKind == 2)
+                    {
+                        Debug.Log("식량 + " + nKind);
+                    }
+                    GameMng.I.targetTile._builtObj = null;
+                    Destroy(GameMng.I.targetTile._builtObj.gameObject);
+                }
                 if (GameMng.I.targetTile._builtObj._hp <= 0)
                 {
+                    GameMng.I.targetTile._code = GameMng.I.mapTile[GameMng.I.targetTile.PosY, GameMng.I.targetTile.PosX]._code;
                     Destroy(GameMng.I.targetTile._builtObj.gameObject);
                 }
             }

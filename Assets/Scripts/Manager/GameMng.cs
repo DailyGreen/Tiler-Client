@@ -407,7 +407,7 @@ public class GameMng : MonoBehaviour
                 break;
             case ACTIVITY.WORKER_UNIT_CREATE:
                 actName.text = "일꾼 생성";
-                actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; Castle.CreateUnit(); });
+                actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; Castle.CreateUnitBtn(); });
                 break;
             case ACTIVITY.DESTROY_BUILT:
                 actName.text = "건물 파괴";

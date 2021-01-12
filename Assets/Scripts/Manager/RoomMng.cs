@@ -32,7 +32,7 @@ public class RoomMng : MonoBehaviour
     GameObject roomPanel;
     [SerializeField]
     GameObject lobbyPanel;
-    
+
     // Room일때(같은 방에 있는 유저 정보 : 0은 나임)
     [SerializeField]
     UnityEngine.UI.Text roomInfo;
@@ -265,7 +265,7 @@ public class RoomMng : MonoBehaviour
     {
         NetworkMng.getInstance.SendMsg(string.Format("TRIBE:{0}", tribeNum));
     }
-    public void wantChangeColor (int colorNum)
+    public void wantChangeColor(int colorNum)
     {
         NetworkMng.getInstance.SendMsg(string.Format("COLOR:{0}", colorNum));
     }

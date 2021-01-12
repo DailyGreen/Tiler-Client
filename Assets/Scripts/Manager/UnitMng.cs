@@ -156,13 +156,14 @@ public class UnitMng : MonoBehaviour
                     {
                         Debug.Log("½Ä·® + " + nKind);
                     }
-                    GameMng.I.targetTile._builtObj = null;
-                    Destroy(GameMng.I.targetTile._builtObj.gameObject);
+                    //Destroy(GameMng.I.targetTile._builtObj.gameObject);
+                    GameMng.I.targetTile._builtObj._hp -= 1;
                 }
                 if (GameMng.I.targetTile._builtObj._hp <= 0)
                 {
                     GameMng.I.targetTile._code = GameMng.I.mapTile[GameMng.I.targetTile.PosY, GameMng.I.targetTile.PosX]._code;
                     Destroy(GameMng.I.targetTile._builtObj.gameObject);
+                    GameMng.I.targetTile._builtObj = null;
                 }
             }
             GameMng.I.cleanActList();

@@ -9,6 +9,8 @@ public class BuiltMng : MonoBehaviour
 
 
     public GameObject[] unitobj = null;
+    [SerializeField]
+    private GameObject AirDropobj = null;
 
     // Start is called before the first frame update
     void Start()
@@ -19,6 +21,8 @@ public class BuiltMng : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.A))
+            CreateAirDrop();
 
         if (Input.GetMouseButtonDown(0) && act != ACTIVITY.ACTING && GameMng.I._UnitGM.act == ACTIVITY.NONE && !EventSystem.current.IsPointerOverGameObject())
         {
@@ -36,13 +40,13 @@ public class BuiltMng : MonoBehaviour
             GameMng.I._range.AttackrangeTileReset();                                                     //클릭시 터렛 공격 범위 초기화
             GameMng.I.mouseRaycast();
             if (GameMng.I.selectedTile)
-            if (GameMng.I.selectedTile._builtObj != null)
-            {
-                if (GameMng.I.selectedTile._code == (int)BUILT.ATTACK_BUILDING)
+                if (GameMng.I.selectedTile._builtObj != null)
                 {
-                    GameMng.I.selectedTile._builtObj.GetComponent<Turret>().Attack();
+                    if (GameMng.I.selectedTile._code == (int)BUILT.ATTACK_BUILDING)
+                    {
+                        GameMng.I.selectedTile._builtObj.GetComponent<Turret>().Attack();
+                    }
                 }
-            }
         }
     }
 
@@ -86,5 +90,24 @@ public class BuiltMng : MonoBehaviour
         GameMng.I.selectedTile._code = (int)TILE.GRASS;                                                             // 나중에 원래 타일 알아오는법 가져오기
         GameMng.I.cleanActList();
         GameMng.I.cleanSelected();
+    }
+
+    public void CreateAirDrop()
+    {
+        int nPosX, nPosY;
+        nPosX = Random.Range(0, GameMng.I.GetMapWidth);
+        nPosY = Random.Range(0, GameMng.I.GetMapHeight);
+        if (GameMng.I.mapTile[nPosY, nPosX]._builtObj == null && GameMng.I.mapTile[nPosY, nPosX]._unitObj == null && GameMng.I.mapTile[nPosY,nPosX]._code < (int)TILE.CAN_MOVE)
+        {
+            GameObject Child = Instantiate(AirDropobj, GameMng.I.mapTile[nPosY, nPosX].transform) as GameObject;
+            GameMng.I.mapTile[nPosY, nPosX]._builtObj = Child.GetComponent<AirDrop>();
+            GameMng.I.mapTile[nPosY, nPosX]._code = (int)TILE.CAN_MOVE;
+        }
+        else
+        {
+            Debug.Log("위치 재 선정");
+            CreateAirDrop();
+        }
+        Debug.Log(nPosY + " , " + nPosX);
     }
 }

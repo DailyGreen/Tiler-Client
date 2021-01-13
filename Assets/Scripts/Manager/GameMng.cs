@@ -235,7 +235,6 @@ public class GameMng : MonoBehaviour
         if (tile._unitObj == null && tile._builtObj == null)
         {
             cleanActList();
-
             maskImage.color = Color.white;
             objectNameTxt.text = tile._name;
             objectDescTxt.text = tile._desc;
@@ -251,7 +250,7 @@ public class GameMng : MonoBehaviour
             objectDescTxt.enabled = true;
 
             switch (tile._code)                                                              //클릭한 타일의 코드에 따른 스프라이트값 조정
-            {
+            { 
                 case (int)TILE.GRASS:
                     objImage.sprite = objSprite[4];
                     break;
@@ -285,7 +284,6 @@ public class GameMng : MonoBehaviour
         {
             obj = tile._unitObj;
             objImage.sprite = objSprite[10];    // 스프라이트 일꾼으로 변경 (나중에 유닛 추가시 switch로 변경)
-
             setMainInterface(true);
         }
         else

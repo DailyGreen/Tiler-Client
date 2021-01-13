@@ -146,7 +146,7 @@ public class UnitMng : MonoBehaviour
                 if (GameMng.I.targetTile._builtObj._code == (int)BUILT.AIRDROP)
                 {
                     Debug.Log("asdf");
-                    int nKind = Random.Range(1, 3);            // 1: ½Ä·® 2: °ñµå
+                    int nKind = Random.Range(1, 3);            // 1: °ñµå 2: ½Ä·®
                     int nResult = Random.Range(20, 60);
                     Debug.Log(nKind + ", " + nResult);
                     if (nKind == 1)
@@ -164,6 +164,7 @@ public class UnitMng : MonoBehaviour
                 {
                     Destroy(GameMng.I.targetTile._builtObj.gameObject);
                     GameMng.I.targetTile._builtObj = null;
+                    GameMng.I.targetTile._code = 0;
                 }
             }
             GameMng.I.cleanActList();

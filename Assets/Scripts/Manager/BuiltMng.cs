@@ -55,9 +55,12 @@ public class BuiltMng : MonoBehaviour
             Child.transform.parent = transform.parent;
             GameMng.I.targetTile._unitObj = Child.GetComponent<Forest_Worker>();
             GameMng.I.targetTile._code = GameMng.I.targetTile._unitObj._code;       // 문제는 Awake다
+            GameMng.I.targetTile._unitObj._uniqueNumber = NetworkMng.getInstance.uniqueNumber;
             GameMng.I._range.rangeTileReset();
             act = ACTIVITY.ACTING;
-            GameMng.I.targetTile._unitObj._uniqueNumber = NetworkMng.getInstance.uniqueNumber;
+
+            NetworkMng.getInstance.SendMsg(string.Format("CREATE_UNIT:{0}:{1}:{2}:{3}", GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosY, index, NetworkMng.getInstance.uniqueNumber));
+
             GameMng.I.cleanActList();
             GameMng.I.cleanSelected();
         }
@@ -68,6 +71,22 @@ public class BuiltMng : MonoBehaviour
             GameMng.I.targetTile = null;
             GameMng.I._range.rangeTileReset();
         }
+    }
+
+    /**
+     * @brief 유닛을 생성함 (서버에서 클라로 정보를 보낼때 호출됨)
+     * @param posX 생성할 X 위치
+     * @param posY 생성할 Y 위치
+     * @param index 유닛 코드
+     * @param uniqueNumber 생성자
+     */
+    public void CreateUnit(int posX, int posY, int index, int uniqueNumber)
+    {
+        GameObject Child = Instantiate(unitobj[index - 300], GameMng.I.mapTile[posY, posX].transform) as GameObject;
+        Child.transform.parent = transform.parent;
+        GameMng.I.mapTile[posY, posX]._unitObj = Child.GetComponent<Forest_Worker>();
+        GameMng.I.mapTile[posY, posX]._code = GameMng.I.mapTile[posY, posX]._unitObj._code;
+        GameMng.I.mapTile[posY, posX]._unitObj._uniqueNumber = uniqueNumber;
     }
 
     /**

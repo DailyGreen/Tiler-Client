@@ -27,6 +27,7 @@ public class HexTileCreate : MonoBehaviour
     {
         CreateHexTileMap();
         CastleCreate();
+        GameMng.I.refreshTurn();
     }
 
     void OnApplicationQuit()

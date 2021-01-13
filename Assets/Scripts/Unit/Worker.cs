@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Worker : Unit
 {
-    public Animator _anim;
 
     //void Start()
     //{

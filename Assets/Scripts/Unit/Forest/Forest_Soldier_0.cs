@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Forest_Soldier_0 : Unit
 {
-    public Animator _anim;
-
     void Start()
     {
         _name = "ภüป็ 1";

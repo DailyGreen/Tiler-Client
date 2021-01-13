@@ -15,11 +15,13 @@ public class Farm : Built
         _code = (int)BUILT.FARM;
         making = 2;
         _activity.Add(ACTIVITY.DESTROY_BUILT);
+        GameMng.I.AddDelegate(MakingFood);
     }
 
     void Update()
     {
-        MakingFood();
+        if (Input.GetKeyDown("f"))
+            MakingFood();
     }
 
     /**
@@ -27,7 +29,7 @@ public class Farm : Built
      */
     void MakingFood()
     {
-        if (Input.GetKeyDown("f"))
-            GameMng.I.addMaxMem(making);
+        Debug.Log("MAKING FOOD CALL !!!!!!!!");
+        GameMng.I.addMaxMem(making);
     }
 }

@@ -288,7 +288,7 @@ public class NetworkMng : MonoBehaviour
         }
         else if (txt[0].Equals("TURN"))
         {
-            GameMng.I.turnManage(txt[1]);
+            GameMng.I.turnManage(int.Parse(txt[1]));
         }
         // 직접 방 생성후 이동
         else if (txt[0].Equals("CHANGE_ROOM"))
@@ -332,6 +332,26 @@ public class NetworkMng : MonoBehaviour
             {
                 myRoom = 0;
             }
+        }
+        else if (txt[0].Equals("CREATE_UNIT"))
+        {
+            // x값, y값, 유닛 코드, 생성자
+            GameMng.I._BuiltGM.CreateUnit(int.Parse(txt[1]), int.Parse(txt[2]), int.Parse(txt[3]), int.Parse(txt[4]));
+        }
+        else if (txt[0].Equals("CREATE_BUILT"))
+        {
+            // x값, y값, 건물 코드, 생성자
+            GameMng.I._UnitGM.CreateBuilt(int.Parse(txt[1]), int.Parse(txt[2]), int.Parse(txt[3]), int.Parse(txt[4]));
+        }
+        else if (txt[0].Equals("MOVE_UNIT"))
+        {
+            // 현재 x값, y값, 이동할 x값, y값
+            StartCoroutine(GameMng.I._UnitGM.MovingUnit(int.Parse(txt[1]), int.Parse(txt[2]), int.Parse(txt[3]), int.Parse(txt[4])));
+        }
+        else if (txt[0].Equals("ATTACK"))
+        {
+            // 오브젝트 x값, y값, 공격할 x값, y값
+            // 현재 오브젝트를 찾아서 공격력 찾은 다음 대상 위치의 hp 를 깎음
         }
         else if (txt[0].Equals("TRIBE"))
         {

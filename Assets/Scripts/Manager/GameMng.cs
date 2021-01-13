@@ -119,6 +119,12 @@ public class GameMng : MonoBehaviour
         setMainInterface(false);
         if (NetworkMng.getInstance.uniqueNumber == NetworkMng.getInstance.firstPlayerUniqueNumber)
             myTurn = true;
+        AddDelegate(SampleTurnFunc);
+    }
+
+    void SampleTurnFunc()
+    {
+        Debug.Log("countTurn 호출됨! ! !");
     }
 
     /**
@@ -204,9 +210,13 @@ public class GameMng : MonoBehaviour
         this.turnDescText.text = this.myTurn ? "내 차례" : "상대 차례";
     }
 
-    public void turnManage(string uniqueNumber)
+    /**
+    * @brief 턴이 변경 되었을때 호출
+    * @param uniqueNumber 변경될 유저의 고유 번호
+    */
+    public void turnManage(int uniqueNumber)
     {
-        if (NetworkMng.getInstance.uniqueNumber == int.Parse(uniqueNumber))
+        if (NetworkMng.getInstance.uniqueNumber == uniqueNumber)
         {
             this.myTurn = true;
             this.turnDescText.text = "내 차례";
@@ -217,6 +227,28 @@ public class GameMng : MonoBehaviour
         {
             if (NetworkMng.getInstance.v_user[i].uniqueNumber.Equals(uniqueNumber))
             {
+                this.turnDescText.text = NetworkMng.getInstance.v_user[i].nickName + " 차례";
+                break;
+            }
+        }
+
+        countDel();
+    }
+
+    /**
+     * @brief 턴 UI 새로고침
+     */
+    public void refreshTurn()
+    {
+        for (int i = 0; i < NetworkMng.getInstance.v_user.Count; i++)
+        {
+            if (NetworkMng.getInstance.v_user[i].uniqueNumber.Equals(NetworkMng.getInstance.firstPlayerUniqueNumber))
+            {
+                if (NetworkMng.getInstance.firstPlayerUniqueNumber.Equals(NetworkMng.getInstance.uniqueNumber))
+                {
+                    this.turnDescText.text = "내 차례";
+                    break;
+                }
                 this.turnDescText.text = NetworkMng.getInstance.v_user[i].nickName + " 차례";
                 break;
             }

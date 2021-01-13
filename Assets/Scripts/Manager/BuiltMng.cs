@@ -7,16 +7,12 @@ public class BuiltMng : MonoBehaviour
 {
     public ACTIVITY act = ACTIVITY.NONE;
 
-
     public GameObject[] unitobj = null;
 
-    // Start is called before the first frame update
-    void Start()
-    {
+    [SerializeField]
+    private GameObject AirDropobj = null;
 
-    }
 
-    // Update is called once per frame
     void Update()
     {
 
@@ -44,6 +40,11 @@ public class BuiltMng : MonoBehaviour
                 }
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            CreateAirDrop();
+        }
     }
 
     public void CreateUnit(/*int cost,*/ int index)
@@ -55,9 +56,12 @@ public class BuiltMng : MonoBehaviour
             Child.transform.parent = transform.parent;
             GameMng.I.targetTile._unitObj = Child.GetComponent<Forest_Worker>();
             GameMng.I.targetTile._code = GameMng.I.targetTile._unitObj._code;       // 문제는 Awake다
+            GameMng.I.targetTile._unitObj._uniqueNumber = NetworkMng.getInstance.uniqueNumber;
             GameMng.I._range.rangeTileReset();
             act = ACTIVITY.ACTING;
-            GameMng.I.targetTile._unitObj._uniqueNumber = NetworkMng.getInstance.uniqueNumber;
+
+            NetworkMng.getInstance.SendMsg(string.Format("CREATE_UNIT:{0}:{1}:{2}:{3}", GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosY, index, NetworkMng.getInstance.uniqueNumber));
+
             GameMng.I.cleanActList();
             GameMng.I.cleanSelected();
         }
@@ -68,6 +72,44 @@ public class BuiltMng : MonoBehaviour
             GameMng.I.targetTile = null;
             GameMng.I._range.rangeTileReset();
         }
+    }
+
+    /**
+     * @brief 유닛을 생성함 (서버에서 클라로 정보를 보낼때 호출됨)
+     * @param posX 생성할 X 위치
+     * @param posY 생성할 Y 위치
+     * @param index 유닛 코드
+     * @param uniqueNumber 생성자
+     */
+    public void CreateUnit(int posX, int posY, int index, int uniqueNumber)
+    {
+        GameObject Child = Instantiate(unitobj[index - 300], GameMng.I.mapTile[posY, posX].transform) as GameObject;
+        Child.transform.parent = transform.parent;
+        GameMng.I.mapTile[posY, posX]._unitObj = Child.GetComponent<Forest_Worker>();
+        GameMng.I.mapTile[posY, posX]._code = GameMng.I.mapTile[posY, posX]._unitObj._code;
+        GameMng.I.mapTile[posY, posX]._unitObj._uniqueNumber = uniqueNumber;
+    }
+
+    /**
+     * @brief 보급 생성
+     */
+    public void CreateAirDrop()
+    {
+        int nPosX, nPosY;
+        nPosX = Random.Range(0, GameMng.I.GetMapWidth);
+        nPosY = Random.Range(0, GameMng.I.GetMapHeight);
+        if (GameMng.I.mapTile[nPosY, nPosX]._builtObj == null && GameMng.I.mapTile[nPosY, nPosX]._unitObj == null && GameMng.I.mapTile[nPosY, nPosX]._code < (int)TILE.CAN_MOVE)
+        {
+            GameObject Child = Instantiate(AirDropobj, GameMng.I.mapTile[nPosY, nPosX].transform) as GameObject;
+            GameMng.I.mapTile[nPosY, nPosX]._code = (int)TILE.CAN_MOVE;
+            GameMng.I.mapTile[nPosY, nPosX]._builtObj = Child.GetComponent<AirDrop>();
+        }
+        else
+        {
+            Debug.Log("위치 재 선정");
+            CreateAirDrop();
+        }
+        Debug.Log(nPosY + " , " + nPosX);
     }
 
     /**

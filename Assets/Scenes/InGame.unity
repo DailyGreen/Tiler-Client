@@ -1153,6 +1153,7 @@ MonoBehaviour:
   act: 100
   unitobj:
   - {fileID: 6683887658819868173, guid: 1bec307012cc85e4680f4c5980f02c45, type: 3}
+  AirDropobj: {fileID: 6037629846481577511, guid: 25eba5b7256c874468747a19e105d280, type: 3}
 --- !u!4 &1923391221
 Transform:
   m_ObjectHideFlags: 0

@@ -57,26 +57,15 @@ public class UnitMng : MonoBehaviour
 
         if (GameMng.I.hit.collider != null)
         {
-            Debug.Log("캐릭터 이동 준비");
             GameMng.I.cleanActList();
             GameMng.I._range.rangeTileReset();  // 범위 타일 위치 초기화
             GameMng.I.distanceOfTiles = Vector2.Distance(GameMng.I.selectedTile._unitObj.transform.position, GameMng.I.targetTile.transform.position);
             if (GameMng.I.hit.collider.tag.Equals("Tile") && GameMng.I.distanceOfTiles <= 1.5f && Tile.isEmptyTile(GameMng.I.targetTile))
             {
-                Debug.Log("캐릭터 이동 시작");
                 act = ACTIVITY.ACTING;
-                if (GameMng.I.selectedTile._unitObj.transform.localPosition.x < GameMng.I.targetTile.transform.localPosition.x)                                                                 //가는 방향 회전 오른쪽
-                {
-                    GameMng.I.selectedTile._unitObj.transform.rotation = Quaternion.Euler(new Vector3(0f, -180f, 0f));
-                }
-                else if (GameMng.I.selectedTile._unitObj.transform.localPosition.x == GameMng.I.targetTile.transform.localPosition.x)                                                           //방향 변동 X
-                {
-
-                }
-                else
-                {
-                    GameMng.I.selectedTile._unitObj.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));                                                                 //가는 방향 회전 왼쪽
-                }
+                reversalUnit(GameMng.I.selectedTile._unitObj.transform, GameMng.I.targetTile.transform);
+                GameMng.I.selectedTile._unitObj._anim.SetTrigger("isRunning");
+                NetworkMng.getInstance.SendMsg(string.Format("MOVE_UNIT:{0}:{1}:{2}:{3}", GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosY, GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosY));
                 StartCoroutine("Moving");
             }
             else                                     // 범위가 아닌 다른 곳을 누름
@@ -109,6 +98,46 @@ public class UnitMng : MonoBehaviour
         }
     }
 
+    public void reversalUnit(Transform selectedObj, Transform targetObj)
+    {
+        if (selectedObj.localPosition.x < targetObj.localPosition.x)                // 가는 방향 회전 오른쪽
+        {
+            selectedObj.rotation = Quaternion.Euler(new Vector3(0f, -180f, 0f));
+        }
+        else if (selectedObj.localPosition.x == targetObj.localPosition.x)          // 방향 변동 X
+        {
+        }
+        else
+        {
+            selectedObj.rotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));       // 가는 방향 회전 왼쪽
+        }
+    }
+
+    public IEnumerator MovingUnit(int posX, int posY, int toX, int toY)
+    {
+        bool isRun = true;
+        reversalUnit(GameMng.I.mapTile[posY, posX]._unitObj.transform, GameMng.I.mapTile[toY, posX].transform);
+        GameMng.I.mapTile[posY, posX]._unitObj._anim.SetTrigger("isRunning");
+        while (isRun)
+        {
+            if (Vector2.Distance(GameMng.I.mapTile[posY, posX]._unitObj.transform.localPosition, GameMng.I.mapTile[toY, toX].transform.localPosition) >= 0.01f)
+            {
+                GameMng.I.mapTile[posY, posX]._unitObj.transform.localPosition = Vector2.Lerp(GameMng.I.mapTile[posY, posX]._unitObj.transform.localPosition, GameMng.I.mapTile[toY, toX].transform.localPosition, GameMng.I.unitSpeed * Time.deltaTime);        //타일 간 부드러운 이동
+                yield return null;
+            }
+            else
+            {
+                act = ACTIVITY.NONE;
+
+                GameMng.I.mapTile[posY, posX]._unitObj.transform.localPosition = GameMng.I.mapTile[toY, toX].transform.localPosition;
+                GameMng.I.mapTile[toY, toX]._unitObj = GameMng.I.mapTile[posY, posX]._unitObj;
+                GameMng.I.mapTile[posY, posX]._unitObj = null;
+                GameMng.I.mapTile[posY, posX]._code = (int)TILE.CAN_MOVE - 1;
+                isRun = false;
+            }
+        }
+    }
+
     public void Building(int cost, int index)
     {
         GameMng.I.mouseRaycast(true);                       //캐릭터 정보와 타일 정보를 알아와야해서 false에서 true로 변경
@@ -122,9 +151,25 @@ public class UnitMng : MonoBehaviour
                 GameMng.I.minGold(cost);
                 GameMng.I._range.rangeTileReset();
                 GameMng.I.targetTile._builtObj._uniqueNumber = NetworkMng.getInstance.uniqueNumber;
+                NetworkMng.getInstance.SendMsg(string.Format("CREATE_BUILT:{0}:{1}:{2}:{3}", GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosY, index, NetworkMng.getInstance.uniqueNumber));
                 act = ACTIVITY.NONE;
             }
         }
+    }
+
+    /**
+     * @brief 유닛을 생성함 (서버에서 클라로 정보를 보낼때 호출됨)
+     * @param posX 생성할 X 위치
+     * @param posY 생성할 Y 위치
+     * @param index 유닛 코드
+     * @param uniqueNumber 생성자
+     */
+    public void CreateBuilt(int posX, int posY, int index, int uniqueNumber)
+    {
+        GameObject Child = Instantiate(builtObj[index - 200], GameMng.I.mapTile[posY, posX].transform) as GameObject;
+        GameMng.I.mapTile[posY, posX]._builtObj = Child.GetComponent<Built>();
+        GameMng.I.mapTile[posY, posX]._code = index;
+        GameMng.I.mapTile[posY, posX]._builtObj._uniqueNumber = uniqueNumber;
     }
 
     public void UnitAttack()
@@ -164,6 +209,7 @@ public class UnitMng : MonoBehaviour
                 {
                     Destroy(GameMng.I.targetTile._builtObj.gameObject);
                     GameMng.I.targetTile._builtObj = null;
+                    GameMng.I.targetTile._code = 0;
                 }
             }
             GameMng.I.cleanActList();

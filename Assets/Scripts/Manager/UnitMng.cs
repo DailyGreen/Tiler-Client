@@ -209,6 +209,7 @@ public class UnitMng : MonoBehaviour
                 {
                     Destroy(GameMng.I.targetTile._builtObj.gameObject);
                     GameMng.I.targetTile._builtObj = null;
+                    GameMng.I.targetTile._code = 0;
                 }
             }
             GameMng.I.cleanActList();

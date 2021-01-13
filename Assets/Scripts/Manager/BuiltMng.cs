@@ -7,16 +7,12 @@ public class BuiltMng : MonoBehaviour
 {
     public ACTIVITY act = ACTIVITY.NONE;
 
-
     public GameObject[] unitobj = null;
 
-    // Start is called before the first frame update
-    void Start()
-    {
+    [SerializeField]
+    private GameObject AirDropobj = null;
 
-    }
 
-    // Update is called once per frame
     void Update()
     {
 
@@ -43,6 +39,11 @@ public class BuiltMng : MonoBehaviour
                     GameMng.I.selectedTile._builtObj.GetComponent<Turret>().Attack();
                 }
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            CreateAirDrop();
         }
     }
 
@@ -87,6 +88,28 @@ public class BuiltMng : MonoBehaviour
         GameMng.I.mapTile[posY, posX]._unitObj = Child.GetComponent<Forest_Worker>();
         GameMng.I.mapTile[posY, posX]._code = GameMng.I.mapTile[posY, posX]._unitObj._code;
         GameMng.I.mapTile[posY, posX]._unitObj._uniqueNumber = uniqueNumber;
+    }
+
+    /**
+     * @brief 보급 생성
+     */
+    public void CreateAirDrop()
+    {
+        int nPosX, nPosY;
+        nPosX = Random.Range(0, GameMng.I.GetMapWidth);
+        nPosY = Random.Range(0, GameMng.I.GetMapHeight);
+        if (GameMng.I.mapTile[nPosY, nPosX]._builtObj == null && GameMng.I.mapTile[nPosY, nPosX]._unitObj == null && GameMng.I.mapTile[nPosY, nPosX]._code < (int)TILE.CAN_MOVE)
+        {
+            GameObject Child = Instantiate(AirDropobj, GameMng.I.mapTile[nPosY, nPosX].transform) as GameObject;
+            GameMng.I.mapTile[nPosY, nPosX]._code = (int)TILE.CAN_MOVE;
+            GameMng.I.mapTile[nPosY, nPosX]._builtObj = Child.GetComponent<AirDrop>();
+        }
+        else
+        {
+            Debug.Log("위치 재 선정");
+            CreateAirDrop();
+        }
+        Debug.Log(nPosY + " , " + nPosX);
     }
 
     /**

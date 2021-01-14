@@ -41,10 +41,10 @@ public class Worker : Unit
         GameMng.I._range.moveRange();
     }
 
-    public static void buildCreateUnitBuilding()
+    public static void buildMillitaryBaseBuilding()
     {
         GameMng.I._range.moveRange();
-        Debug.Log("유닛 건물 생성");
+        Debug.Log("군사 기지 생성");
     }
 
     public static void buildShieldBuilding()

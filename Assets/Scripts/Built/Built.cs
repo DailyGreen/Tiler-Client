@@ -17,6 +17,8 @@ public class Built : DynamicObject
 
     public Turret turret = null;
 
+    public MillitaryBase millitarybase = null;
+
     /**
      * @brief 건물을 생성
      * @param GameObject built     생성할 건물 게임오브젝트

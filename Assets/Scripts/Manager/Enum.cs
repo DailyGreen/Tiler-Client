@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
- * 타일 종류에 대한 ㅋ ㅗ드
+ * 타일 종류에 대한 코드
  */
 public enum TILE
 {
@@ -30,10 +30,11 @@ public enum ACTIVITY
     BUILD_MINE,                 // 광산 짓기
     BUILD_FARM,                 // 농장 짓기
     BUILD_ATTACK_BUILDING,      // 공격 건물 짓기
-    BUILD_CREATE_UNIT_BUILDING, // 유닛 생성 건물 짓기
+    BUILD_MILLITARY_BASE,       // 유닛 생성 건물 짓기
     BUILD_SHIELD_BUILDING,      // 방어 건물 짓기
     BUILD_UPGRADE_BUILDING,     // 업그레이드 건물 짓기
     WORKER_UNIT_CREATE,         // 워커 유닛 생성
+    ATTACK_UNIT_CREATE,         // 공격 유닛 생성
     DESTROY_BUILT,              // 건물 파괴
     ATTACK,                     // 공격
 }
@@ -43,8 +44,8 @@ public enum BUILT
     MINE = 200,
     FARM,
     ATTACK_BUILDING,
+    MILLITARY_BASE,
     CASTLE,
-    CREATE_UNIT_BUILDING,
     SHIELD_BUILDING,
     UPGRADE_BUILDING,
     AIRDROP
@@ -52,7 +53,8 @@ public enum BUILT
 
 public enum UNIT
 {
-    WORKER = 300
+    FOREST_WORKER = 300,
+    FORSET_SOILDER,
 }
 
 public enum COLOR

@@ -27,7 +27,7 @@ public class MillitaryBase : Built
         if (GameMng.I.selectedTile._code == (int)BUILT.MILLITARY_BASE)
         {
             GameMng.I._BuiltGM.act = ACTIVITY.ATTACK_UNIT_CREATE;
-            GameMng.I._range.moveRange();
+            //GameMng.I._range.moveRange();
         }
         Debug.Log("병력 유닛 생성할 위치 선정");
 

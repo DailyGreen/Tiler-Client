@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
- * 타일 종류에 대한 ㅋ ㅗ드
+ * 타일 종류에 대한 코드
  */
 public enum TILE
 {
@@ -12,11 +12,15 @@ public enum TILE
     DIRT,
     MARS,
     STONE,
-    START_POINT,        // 5
     CAN_MOVE,           // 이전까지 움직일수 있는 타일
     SEA_01,
     SEA_02,
     SEA_03,
+    GRASS_START = 'F',
+    SAND_START = 'G',
+    DIRT_START = 'H',
+    MARS_START = 'I',
+    STONE_START = 'J',
 }
 
 /*

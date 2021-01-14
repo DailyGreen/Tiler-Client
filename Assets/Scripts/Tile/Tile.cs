@@ -6,7 +6,7 @@ using UnityEngine;
 public class Tile : Object
 {
     [SerializeField]
-    private int posX, posY;
+    private int posX, posY, posZ;
 
     GameObject tile;
     [SerializeField]
@@ -20,10 +20,11 @@ public class Tile : Object
     void Start()
     {
         tile = this.GetComponent<GameObject>();
-        if (!this._code.Equals((int)TILE.START_POINT))
+        if (!this._code.Equals((int)BUILT.CASTLE))
         {
-            if (this._code < (int)ACTIVITY .ACTING && this._code > (int)TILE.CAN_MOVE) { this.tileSpriteRend.sprite = tileSprite[this._code - 2]; }
-            else if(this._code < (int)TILE.CAN_MOVE) { this.tileSpriteRend.sprite = tileSprite[this._code]; }
+            if (this._code >= (int)TILE.GRASS_START) { this.tileSpriteRend.sprite = tileSprite[this._code - (int)TILE.GRASS_START]; }
+            else if (this._code > (int)TILE.CAN_MOVE && this._code < (int)BUILT.CASTLE) { this.tileSpriteRend.sprite = tileSprite[this._code - 1]; }
+            else if (this._code < (int)TILE.CAN_MOVE) { this.tileSpriteRend.sprite = tileSprite[this._code]; }
         }
         _name = "독도는";
         _desc = "우리땅";
@@ -53,6 +54,17 @@ public class Tile : Object
         set
         {
             posY = value;
+        }
+    }
+    public int PosZ
+    {
+        get
+        {
+            return posZ;
+        }
+        set
+        {
+            posZ = value;
         }
     }
 

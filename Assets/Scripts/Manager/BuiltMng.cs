@@ -117,6 +117,7 @@ public class BuiltMng : MonoBehaviour
      */
     public void DestroyBuilt()
     {
+        NetworkMng.getInstance.SendMsg(string.Format("DESTROY_BUILT:{0}:{1}", GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosY));
         Destroy(GameMng.I.selectedTile._builtObj.gameObject);
         if (GameMng.I.selectedTile._builtObj._code == (int)BUILT.ATTACK_BUILDING)
         {
@@ -125,8 +126,18 @@ public class BuiltMng : MonoBehaviour
         act = ACTIVITY.NONE;
         GameMng.I.selectedTile._builtObj = null;
         Debug.Log("여기 수정해야함!!!!!");
-        GameMng.I.selectedTile._code = (int)TILE.GRASS;                                                             // 나중에 원래 타일 알아오는법 가져오기
+        GameMng.I.selectedTile._code = (int)TILE.GRASS;
         GameMng.I.cleanActList();
         GameMng.I.cleanSelected();
+    }
+
+    /**
+     * @brief 건물 파괴될때 호출됨
+     */
+    public void DestroyBuilt(int posX, int posY)
+    {
+        Destroy(GameMng.I.mapTile[posY, posX]._builtObj.gameObject);
+        GameMng.I.mapTile[posY, posX]._builtObj = null;
+        GameMng.I.mapTile[posY, posX]._code = (int)TILE.GRASS;
     }
 }

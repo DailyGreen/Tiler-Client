@@ -20,4 +20,5 @@ public class Object : MonoBehaviour
     //public int uniqueNumber;      // 플레이어 구별 코드
 
     public List<ACTIVITY> _activity = new List<ACTIVITY>();
+
 }

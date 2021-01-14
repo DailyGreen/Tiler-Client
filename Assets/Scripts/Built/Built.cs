@@ -8,7 +8,7 @@ public class Built : DynamicObject
     void Start()
     {
         _code = 199;
-        Debug.Log("128921uwqd");
+        Debug.Log("Built START");
     }
 
     public Mine mine = null;

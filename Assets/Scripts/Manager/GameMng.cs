@@ -119,12 +119,12 @@ public class GameMng : MonoBehaviour
         setMainInterface(false);
         if (NetworkMng.getInstance.uniqueNumber == NetworkMng.getInstance.firstPlayerUniqueNumber)
             myTurn = true;
-        AddDelegate(SampleTurnFunc);
+        AddDelegate(SampleDelegate);
     }
 
-    void SampleTurnFunc()
+    public void SampleDelegate()
     {
-        Debug.Log("countTurn 호출됨! ! !");
+        Debug.Log("delegate 실행");
     }
 
     /**
@@ -216,6 +216,8 @@ public class GameMng : MonoBehaviour
     */
     public void turnManage(int uniqueNumber)
     {
+        countDel();
+
         if (NetworkMng.getInstance.uniqueNumber == uniqueNumber)
         {
             this.myTurn = true;
@@ -231,8 +233,6 @@ public class GameMng : MonoBehaviour
                 break;
             }
         }
-
-        countDel();
     }
 
     /**

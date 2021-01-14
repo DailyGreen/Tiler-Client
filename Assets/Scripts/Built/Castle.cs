@@ -14,11 +14,6 @@ public class Castle : Built
         _activity.Add(ACTIVITY.WORKER_UNIT_CREATE);
     }
 
-    void Update()
-    {
-
-    }
-
     public static void CreateUnitBtn()
     {
         if (GameMng.I.selectedTile._code == (int)BUILT.CASTLE)

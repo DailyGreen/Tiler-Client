@@ -216,6 +216,8 @@ public class GameMng : MonoBehaviour
     */
     public void turnManage(int uniqueNumber)
     {
+        countDel();
+
         if (NetworkMng.getInstance.uniqueNumber == uniqueNumber)
         {
             this.myTurn = true;
@@ -231,8 +233,6 @@ public class GameMng : MonoBehaviour
                 break;
             }
         }
-
-        countDel();
     }
 
     /**

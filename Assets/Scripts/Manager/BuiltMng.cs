@@ -132,4 +132,14 @@ public class BuiltMng : MonoBehaviour
         GameMng.I.cleanActList();
         GameMng.I.cleanSelected();
     }
+
+    /**
+     * @brief °Ç¹° ÆÄ±«µÉ¶§ È£ÃâµÊ
+     */
+    public void DestroyBuilt(int posX, int posY)
+    {
+        Destroy(GameMng.I.mapTile[posY, posX]._builtObj.gameObject);
+        GameMng.I.mapTile[posY, posX]._builtObj = null;
+        GameMng.I.mapTile[posY, posX]._code = (int)TILE.GRASS;
+    }
 }

@@ -120,7 +120,7 @@ public class UnitMng : MonoBehaviour
     public IEnumerator MovingUnit(int posX, int posY, int toX, int toY)
     {
         bool isRun = true;
-        reversalUnit(GameMng.I.mapTile[posY, posX]._unitObj.transform, GameMng.I.mapTile[toY, posX].transform);
+        reversalUnit(GameMng.I.mapTile[posY, posX]._unitObj.transform, GameMng.I.mapTile[toY, toX].transform);
         GameMng.I.mapTile[posY, posX]._unitObj._anim.SetTrigger("isRunning");
         while (isRun)
         {

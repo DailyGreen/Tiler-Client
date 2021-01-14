@@ -290,6 +290,10 @@ public class NetworkMng : MonoBehaviour
         {
             GameMng.I.turnManage(int.Parse(txt[1]));
         }
+        else if (txt[0].Equals("DESTROY_BUILT"))
+        {
+            GameMng.I._BuiltGM.DestroyBuilt(int.Parse(txt[1]), int.Parse(txt[2]));
+        }
         // 직접 방 생성후 이동
         else if (txt[0].Equals("CHANGE_ROOM"))
         {

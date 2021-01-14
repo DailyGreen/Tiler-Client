@@ -9,6 +9,12 @@ public class Turret : Built
 
     void Start()
     {
+        init();
+        //GameMng.I.AddDelegate();
+    }
+
+    void init()
+    {
         _name = "터렛";
         _desc = "턴이 끝날 때 사정거리 안의 적을 공격한다";
         _hp = 7;
@@ -25,4 +31,9 @@ public class Turret : Built
             GameMng.I._range.attackRange();
         }
     }
+
+    //void OnDestroy()
+    //{
+    //    GameMng.I.RemoveDelegate();
+    //}
 }

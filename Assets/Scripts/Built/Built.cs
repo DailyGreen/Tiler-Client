@@ -8,7 +8,7 @@ public class Built : DynamicObject
     void Start()
     {
         _code = 199;
-        Debug.Log("128921uwqd");
+        Debug.Log("Built START");
     }
 
     public Mine mine = null;
@@ -18,11 +18,4 @@ public class Built : DynamicObject
     public Turret turret = null;
 
     public MillitaryBase millitarybase = null;
-
-    /**
-     * @brief 건물을 생성
-     * @param GameObject built     생성할 건물 게임오브젝트
-     * @param int cost             생성할 건물의 건설비용
-     */
-
 }

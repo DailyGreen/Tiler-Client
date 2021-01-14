@@ -21,7 +21,10 @@ public class BuiltMng : MonoBehaviour
             switch (act)
             {
                 case ACTIVITY.WORKER_UNIT_CREATE:
-                    CreateUnit((int)UNIT.WORKER);
+                    CreateUnit((int)UNIT.FOREST_WORKER);
+                    break;
+                case ACTIVITY.ATTACK_UNIT_CREATE:
+                    CreateUnit((int)UNIT.FORSET_SOILDER);
                     break;
             }
         }
@@ -54,8 +57,8 @@ public class BuiltMng : MonoBehaviour
         {
             GameObject Child = Instantiate(unitobj[index - 300], GameMng.I.targetTile.transform) as GameObject;                 // enum 값 - 100
             Child.transform.parent = transform.parent;
-            GameMng.I.targetTile._unitObj = Child.GetComponent<Forest_Worker>();
-            GameMng.I.targetTile._code = GameMng.I.targetTile._unitObj._code;       // 문제는 Awake다
+            GameMng.I.targetTile._unitObj = Child.GetComponent<Unit>();
+            GameMng.I.targetTile._code = index;       // 문제는 Awake다
             GameMng.I.targetTile._unitObj._uniqueNumber = NetworkMng.getInstance.uniqueNumber;
             GameMng.I._range.rangeTileReset();
             act = ACTIVITY.ACTING;
@@ -85,7 +88,7 @@ public class BuiltMng : MonoBehaviour
     {
         GameObject Child = Instantiate(unitobj[index - 300], GameMng.I.mapTile[posY, posX].transform) as GameObject;
         Child.transform.parent = transform.parent;
-        GameMng.I.mapTile[posY, posX]._unitObj = Child.GetComponent<Forest_Worker>();
+        GameMng.I.mapTile[posY, posX]._unitObj = Child.GetComponent<Unit>();
         GameMng.I.mapTile[posY, posX]._code = GameMng.I.mapTile[posY, posX]._unitObj._code;
         GameMng.I.mapTile[posY, posX]._unitObj._uniqueNumber = uniqueNumber;
     }

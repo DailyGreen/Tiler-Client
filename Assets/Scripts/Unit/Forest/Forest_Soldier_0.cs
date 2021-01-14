@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class Forest_Soldier_0 : Unit
 {
-    void Start()
+    void Awake()
     {
         _name = "전사 1";
         _desc = "모조리 죽여주마!";
         _cost = 0;
+        _code = (int)UNIT.FORSET_SOILDER;
         _activity.Add(ACTIVITY.MOVE);
         _activity.Add(ACTIVITY.ATTACK);
         StartCoroutine("creating");

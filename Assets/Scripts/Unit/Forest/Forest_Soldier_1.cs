@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Forest_Soldier_1 : Unit
 {
-    void Start()
+    void Awake()
     {
         _name = "전사 2";
         _desc = "나는... 강하다...";

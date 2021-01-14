@@ -178,6 +178,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mine
       objectReference: {fileID: 0}
+    - target: {fileID: 338592394497751679, guid: 72cd5817f581c874fa47117e65685489, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1022674985044698913, guid: 72cd5817f581c874fa47117e65685489, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.02700229
@@ -9297,7 +9301,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!222 &1183078789057436233
 CanvasRenderer:
   m_ObjectHideFlags: 0

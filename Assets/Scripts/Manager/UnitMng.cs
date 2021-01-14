@@ -36,6 +36,9 @@ public class UnitMng : MonoBehaviour
                 case ACTIVITY.BUILD_ATTACK_BUILDING:
                     Building(Turret.cost, (int)BUILT.ATTACK_BUILDING);
                     break;
+                case ACTIVITY.BUILD_MILLITARY_BASE:
+                    Building(MillitaryBase.cost, (int)BUILT.MILLITARY_BASE);
+                    break;
                 case ACTIVITY.ATTACK:
                     UnitAttack();
                     break;
@@ -44,6 +47,7 @@ public class UnitMng : MonoBehaviour
         else if (Input.GetMouseButtonUp(1) && act != ACTIVITY.ACTING)
         {
             act = ACTIVITY.NONE;
+            GameMng.I._BuiltGM.act = ACTIVITY.NONE;
             GameMng.I._range.rangeTileReset();
             GameMng.I._range.AttackrangeTileReset();                                                     //Ãß°¡
             GameMng.I.cleanActList();
@@ -116,7 +120,7 @@ public class UnitMng : MonoBehaviour
     public IEnumerator MovingUnit(int posX, int posY, int toX, int toY)
     {
         bool isRun = true;
-        reversalUnit(GameMng.I.mapTile[posY, posX]._unitObj.transform, GameMng.I.mapTile[toY, posX].transform);
+        reversalUnit(GameMng.I.mapTile[posY, posX]._unitObj.transform, GameMng.I.mapTile[toY, toX].transform);
         GameMng.I.mapTile[posY, posX]._unitObj._anim.SetTrigger("isRunning");
         while (isRun)
         {
@@ -183,6 +187,8 @@ public class UnitMng : MonoBehaviour
                 if (GameMng.I.targetTile._unitObj._hp <= 0)
                 {
                     Destroy(GameMng.I.targetTile._unitObj.gameObject);
+                    GameMng.I.targetTile._unitObj = null;
+                    GameMng.I.targetTile._code = 0;
                 }
             }
             else if (GameMng.I.targetTile._builtObj != null)

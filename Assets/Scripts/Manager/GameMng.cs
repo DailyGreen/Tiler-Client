@@ -216,6 +216,8 @@ public class GameMng : MonoBehaviour
     */
     public void turnManage(int uniqueNumber)
     {
+        countDel();
+
         if (NetworkMng.getInstance.uniqueNumber == uniqueNumber)
         {
             this.myTurn = true;
@@ -231,8 +233,6 @@ public class GameMng : MonoBehaviour
                 break;
             }
         }
-
-        countDel();
     }
 
     /**
@@ -372,7 +372,7 @@ public class GameMng : MonoBehaviour
         objectDescTxt.text = obj._desc;
 
         hpText.text = (tile._unitObj ? tile._unitObj._hp : tile._builtObj._hp) + "" + " / " + (tile._unitObj ? tile._unitObj._hp : tile._builtObj._hp); //나중에 최대체력, 현재체력 구분할 것
-        NetworkMng.getInstance._soundGM.unitClick(UNIT.WORKER);
+        NetworkMng.getInstance._soundGM.unitClick(UNIT.FOREST_WORKER);
         //damageText.text = tile._unitObj._damage + "";
 
         Color color;
@@ -425,7 +425,7 @@ public class GameMng : MonoBehaviour
             case ACTIVITY.MOVE:
                 actName.text = "이동";
                 actDesc.text = "한 턴 소요";
-                actButton.onClick.AddListener(delegate { _UnitGM.act = activity; Worker.Move(); });
+                actButton.onClick.AddListener(delegate { _UnitGM.act = activity; _range.AttackrangeTileReset(); Worker.Move(); });
                 break;
             case ACTIVITY.BUILD_MINE:
                 actName.text = "광산";
@@ -442,10 +442,10 @@ public class GameMng : MonoBehaviour
                 actDesc.text = "두 턴 소요";
                 actButton.onClick.AddListener(delegate { _UnitGM.act = activity; Worker.buildAttackBuilding(); });
                 break;
-            case ACTIVITY.BUILD_CREATE_UNIT_BUILDING:
-                actName.text = "유닛 건물";
+            case ACTIVITY.BUILD_MILLITARY_BASE:
+                actName.text = "군사 기지";
                 actDesc.text = "두 턴 소요";
-                actButton.onClick.AddListener(delegate { _UnitGM.act = activity; Worker.buildCreateUnitBuilding(); });
+                actButton.onClick.AddListener(delegate { _UnitGM.act = activity; Worker.buildMillitaryBaseBuilding(); });
                 break;
             case ACTIVITY.BUILD_SHIELD_BUILDING:
                 actName.text = "방어 건물";
@@ -468,7 +468,12 @@ public class GameMng : MonoBehaviour
             case ACTIVITY.ATTACK:                                                               // 임시입니다!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 actName.text = "공격";
                 actDesc.text = "두 턴 소요";
-                actButton.onClick.AddListener(delegate { _UnitGM.act = activity; Worker.unitAttacking(); });
+                actButton.onClick.AddListener(delegate { _UnitGM.act = activity; _range.rangeTileReset(); Worker.unitAttacking(); });
+                break;
+            case ACTIVITY.ATTACK_UNIT_CREATE:
+                actName.text = "병력 생성";
+                actDesc.text = "두 턴 소요";
+                actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; MillitaryBase.CreateAttackUnitBtn(); });
                 break;
             default:
                 break;

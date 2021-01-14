@@ -21,7 +21,10 @@ public class BuiltMng : MonoBehaviour
             switch (act)
             {
                 case ACTIVITY.WORKER_UNIT_CREATE:
-                    CreateUnit((int)UNIT.WORKER);
+                    CreateUnit((int)UNIT.FOREST_WORKER);
+                    break;
+                case ACTIVITY.ATTACK_UNIT_CREATE:
+                    CreateUnit((int)UNIT.FORSET_SOILDER);
                     break;
             }
         }
@@ -54,8 +57,8 @@ public class BuiltMng : MonoBehaviour
         {
             GameObject Child = Instantiate(unitobj[index - 300], GameMng.I.targetTile.transform) as GameObject;                 // enum 값 - 100
             Child.transform.parent = transform.parent;
-            GameMng.I.targetTile._unitObj = Child.GetComponent<Forest_Worker>();
-            GameMng.I.targetTile._code = GameMng.I.targetTile._unitObj._code;       // 문제는 Awake다
+            GameMng.I.targetTile._unitObj = Child.GetComponent<Unit>();
+            GameMng.I.targetTile._code = index;       // 문제는 Awake다
             GameMng.I.targetTile._unitObj._uniqueNumber = NetworkMng.getInstance.uniqueNumber;
             GameMng.I._range.rangeTileReset();
             act = ACTIVITY.ACTING;
@@ -85,7 +88,7 @@ public class BuiltMng : MonoBehaviour
     {
         GameObject Child = Instantiate(unitobj[index - 300], GameMng.I.mapTile[posY, posX].transform) as GameObject;
         Child.transform.parent = transform.parent;
-        GameMng.I.mapTile[posY, posX]._unitObj = Child.GetComponent<Forest_Worker>();
+        GameMng.I.mapTile[posY, posX]._unitObj = Child.GetComponent<Unit>();
         GameMng.I.mapTile[posY, posX]._code = GameMng.I.mapTile[posY, posX]._unitObj._code;
         GameMng.I.mapTile[posY, posX]._unitObj._uniqueNumber = uniqueNumber;
     }
@@ -117,6 +120,7 @@ public class BuiltMng : MonoBehaviour
      */
     public void DestroyBuilt()
     {
+        NetworkMng.getInstance.SendMsg(string.Format("DESTROY_BUILT:{0}:{1}", GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosY));
         Destroy(GameMng.I.selectedTile._builtObj.gameObject);
         if (GameMng.I.selectedTile._builtObj._code == (int)BUILT.ATTACK_BUILDING)
         {
@@ -128,5 +132,15 @@ public class BuiltMng : MonoBehaviour
         GameMng.I.selectedTile._code = (int)TILE.GRASS;                                                             // 나중에 원래 타일 알아오는법 가져오기
         GameMng.I.cleanActList();
         GameMng.I.cleanSelected();
+    }
+
+    /**
+     * @brief 건물 파괴될때 호출됨
+     */
+    public void DestroyBuilt(int posX, int posY)
+    {
+        Destroy(GameMng.I.mapTile[posY, posX]._builtObj.gameObject);
+        GameMng.I.mapTile[posY, posX]._builtObj = null;
+        GameMng.I.mapTile[posY, posX]._code = (int)TILE.GRASS;
     }
 }

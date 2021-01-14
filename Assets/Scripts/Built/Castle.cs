@@ -24,7 +24,7 @@ public class Castle : Built
         if (GameMng.I.selectedTile._code == (int)BUILT.CASTLE)
         {
             GameMng.I._BuiltGM.act = ACTIVITY.WORKER_UNIT_CREATE;
-            GameMng.I._range.moveRange();
+            //GameMng.I._range.moveRange();
         }
         Debug.Log("ÀÏ²Û À¯´Ö »ý¼º");
 

@@ -22,7 +22,7 @@ public class RangeControl : MonoBehaviour
     /**
     * @brief 이동 범위 계산
     */
-    public void moveRange()
+    /*public void moveRange()
     {
         if ((GameMng.I.selectedTile.PosY % 2).Equals(1))
         {
@@ -87,7 +87,7 @@ public class RangeControl : MonoBehaviour
                     moveRangeTr[3].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY, GameMng.I.selectedTile.PosX + 1].transform.position;
             }
         }
-    }
+    }*/
     /**
     * @brief 범위 타일 위치 리셋
     */

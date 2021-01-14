@@ -6,7 +6,7 @@ using UnityEngine;
 public class Tile : Object
 {
     [SerializeField]
-    private int posX, posY;
+    private int posX, posY, posZ;
 
     GameObject tile;
     [SerializeField]
@@ -55,6 +55,18 @@ public class Tile : Object
         set
         {
             posY = value;
+        }
+    }
+
+    public int PosZ
+    {
+        get
+        {
+            return posZ;
+        }
+        set
+        {
+            posZ = value;
         }
     }
 

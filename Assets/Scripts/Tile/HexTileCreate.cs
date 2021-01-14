@@ -27,7 +27,7 @@ public class HexTileCreate : MonoBehaviour
     {
         CreateHexTileMap();
         CastleCreate();
-        StartTileClear();
+        SetTileInfo();
         GameMng.I.refreshTurn();
     }
 
@@ -73,7 +73,7 @@ public class HexTileCreate : MonoBehaviour
                 tilestate.PosX++;
             }
             tilestate.PosX = 0;
-            tilestate.PosY++;
+            tilestate.PosZ++;
         }
     }
 
@@ -92,12 +92,17 @@ public class HexTileCreate : MonoBehaviour
         }
     }
 
-    void StartTileClear()
+    /**
+     * @brief 타일의 x,y,z 값 설정 및 시작지점에 성이 생성이 안됐을때 기본 타일값으로 초기화
+     */
+    void SetTileInfo()
     {
         for (int y = 0; y < GameMng.I.GetMapHeight; y++)
         {
             for (int x = 0; x < GameMng.I.GetMapWidth; x++)
             {
+                GameMng.I.mapTile[y, x].PosX = GameMng.I.mapTile[y,x].PosX - GameMng.I.mapTile[y, x].PosZ / 2;
+                GameMng.I.mapTile[y, x].PosY = -GameMng.I.mapTile[y, x].PosX - GameMng.I.mapTile[y, x].PosZ; 
                 if (GameMng.I.mapTile[y, x]._code >= (int)TILE.GRASS_START && GameMng.I.mapTile[y, x]._code < (int)BUILT.CASTLE)
                 {
                     GameMng.I.mapTile[y, x]._code -= (int)TILE.GRASS_START;

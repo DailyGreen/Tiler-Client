@@ -491,6 +491,15 @@ public class GameMng : MonoBehaviour
         {
             if (isTarget) targetTile = hit.collider.gameObject.GetComponent<Tile>();
             else selectedTile = hit.collider.gameObject.GetComponent<Tile>();
+            for (int y = 0; y < GetMapHeight; y++)
+            {
+                for (int x = 0; x < GetMapWidth; x++)
+                {
+                    if(selectedTile == mapTile[y,x])
+                        Debug.Log("x:" + x + "Y:" + y);
+                } 
+            }
+            //Debug.Log("x:" + selectedTile.PosX + "Y:" + selectedTile.PosY +"Z:" +selectedTile.PosZ);
         }
     }
 

@@ -23,10 +23,11 @@ public class HexTileCreate : MonoBehaviour
     char[] mapReadChar;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         CreateHexTileMap();
         CastleCreate();
+        StartTileClear();
         GameMng.I.refreshTurn();
     }
 
@@ -46,19 +47,20 @@ public class HexTileCreate : MonoBehaviour
             mapReadChar = mapReadLines[y].ToCharArray();
             for (int x = 0; x < GameMng.I.GetMapWidth; x++)
             {
-                tilestate._code = (int)Char.GetNumericValue(mapReadChar[x]);
+                if (mapReadChar[x] >= (char)TILE.GRASS_START) { tilestate._code = (int)mapReadChar[x]; }
+                else { tilestate._code = (int)Char.GetNumericValue(mapReadChar[x]); }
                 GameObject child = Instantiate(hextile) as GameObject;
                 child.transform.parent = parentObject.transform;
 
                 GameMng.I.mapTile[y, x] = child.transform.GetComponent<Tile>();      // 각각의 타일 스크립트 GameMng.I.mapTile 2차원 배열에 저장
 
                 // mapinfo.txt  에 start_point 코드일때 starttile 에 타일 스크립트 넣어줌
-                if (tilestate._code.Equals((int)TILE.START_POINT))
+                if (tilestate._code >= (int)TILE.GRASS_START)
                 {
                     starttile[index] = GameMng.I.mapTile[y, x];
                     index++;
                 }
-
+                child.name = x.ToString() + "," + y.ToString();
                 if (y % 2 == 0)
                 {
                     child.transform.position = new Vector2(x * tileXOffset, y * tileYOffset);
@@ -86,6 +88,21 @@ public class HexTileCreate : MonoBehaviour
             starttile[NetworkMng.getInstance.v_user[i].startPos]._builtObj = tilecild.GetComponent<Built>();
             starttile[NetworkMng.getInstance.v_user[i].startPos]._builtObj._uniqueNumber = NetworkMng.getInstance.v_user[i].uniqueNumber;
             starttile[NetworkMng.getInstance.v_user[i].startPos]._code = (int)BUILT.CASTLE;
+            Debug.Log(starttile[NetworkMng.getInstance.v_user[i].startPos]._code);
+        }
+    }
+
+    void StartTileClear()
+    {
+        for (int y = 0; y < GameMng.I.GetMapHeight; y++)
+        {
+            for (int x = 0; x < GameMng.I.GetMapWidth; x++)
+            {
+                if (GameMng.I.mapTile[y, x]._code >= (int)TILE.GRASS_START && GameMng.I.mapTile[y, x]._code < (int)BUILT.CASTLE)
+                {
+                    GameMng.I.mapTile[y, x]._code -= (int)TILE.GRASS_START;
+                }
+            }
         }
     }
 }

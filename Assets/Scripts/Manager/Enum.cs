@@ -3,6 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
+ * 타일 방향
+ * 좌, 좌하, 우하, 좌상, 우상, 우
+ */
+public enum DIRECTION
+{
+    W = 0, SW = 1, SE = 2, NW = 3, NE = 4, E = 5
+}
+
+/*
  * 타일 종류에 대한 코드
  */
 public enum TILE

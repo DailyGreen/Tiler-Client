@@ -22,40 +22,40 @@ public class Worker : Unit
 
     public static void Move()
     {
-        //GameMng.I._range.moveRange();
+        GameMng.I._range.moveRange();
         Debug.Log("캐릭터 이동");
     }
 
     public static void buildMine()
     {
-        //GameMng.I._range.moveRange();
+        GameMng.I._range.moveRange();
     }
 
     public static void buildFarm()
     {
-        //GameMng.I._range.moveRange();
+        GameMng.I._range.moveRange();
     }
 
     public static void buildAttackBuilding()
     {
-        //GameMng.I._range.moveRange();
+        GameMng.I._range.moveRange();
     }
 
     public static void buildMillitaryBaseBuilding()
     {
-        //GameMng.I._range.moveRange();
+        GameMng.I._range.moveRange();
         Debug.Log("군사 기지 생성");
     }
 
     public static void buildShieldBuilding()
     {
-        //GameMng.I._range.moveRange();
+        GameMng.I._range.moveRange();
         Debug.Log("방어 건물 생성");
     }
 
     public static void buildUpgradeBuilding()
     {
-        //GameMng.I._range.moveRange();
+        GameMng.I._range.moveRange();
         Debug.Log("강화 건물 생성");
     }
 

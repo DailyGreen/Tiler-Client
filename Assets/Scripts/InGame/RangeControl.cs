@@ -29,72 +29,7 @@ public class RangeControl : MonoBehaviour
                 moveRangeTr[i].transform.position = GameMng.I.selectedTile.tileneighbor[i].transform.position;
         }
     }
-    /*public void moveRange()
-    {
-        if ((GameMng.I.selectedTile.PosY % 2).Equals(1))
-        {
-            if (GameMng.I.selectedTile.PosY < nHeight)
-            {
-                if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX]._code < (int)TILE.CAN_MOVE)
-                    moveRangeTr[0].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX].transform.position;
-            }
-            if (GameMng.I.selectedTile.PosY < nHeight && GameMng.I.selectedTile.PosX < nwidth)
-            {
-                if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX + 1]._code < (int)TILE.CAN_MOVE)
-                    moveRangeTr[1].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX + 1].transform.position;
-            }
-            if (GameMng.I.selectedTile.PosY > 0)
-            {
-                if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY - 1, GameMng.I.selectedTile.PosX]._code < (int)TILE.CAN_MOVE)
-                    moveRangeTr[4].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY - 1, GameMng.I.selectedTile.PosX].transform.position;
-            }
-            if (GameMng.I.selectedTile.PosY > 0 && GameMng.I.selectedTile.PosX < nwidth)
-            {
-                if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY - 1, GameMng.I.selectedTile.PosX + 1]._code < (int)TILE.CAN_MOVE)
-                    moveRangeTr[5].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY - 1, GameMng.I.selectedTile.PosX + 1].transform.position;
-            }
-            if (GameMng.I.selectedTile.PosX > 0)
-            {
-                if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY, GameMng.I.selectedTile.PosX - 1]._code < (int)TILE.CAN_MOVE)
-                    moveRangeTr[2].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY, GameMng.I.selectedTile.PosX - 1].transform.position;
-            }
-            if (GameMng.I.selectedTile.PosX < nwidth)
-            {
-                if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY, GameMng.I.selectedTile.PosX + 1]._code < (int)TILE.CAN_MOVE)
-                    moveRangeTr[3].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY, GameMng.I.selectedTile.PosX + 1].transform.position;
-            }
-        }
-        else
-        {
-            if (GameMng.I.selectedTile.PosY > 0 && GameMng.I.selectedTile.PosX > 0)
-            {
-                if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY - 1, GameMng.I.selectedTile.PosX - 1]._code < (int)TILE.CAN_MOVE)
-                    moveRangeTr[4].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY - 1, GameMng.I.selectedTile.PosX - 1].transform.position;
-            }
-            if (GameMng.I.selectedTile.PosY > 0)
-            {
-                if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY - 1, GameMng.I.selectedTile.PosX]._code < (int)TILE.CAN_MOVE)
-                    moveRangeTr[5].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY - 1, GameMng.I.selectedTile.PosX].transform.position;
-            }
-            if (GameMng.I.selectedTile.PosX > 0)
-            {
-                if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX - 1]._code < (int)TILE.CAN_MOVE)
-                    moveRangeTr[0].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX - 1].transform.position;
-                if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY, GameMng.I.selectedTile.PosX - 1]._code < (int)TILE.CAN_MOVE)
-                    moveRangeTr[2].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY, GameMng.I.selectedTile.PosX - 1].transform.position;
-            }
-            if (GameMng.I.selectedTile.PosX <= nwidth)
-            {
-                if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX]._code < (int)TILE.CAN_MOVE)
-                    moveRangeTr[1].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX].transform.position;
-            }
-            if (GameMng.I.selectedTile.PosX < nwidth)
-            {
-                if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY, GameMng.I.selectedTile.PosX + 1]._code < (int)TILE.CAN_MOVE)
-                    moveRangeTr[3].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY, GameMng.I.selectedTile.PosX + 1].transform.position;
-            }
-        }
-    }*/
+    
     /**
     * @brief 범위 타일 위치 리셋
     */

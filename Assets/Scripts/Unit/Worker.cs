@@ -22,7 +22,7 @@ public class Worker : Unit
 
     public static void Move()
     {
-        //GameMng.I._range.moveRange();
+        GameMng.I._range.moveRange();
         Debug.Log("캐릭터 이동");
     }
 

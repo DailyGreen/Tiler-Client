@@ -93,7 +93,7 @@ public class HexTileCreate : MonoBehaviour
     }
 
     /**
-     * @brief 타일의 x,y,z 값 설정 및 시작지점에 성이 생성이 안됐을때 기본 타일값으로 초기화
+     * @brief 타일의 x,y,z 값 설정 및 시작지점에 성이 생성이 안됐을때 기본 타일값으로 초기화 및 타일 주변 스크립트 가져옴
      */
     void SetTileInfo()
     {
@@ -106,6 +106,64 @@ public class HexTileCreate : MonoBehaviour
                 if (GameMng.I.mapTile[y, x]._code >= (int)TILE.GRASS_START && GameMng.I.mapTile[y, x]._code < (int)BUILT.CASTLE)
                 {
                     GameMng.I.mapTile[y, x]._code -= (int)TILE.GRASS_START;
+                }
+                if (x > 0)
+                {
+                    GameMng.I.mapTile[y, x].tileneighbor[(int)DIRECTION.W] = GameMng.I.mapTile[y, x - 1];
+                }
+                if (x >= 0 && !x.Equals(GameMng.I.GetMapWidth - 1))
+                {
+                    GameMng.I.mapTile[y, x].tileneighbor[(int)DIRECTION.E] = GameMng.I.mapTile[y, x + 1];
+
+                }
+
+                if (y > 0)
+                {
+                    if (y % 2 == 0)         // 짝수
+                    {
+                        if (x > 0)
+                        {
+                            GameMng.I.mapTile[y, x].tileneighbor[(int)DIRECTION.SW] = GameMng.I.mapTile[y - 1, x - 1];
+                            GameMng.I.mapTile[y, x].tileneighbor[(int)DIRECTION.NW] = GameMng.I.mapTile[y + 1, x - 1];
+                        }
+                        Debug.Log("Asdf");
+                        if (x >= 0 /*&& !(x < GameMng.I.GetMapWidth)*/)
+                        {
+                            GameMng.I.mapTile[y, x].tileneighbor[(int)DIRECTION.SE] = GameMng.I.mapTile[y - 1, x];
+                            GameMng.I.mapTile[y, x].tileneighbor[(int)DIRECTION.NE] = GameMng.I.mapTile[y + 1, x];
+                        }
+                    }
+                    else
+                    {
+                        GameMng.I.mapTile[y, x].tileneighbor[(int)DIRECTION.SW] = GameMng.I.mapTile[y - 1, x];      // 좌하
+                        if (!y.Equals(GameMng.I.GetMapHeight - 1))
+                            GameMng.I.mapTile[y, x].tileneighbor[(int)DIRECTION.NW] = GameMng.I.mapTile[y + 1, x];      // 좌상   
+
+                        if (x >= 0 && !x.Equals(GameMng.I.GetMapWidth - 1))
+                        {
+                            GameMng.I.mapTile[y, x].tileneighbor[(int)DIRECTION.SE] = GameMng.I.mapTile[y - 1, x + 1];      // 우하
+                            if (!y.Equals(GameMng.I.GetMapHeight - 1) && !x.Equals(GameMng.I.GetMapWidth - 1))
+                                GameMng.I.mapTile[y, x].tileneighbor[(int)DIRECTION.NE] = GameMng.I.mapTile[y + 1, x + 1];      // 우상
+
+                        }
+                    }
+                }
+                else
+                {
+                    if (y % 2 == 0)
+                    {
+                        if (x > 0)
+                            GameMng.I.mapTile[y, x].tileneighbor[(int)DIRECTION.NW] = GameMng.I.mapTile[y + 1, x - 1];
+
+                        GameMng.I.mapTile[y, x].tileneighbor[(int)DIRECTION.NE] = GameMng.I.mapTile[y + 1, x];
+                    }
+                    else
+                    {
+                        if (!y.Equals(GameMng.I.GetMapHeight - 1))
+                            GameMng.I.mapTile[y, x].tileneighbor[(int)DIRECTION.NW] = GameMng.I.mapTile[y + 1, x];
+                        if (!y.Equals(GameMng.I.GetMapHeight - 1) && !x.Equals(GameMng.I.GetMapWidth - 1))
+                            GameMng.I.mapTile[y, x].tileneighbor[(int)DIRECTION.NE] = GameMng.I.mapTile[y + 1, x + 1];
+                    }
                 }
             }
         }

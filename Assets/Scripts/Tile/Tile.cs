@@ -14,6 +14,8 @@ public class Tile : Object
     [SerializeField]
     SpriteRenderer tileSpriteRend;
 
+    public Tile[] tileneighbor = new Tile[6];
+
     public Unit _unitObj;
     public Built _builtObj;
 
@@ -79,6 +81,11 @@ public class Tile : Object
         }
     }
 
+
+    public void SetNeighbor(int distance, Tile tile)
+    {
+
+    }
 
     public static bool isEmptyTile(Tile t)
     {

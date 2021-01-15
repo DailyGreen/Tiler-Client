@@ -133,6 +133,7 @@ MonoBehaviour:
   _activity: 
   posX: 0
   posY: 0
+  posZ: 0
   tileSprite:
   - {fileID: 21300000, guid: 3ef21efafde12d740babff416570ade2, type: 3}
   - {fileID: 21300000, guid: 94a80911aec957f4b8e56f8f1740842d, type: 3}
@@ -143,5 +144,12 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 8ba4a4c5c1f9a3b4b8e3acfbe550e8b5, type: 3}
   - {fileID: 21300000, guid: 6cfdce3bc722d974c8f01704ff5f19da, type: 3}
   tileSpriteRend: {fileID: 3044242763324709725}
+  tileneighbor:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   _unitObj: {fileID: 0}
   _builtObj: {fileID: 0}

@@ -22,6 +22,14 @@ public class RangeControl : MonoBehaviour
     /**
     * @brief 이동 범위 계산
     */
+    public void moveRange()
+    {
+        for (int i = 0; i < moveRangeTr.Length; i++)
+        {
+            if (GameMng.I.selectedTile.tileneighbor[i] != null && GameMng.I.selectedTile.tileneighbor[i]._code < (int)TILE.CAN_MOVE)
+                moveRangeTr[i].transform.position = GameMng.I.selectedTile.tileneighbor[i].transform.position;
+        }
+    }
     /*public void moveRange()
     {
         if ((GameMng.I.selectedTile.PosY % 2).Equals(1))

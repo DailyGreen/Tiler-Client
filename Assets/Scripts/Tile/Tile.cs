@@ -16,7 +16,7 @@ public class Tile : Object
 
     public Unit _unitObj;
     public Built _builtObj;
-
+    public Tile[] tileneighbor = new Tile[6];
     void Start()
     {
         tile = this.GetComponent<GameObject>();

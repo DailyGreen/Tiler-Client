@@ -29,11 +29,13 @@ public class HexTileCreate : MonoBehaviour
     public const float tileXOffset = 1.24f;
     public const float tileYOffset = 1.08f;
 
-    string[] mapReadLines = File.ReadAllLines(@"Assets/mapinfo.txt");
+    TextAsset maptextload;
+    String[] mapreadlines;
     char[] mapReadChar;
 
     void Awake()
     {
+        LoadTilemapfromtxt("mapinfo");
         CreateHexTileMap();
         CastleCreate();
         SetTileInfo();
@@ -46,6 +48,12 @@ public class HexTileCreate : MonoBehaviour
         tilestate.PosY = 0;
     }
 
+    void LoadTilemapfromtxt(string _filename)
+    {
+        maptextload = Resources.Load(_filename) as TextAsset;
+        mapreadlines = maptextload.text.Split('\n');
+    }
+
     /**
      * @brief 헥사 타일맵 생성, 타일 posX posY 설정, 시작 위치 설정
      */
@@ -53,7 +61,7 @@ public class HexTileCreate : MonoBehaviour
     {
         for (int y = 0; y < GameMng.I.GetMapHeight; y++)
         {
-            mapReadChar = mapReadLines[y].ToCharArray();
+            mapReadChar = mapreadlines[y].ToCharArray();
             for (int x = 0; x < GameMng.I.GetMapWidth; x++)
             {
                 if (mapReadChar[x] >= (char)TILE.GRASS_START) { tilestate._code = (int)mapReadChar[x]; }
@@ -119,8 +127,8 @@ public class HexTileCreate : MonoBehaviour
         {
             for (int x = 0; x < GameMng.I.GetMapWidth; x++)
             {
-                GameMng.I.mapTile[y, x].PosX = GameMng.I.mapTile[y, x].PosX - GameMng.I.mapTile[y, x].PosZ / 2;
-                GameMng.I.mapTile[y, x].PosY = -GameMng.I.mapTile[y, x].PosX - GameMng.I.mapTile[y, x].PosZ;
+                //GameMng.I.mapTile[y, x].PosX = GameMng.I.mapTile[y, x].PosX - GameMng.I.mapTile[y, x].PosZ / 2;
+                //GameMng.I.mapTile[y, x].PosY = -GameMng.I.mapTile[y, x].PosX - GameMng.I.mapTile[y, x].PosZ;
                 if (GameMng.I.mapTile[y, x]._code >= (int)TILE.GRASS_START && GameMng.I.mapTile[y, x]._code < (int)BUILT.CASTLE)
                 {
                     GameMng.I.mapTile[y, x]._code -= (int)TILE.GRASS_START;
@@ -184,6 +192,18 @@ public class HexTileCreate : MonoBehaviour
                     }
                 }
             }
+        }
+    }
+    public void TilecodeClear()
+    {
+        if (GameMng.I.selectedTile._unitObj == null || GameMng.I.selectedTile._builtObj == null)
+        {
+            mapReadChar = mapreadlines[GameMng.I.selectedTile.PosZ].ToCharArray();
+            if (mapReadChar[GameMng.I.selectedTile.PosX] >= (int)TILE.GRASS_START)
+            {
+                GameMng.I.selectedTile._code = (int)mapReadChar[GameMng.I.selectedTile.PosX] - (int)TILE.GRASS_START;
+            }
+            else { GameMng.I.selectedTile._code = (int)Char.GetNumericValue(mapReadChar[GameMng.I.selectedTile.PosX]); }
         }
     }
 }

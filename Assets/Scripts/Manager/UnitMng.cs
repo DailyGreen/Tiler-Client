@@ -5,6 +5,8 @@ using UnityEngine.EventSystems;
 
 public class UnitMng : MonoBehaviour
 {
+    public HexTileCreate hc;
+
     public ACTIVITY act = ACTIVITY.NONE;
 
     public Worker worker = null;
@@ -99,7 +101,7 @@ public class UnitMng : MonoBehaviour
             GameMng.I.targetTile._unitObj = GameMng.I.selectedTile._unitObj;
             GameMng.I.targetTile._code = GameMng.I.selectedTile._unitObj._code;
             GameMng.I.selectedTile._unitObj = null;
-            GameMng.I.selectedTile._code = (int)TILE.CAN_MOVE - 1;
+            hc.TilecodeClear();
         }
     }
 

@@ -6,23 +6,32 @@ using UnityEngine;
 
 public class HexTileCreate : MonoBehaviour
 {
+    /**********
+     * 타일 오브젝트
+     */
     public GameObject parentObject;
     public GameObject hextile;
     public Tile tilestate;      // 프림
     public GameObject castle;
     public GameObject tilecild;
 
+    /**********
+     * 세팅
+     */
     public Tile[] starttile = new Tile[24];
     int index = 0;
+    [SerializeField]
+    GameObject mainCamera;
 
-    // 타일 간격
+    /**********
+     * 타일 간격
+     */
     public const float tileXOffset = 1.24f;
     public const float tileYOffset = 1.08f;
 
     string[] mapReadLines = File.ReadAllLines(@"Assets/mapinfo.txt");
     char[] mapReadChar;
 
-    // Start is called before the first frame update
     void Awake()
     {
         CreateHexTileMap();
@@ -89,6 +98,15 @@ public class HexTileCreate : MonoBehaviour
             starttile[NetworkMng.getInstance.v_user[i].startPos]._builtObj._uniqueNumber = NetworkMng.getInstance.v_user[i].uniqueNumber;
             starttile[NetworkMng.getInstance.v_user[i].startPos]._code = (int)BUILT.CASTLE;
             Debug.Log(starttile[NetworkMng.getInstance.v_user[i].startPos]._code);
+
+            if (NetworkMng.getInstance.v_user[i].uniqueNumber.Equals(NetworkMng.getInstance.uniqueNumber))
+            {
+                Debug.Log("POS " + starttile[NetworkMng.getInstance.v_user[i].startPos].transform.position);
+                Vector3 tempVec = starttile[NetworkMng.getInstance.v_user[i].startPos].transform.position;
+                tempVec.z = -20;
+                mainCamera.transform.position = tempVec;
+                Debug.Log("POS2 " + mainCamera.transform.position);
+            }
         }
     }
 

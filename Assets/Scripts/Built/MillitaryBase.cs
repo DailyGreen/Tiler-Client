@@ -5,7 +5,7 @@ using UnityEngine;
 public class MillitaryBase : Built
 {
     public static int cost = 10;   // 건설 비용
-    // Start is called before the first frame update
+
     void Start()
     {
         _name = "군사 기지";
@@ -16,18 +16,13 @@ public class MillitaryBase : Built
         _code = (int)BUILT.MILLITARY_BASE;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
     public static void CreateAttackUnitBtn()
     {
         if (GameMng.I.selectedTile._code == (int)BUILT.MILLITARY_BASE)
         {
             GameMng.I._BuiltGM.act = ACTIVITY.ATTACK_UNIT_CREATE;
-            //GameMng.I._range.moveRange();
+            GameMng.I._range.moveRange();
         }
         Debug.Log("병력 유닛 생성할 위치 선정");
 

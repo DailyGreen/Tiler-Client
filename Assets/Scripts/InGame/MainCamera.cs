@@ -78,8 +78,8 @@ public class MainCamera : MonoBehaviour
         }
         pos.z = -20;
 
-        pos.x = Mathf.Clamp(pos.x, -limitPos.x, limitPos.x);
-        pos.y = Mathf.Clamp(pos.y, -limitPos.y, limitPos.y);
+        //pos.x = Mathf.Clamp(pos.x, -limitPos.x, limitPos.x);
+        //pos.y = Mathf.Clamp(pos.y, -limitPos.y, limitPos.y);
         this.transform.position = pos;
     }
 }

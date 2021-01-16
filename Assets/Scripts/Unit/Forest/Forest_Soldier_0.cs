@@ -23,16 +23,11 @@ public class Forest_Soldier_0 : Unit
 
     public void walking()
     {
-        _anim.SetBool("isWorking", false);
-        _anim.SetBool("isRunning", true);
+        _anim.SetTrigger("isRunning");
     }
-    public void working()
-    {
-        _anim.SetBool("isRunning", false);
-        _anim.SetBool("isWorking", true);
-    }
+
     public void dying()
     {
-        _anim.SetBool("isDying", true);
+        _anim.SetTrigger("isDying");
     }
 }

@@ -3280,7 +3280,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &451851686
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3293,7 +3293,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1323886476}
-  - {fileID: 1878147858}
   m_Father: {fileID: 661604230}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3386,12 +3385,12 @@ MonoBehaviour:
     m_SelectedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
+    m_NormalTrigger: StartBT_Normal
+    m_HighlightedTrigger: StartBT_Highlighted
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Highlighted
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 451851691}
   m_OnClick:
     m_PersistentCalls:
@@ -3919,21 +3918,8 @@ MonoBehaviour:
   roomPanel: {fileID: 1641786538}
   lobbyPanel: {fileID: 1679209181}
   roomInfo: {fileID: 378719533}
-  players:
-  - {fileID: 107816360}
-  - {fileID: 1201429821}
-  - {fileID: 1479513601}
-  - {fileID: 1633787262}
-  - {fileID: 2090494201}
-  - {fileID: 1300841439}
-  playersName:
-  - {fileID: 1784113217}
-  - {fileID: 1391943405}
-  - {fileID: 1758328278}
-  - {fileID: 1634719750}
-  - {fileID: 189614529}
-  - {fileID: 1205827199}
   gameStartBT: {fileID: 451851690}
+  readyUI: {fileID: 1878147857}
   tribeImages:
   - {fileID: 266506265}
   - {fileID: 2083092505}
@@ -3962,6 +3948,20 @@ MonoBehaviour:
   - {fileID: 21300000, guid: bebcb3fa5729f5b4bb391cf6f8eac7e2, type: 3}
   - {fileID: 21300000, guid: db4f5bfbc6ebc1c4889d763ea0c0951d, type: 3}
   - {fileID: 21300000, guid: 7958d750e21e4e64fa4dee1f4ebfcfbb, type: 3}
+  players:
+  - {fileID: 107816360}
+  - {fileID: 1201429821}
+  - {fileID: 1479513601}
+  - {fileID: 1633787262}
+  - {fileID: 2090494201}
+  - {fileID: 1300841439}
+  playersName:
+  - {fileID: 1784113217}
+  - {fileID: 1391943405}
+  - {fileID: 1758328278}
+  - {fileID: 1634719750}
+  - {fileID: 189614529}
+  - {fileID: 1205827199}
 --- !u!95 &507083846
 Animator:
   serializedVersion: 3
@@ -5167,7 +5167,7 @@ GameObject:
   - component: {fileID: 661604230}
   - component: {fileID: 661604231}
   m_Layer: 5
-  m_Name: Center
+  m_Name: PlayBT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5185,6 +5185,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 451851686}
+  - {fileID: 1878147858}
   m_Father: {fileID: 104755329}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -14498,7 +14499,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1878147858
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14506,11 +14507,11 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1878147857}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 451851686}
+  m_Father: {fileID: 661604230}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}

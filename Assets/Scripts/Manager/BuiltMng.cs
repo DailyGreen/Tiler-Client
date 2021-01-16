@@ -50,8 +50,14 @@ public class BuiltMng : MonoBehaviour
         }
     }
 
+    /**
+     * @brief 유닛을 생성함 (클라 전용)
+     * @param cost 사용된 코스트
+     * @param index 유닛 코드
+     */
     public void CreateUnit(/*int cost,*/ int index)
     {
+        GameMng.I.minGold(3);       // TODO : 코스트로 변경
         GameMng.I.mouseRaycast(true);                       //캐릭터 정보와 타일 정보를 알아와야해서 false에서 true로 변경
         if (GameMng.I.targetTile._builtObj == null && GameMng.I.targetTile._code < (int)TILE.CAN_MOVE && GameMng.I.targetTile._unitObj == null && Vector2.Distance(GameMng.I.selectedTile.transform.localPosition, GameMng.I.targetTile.transform.localPosition) <= 1.5f)
         {

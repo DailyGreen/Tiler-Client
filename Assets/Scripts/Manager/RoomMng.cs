@@ -4,22 +4,29 @@ using UnityEngine;
 
 public class RoomMng : MonoBehaviour
 {
+    /**********
+     * 방 생성시 UI
+     */
     [SerializeField]
-    UnityEngine.UI.Text roomNameTxt;        // 방 생성시 이름
+    UnityEngine.UI.Text roomNameTxt;            // 방 생성시 이름
     [SerializeField]
-    UnityEngine.UI.Text roomPWTxt;          // 방 비밀번호 이름
-    //[SerializeField]
-    //UnityEngine.UI.Text roomLimitMem;          // 방 비밀번호 이름
+    UnityEngine.UI.Text roomPWTxt;              // 방 비밀번호 이름
 
+    /**********
+     * 방 찾기 UI
+     */
     [SerializeField]
-    GameObject roomPrefab;                // 방 찾기시 생성될 방 버튼들
+    GameObject roomPrefab;                      // 방 찾기시 생성될 방 버튼들
     [SerializeField]
-    GameObject roomList;               // 발견된 방 리스트들
+    GameObject roomList;                        // 발견된 방 리스트들
     [SerializeField]
-    GameObject checkPWpop;                  // 비밀번호 체크 팝업
+    GameObject checkPWpop;                      // 비밀번호 체크 팝업
     [SerializeField]
     Animator pwPopAnim;
 
+    /**********
+     * 방 데이터
+     */
     //[HideInInspector]
     public string roomPW;
     //[HideInInspector]
@@ -27,7 +34,11 @@ public class RoomMng : MonoBehaviour
     //[HideInInspector]
     public string roomIdx;
     public string roomName;
+    string nowMem;  // 현재 방에 있는 유저 수
 
+    /**********
+     * 로비 UI
+     */
     [SerializeField]
     GameObject roomPanel;
     [SerializeField]
@@ -36,21 +47,21 @@ public class RoomMng : MonoBehaviour
     // Room일때(같은 방에 있는 유저 정보 : 0은 나임)
     [SerializeField]
     UnityEngine.UI.Text roomInfo;
-    public GameObject[] players;
-    public UnityEngine.UI.Text[] playersName;
     [SerializeField]
-    UnityEngine.UI.Button gameStartBT;
+    UnityEngine.UI.Button gameStartBT;          // 방장만 사용할 수 있는 버튼
     [SerializeField]
-    UnityEngine.UI.Image[] tribeImages;
+    GameObject readyUI;                         // 방장이 아닌 유저들에게 보여줄 이미지
     [SerializeField]
-    UnityEngine.UI.Image[] colorImages;
+    UnityEngine.UI.Image[] tribeImages;         // 종족 이미지들
     [SerializeField]
-    UnityEngine.UI.Button[] colorBT;
+    UnityEngine.UI.Image[] colorImages;         // 색깔 이미지들
     [SerializeField]
-    Sprite[] tribeSprites;
+    UnityEngine.UI.Button[] colorBT;            // 색깔 버튼
+    [SerializeField]
+    Sprite[] tribeSprites;                      // 종족 스프라이트
+    public GameObject[] players;                // 플레이어들
+    public UnityEngine.UI.Text[] playersName;   // 플레이어 이름 텍스트
 
-    //public string roomName;
-    string nowMem;  // 현재 방에 있는 유저 수
 
     void Start()
     {
@@ -68,6 +79,7 @@ public class RoomMng : MonoBehaviour
         {
             NetworkMng.getInstance.SendMsg(string.Format("CREATE_ROOM:{0}:{1}:{2}", roomNameTxt.text, roomPWTxt.text, 3));
 
+            NetworkMng.getInstance.v_user.Clear();
             UserInfo userInfo = new UserInfo
             {
                 nickName = NetworkMng.getInstance.nickName,
@@ -181,7 +193,8 @@ public class RoomMng : MonoBehaviour
 
     public void exitRoom()
     {
-        gameStartBT.interactable = false;
+        gameStartBT.gameObject.SetActive(false);
+        readyUI.SetActive(true);
         for (int i = 0; i < players.Length; i++)
         {
             players[i].SetActive(false);
@@ -219,7 +232,8 @@ public class RoomMng : MonoBehaviour
         playersName[0].text = NetworkMng.getInstance.nickName;
         nowMem = "1";
         roomInfo.text = roomNameTxt.text;
-        gameStartBT.interactable = true;
+        gameStartBT.gameObject.SetActive(true);
+        readyUI.SetActive(false);
         NetworkMng.getInstance._soundGM.roomBGM();
     }
 

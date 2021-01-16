@@ -29,7 +29,7 @@ public class Farm : Built
     void MakingFood()
     {
         Debug.Log("MAKING FOOD CALL !!!!!!!!");
-        GameMng.I.addMaxMem(making);
+        GameMng.I.addFood(making);
     }
 
     void OnDestroy()

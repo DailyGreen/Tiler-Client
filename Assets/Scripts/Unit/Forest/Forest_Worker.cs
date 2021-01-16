@@ -28,37 +28,12 @@ public class Forest_Worker : Worker
         GameMng.I._BuiltGM.act = ACTIVITY.NONE;
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            _anim.SetBool("isWorking", false);
-            _anim.SetBool("isRunning", false);
-        }
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            Debug.Log("sdf");
-            walking();
-        }
-        if (Input.GetKeyDown(KeyCode.V))
-        {
-            Debug.Log("sdf");
-            working();
-        }
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            _anim.SetBool("isDying", true);
-        }
-    }
-
     public void walking()
     {
-        _anim.SetBool("isWorking", false);
-        _anim.SetBool("isRunning", true);
+        _anim.SetTrigger("isRunning");
     }
     public void working()
     {
-        _anim.SetBool("isRunning", false);
         _anim.SetBool("isWorking", true);
     }
 }

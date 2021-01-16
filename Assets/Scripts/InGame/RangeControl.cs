@@ -5,9 +5,9 @@ using UnityEngine;
 public class RangeControl : MonoBehaviour
 {
     [SerializeField]
-    private Transform[] moveRangeTr = new Transform[6];                                                             //0: ÁÂ»ó, 1: ¿ì»ó, 2: ÁÂ, 3: ¿ì, 4: ÁÂÇÏ, 5: ¿ìÇÏ
+    private Transform[] moveRangeTr = new Transform[6];
     [SerializeField]
-    private Transform[] attackRangeTr = new Transform[6];                                                            //0: ÁÂ»ó, 1: ¿ì»ó, 2: ÁÂ, 3: ¿ì, 4: ÁÂÇÏ, 5: ¿ìÇÏ
+    private Transform[] attackRangeTr = new Transform[6];
 
     private float nHeight = 0.0f;                                                                                   //¸Ê ¼¼·Î ÃÖ´ë Å©±â
     private float nwidth = 0.0f;                                                                                    //¸Ê °¡·Î ÃÖ´ë Å©±â

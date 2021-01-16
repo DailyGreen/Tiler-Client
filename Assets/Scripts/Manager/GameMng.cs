@@ -316,8 +316,15 @@ public class GameMng : MonoBehaviour
         if (tile._unitObj)
         {
             obj = tile._unitObj;
-            objImage.sprite = objSprite[10];    // 스프라이트 일꾼으로 변경 (나중에 유닛 추가시 switch로 변경)
-
+            switch (tile._unitObj._code)
+            {
+                case (int)UNIT.FOREST_WORKER:
+                    objImage.sprite = objSprite[10];    
+                    break;
+                case (int)UNIT.FORSET_SOILDER:
+                    objImage.sprite = objSprite[11];
+                    break;
+            }
             setMainInterface(true);
         }
         else
@@ -357,6 +364,26 @@ public class GameMng : MonoBehaviour
                     break;
                 case (int)BUILT.CASTLE:
                     objImage.sprite = objSprite[3];
+                    hpText.enabled = true;
+                    damageText.enabled = false;
+                    logoImage[0].enabled = true;
+                    logoImage[1].enabled = false;
+                    objImage.enabled = true;
+                    objectNameTxt.enabled = true;
+                    objectDescTxt.enabled = true;
+                    break;
+                case (int)BUILT.AIRDROP:
+                    objImage.sprite = objSprite[13];
+                    hpText.enabled = false;
+                    damageText.enabled = false;
+                    logoImage[0].enabled = false;
+                    logoImage[1].enabled = false;
+                    objImage.enabled = true;
+                    objectNameTxt.enabled = true;
+                    objectDescTxt.enabled = true;
+                    break;
+                case (int)BUILT.MILLITARY_BASE:
+                    objImage.sprite = objSprite[14];
                     hpText.enabled = true;
                     damageText.enabled = false;
                     logoImage[0].enabled = true;

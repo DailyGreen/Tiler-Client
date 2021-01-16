@@ -827,6 +827,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: f89d12bd18db68f46ac146795493daad, type: 3}
   - {fileID: 21300000, guid: 2a9a942a3dc771241a81022e8bfc1f7b, type: 3}
   - {fileID: 21300000, guid: b08e570699f1c8a4f9cc388204aef3bc, type: 3}
+  - {fileID: 21300012, guid: b08e570699f1c8a4f9cc388204aef3bc, type: 3}
+  - {fileID: 21300014, guid: b08e570699f1c8a4f9cc388204aef3bc, type: 3}
+  - {fileID: 21300000, guid: 17a26b6ee7cbb254eb5562096f517c35, type: 3}
+  - {fileID: 21300000, guid: 48853b64a25bd0b4ca3bb19260c643af, type: 3}
   objectNameTxt: {fileID: 1183078787967441958}
   objectDescTxt: {fileID: 1183078787327756445}
   hpText: {fileID: 1183078788406832961}

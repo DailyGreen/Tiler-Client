@@ -97,6 +97,7 @@ public class UnitMng : MonoBehaviour
 
             GameMng.I.selectedTile._unitObj.transform.localPosition = GameMng.I.targetTile.transform.localPosition;
             GameMng.I.targetTile._unitObj = GameMng.I.selectedTile._unitObj;
+            GameMng.I.targetTile._code = GameMng.I.selectedTile._unitObj._code;
             GameMng.I.selectedTile._unitObj = null;
             GameMng.I.selectedTile._code = (int)TILE.CAN_MOVE - 1;
         }

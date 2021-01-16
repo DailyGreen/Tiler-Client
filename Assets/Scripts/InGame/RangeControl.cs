@@ -5,9 +5,9 @@ using UnityEngine;
 public class RangeControl : MonoBehaviour
 {
     [SerializeField]
-    private Transform[] moveRangeTr = new Transform[6];                                                             //0: 좌상, 1: 우상, 2: 좌, 3: 우, 4: 좌하, 5: 우하
+    private Transform[] moveRangeTr = new Transform[6];
     [SerializeField]
-    private Transform[] attackRangeTr = new Transform[6];                                                            //0: 좌상, 1: 우상, 2: 좌, 3: 우, 4: 좌하, 5: 우하
+    private Transform[] attackRangeTr = new Transform[6];
 
     private float nHeight = 0.0f;                                                                                   //맵 세로 최대 크기
     private float nwidth = 0.0f;                                                                                    //맵 가로 최대 크기
@@ -25,6 +25,8 @@ public class RangeControl : MonoBehaviour
     {
         for (int i = 0; i < moveRangeTr.Length; i++)
         {
+            if (GameMng.I.selectedTile.tileneighbor[i] == null)
+                continue;
             if (GameMng.I.selectedTile.tileneighbor[i] != null && GameMng.I.selectedTile.tileneighbor[i]._code < (int)TILE.CAN_MOVE)
                 moveRangeTr[i].transform.position = GameMng.I.selectedTile.tileneighbor[i].transform.position;
         }
@@ -46,149 +48,12 @@ public class RangeControl : MonoBehaviour
     */
     public void attackRange()
     {
-        if (GameMng.I.selectedTile._builtObj != null)   // 범위 안에 건물이 있을시
+        for (int i = 0; i < moveRangeTr.Length; i++)
         {
-            if ((GameMng.I.selectedTile.PosY % 2) == 1)
-            {
-                if (GameMng.I.selectedTile.PosY < nHeight)
-                {
-                    if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX]._unitObj != null)
-                        attackRangeTr[0].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX].transform.position;
-                }
-                if (GameMng.I.selectedTile.PosY < nHeight && GameMng.I.selectedTile.PosX < nwidth)
-                {
-                    if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX + 1]._unitObj != null)
-                        attackRangeTr[1].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX + 1].transform.position;
-                }
-                if (GameMng.I.selectedTile.PosY > 0)
-                {
-                    if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY - 1, GameMng.I.selectedTile.PosX]._unitObj != null)
-                        attackRangeTr[4].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY - 1, GameMng.I.selectedTile.PosX].transform.position;
-                }
-                if (GameMng.I.selectedTile.PosY > 0 && GameMng.I.selectedTile.PosX < nwidth)
-                {
-                    if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY - 1, GameMng.I.selectedTile.PosX + 1]._unitObj != null)
-                        attackRangeTr[5].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY - 1, GameMng.I.selectedTile.PosX + 1].transform.position;
-                }
-                if (GameMng.I.selectedTile.PosX > 0)
-                {
-                    if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY, GameMng.I.selectedTile.PosX - 1]._unitObj != null)
-                        attackRangeTr[2].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY, GameMng.I.selectedTile.PosX - 1].transform.position;
-                }
-                if (GameMng.I.selectedTile.PosX < nwidth)
-                {
-                    if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY, GameMng.I.selectedTile.PosX + 1]._unitObj != null)
-                        attackRangeTr[3].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY, GameMng.I.selectedTile.PosX + 1].transform.position;
-                }
-            }
-            else
-            {
-                if (GameMng.I.selectedTile.PosY > 0 && GameMng.I.selectedTile.PosX > 0)
-                {
-                    if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY - 1, GameMng.I.selectedTile.PosX - 1]._unitObj != null)
-                        attackRangeTr[4].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY - 1, GameMng.I.selectedTile.PosX - 1].transform.position;
-                }
-                if (GameMng.I.selectedTile.PosY > 0)
-                {
-                    if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY - 1, GameMng.I.selectedTile.PosX]._unitObj != null)
-                        attackRangeTr[5].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY - 1, GameMng.I.selectedTile.PosX].transform.position;
-                }
-                if (GameMng.I.selectedTile.PosX > 0)                                                                                                                             //공격범위가 한곳이 안나오면 이 잘 못
-                {
-                    if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX - 1]._unitObj != null)
-                        attackRangeTr[0].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX - 1].transform.position;
-                    if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY, GameMng.I.selectedTile.PosX - 1]._unitObj != null)
-                        attackRangeTr[2].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY, GameMng.I.selectedTile.PosX - 1].transform.position;
-                }
-                if (GameMng.I.selectedTile.PosX <= nwidth)
-                {
-                    if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX]._unitObj != null)
-                        attackRangeTr[1].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX].transform.position;
-                }
-                if (GameMng.I.selectedTile.PosX < nwidth)
-                {
-                    if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY, GameMng.I.selectedTile.PosX + 1]._unitObj != null)
-                        attackRangeTr[3].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY, GameMng.I.selectedTile.PosX + 1].transform.position;
-                }
-            }
-        }
-        else if (GameMng.I.selectedTile._unitObj != null)   // 범위 안에 유닛이 있을 시
-        {
-            if ((GameMng.I.selectedTile.PosY % 2) == 1)
-            {
-                if (GameMng.I.selectedTile.PosY < nHeight)
-                {
-                    if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX]._unitObj != null
-                        || GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX]._builtObj != null)
-                        attackRangeTr[0].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX].transform.position;
-                }
-                if (GameMng.I.selectedTile.PosY < nHeight && GameMng.I.selectedTile.PosX < nwidth)
-                {
-                    if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX + 1]._unitObj != null
-                        || GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX + 1]._builtObj != null)
-                        attackRangeTr[1].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX + 1].transform.position;
-                }
-                if (GameMng.I.selectedTile.PosY > 0)
-                {
-                    if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY - 1, GameMng.I.selectedTile.PosX]._unitObj != null
-                        || GameMng.I.mapTile[GameMng.I.selectedTile.PosY - 1, GameMng.I.selectedTile.PosX]._builtObj != null)
-                        attackRangeTr[4].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY - 1, GameMng.I.selectedTile.PosX].transform.position;
-                }
-                if (GameMng.I.selectedTile.PosY > 0 && GameMng.I.selectedTile.PosX < nwidth)
-                {
-                    if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY - 1, GameMng.I.selectedTile.PosX + 1]._unitObj != null
-                        || GameMng.I.mapTile[GameMng.I.selectedTile.PosY - 1, GameMng.I.selectedTile.PosX + 1]._builtObj != null)
-                        attackRangeTr[5].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY - 1, GameMng.I.selectedTile.PosX + 1].transform.position;
-                }
-                if (GameMng.I.selectedTile.PosX > 0)
-                {
-                    if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY, GameMng.I.selectedTile.PosX - 1]._unitObj != null
-                        || GameMng.I.mapTile[GameMng.I.selectedTile.PosY, GameMng.I.selectedTile.PosX - 1]._builtObj != null)
-                        attackRangeTr[2].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY, GameMng.I.selectedTile.PosX - 1].transform.position;
-                }
-                if (GameMng.I.selectedTile.PosX < nwidth)
-                {
-                    if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY, GameMng.I.selectedTile.PosX + 1]._unitObj != null
-                        || GameMng.I.mapTile[GameMng.I.selectedTile.PosY, GameMng.I.selectedTile.PosX + 1]._builtObj != null)
-                        attackRangeTr[3].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY, GameMng.I.selectedTile.PosX + 1].transform.position;
-                }
-            }
-            else
-            {
-                if (GameMng.I.selectedTile.PosY > 0 && GameMng.I.selectedTile.PosX > 0)
-                {
-                    if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY - 1, GameMng.I.selectedTile.PosX - 1]._unitObj != null
-                        || GameMng.I.mapTile[GameMng.I.selectedTile.PosY - 1, GameMng.I.selectedTile.PosX - 1]._builtObj != null)
-                        attackRangeTr[4].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY - 1, GameMng.I.selectedTile.PosX - 1].transform.position;
-                }
-                if (GameMng.I.selectedTile.PosY > 0)
-                {
-                    if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY - 1, GameMng.I.selectedTile.PosX]._unitObj != null
-                        || GameMng.I.mapTile[GameMng.I.selectedTile.PosY - 1, GameMng.I.selectedTile.PosX]._builtObj != null)
-                        attackRangeTr[5].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY - 1, GameMng.I.selectedTile.PosX].transform.position;
-                }
-                if (GameMng.I.selectedTile.PosX > 0)                                                                                                                             //공격범위가 한곳이 안나오면 이 잘 못
-                {
-                    if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX - 1]._unitObj != null
-                        || GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX - 1]._builtObj != null)
-                        attackRangeTr[0].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX - 1].transform.position;
-                    if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY, GameMng.I.selectedTile.PosX - 1]._unitObj != null
-                        || GameMng.I.mapTile[GameMng.I.selectedTile.PosY, GameMng.I.selectedTile.PosX - 1]._builtObj != null)
-                        attackRangeTr[2].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY, GameMng.I.selectedTile.PosX - 1].transform.position;
-                }
-                if (GameMng.I.selectedTile.PosX <= nwidth)
-                {
-                    if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX]._unitObj != null
-                        || GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX]._builtObj != null)
-                        attackRangeTr[1].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY + 1, GameMng.I.selectedTile.PosX].transform.position;
-                }
-                if (GameMng.I.selectedTile.PosX < nwidth)
-                {
-                    if (GameMng.I.mapTile[GameMng.I.selectedTile.PosY, GameMng.I.selectedTile.PosX + 1]._unitObj != null
-                        || GameMng.I.mapTile[GameMng.I.selectedTile.PosY, GameMng.I.selectedTile.PosX + 1]._builtObj != null)
-                        attackRangeTr[3].transform.position = GameMng.I.mapTile[GameMng.I.selectedTile.PosY, GameMng.I.selectedTile.PosX + 1].transform.position;
-                }
-            }
+            if (GameMng.I.selectedTile.tileneighbor[i] != null && GameMng.I.selectedTile.tileneighbor[i]._builtObj != null)
+                attackRangeTr[i].transform.position = GameMng.I.selectedTile.tileneighbor[i].transform.position;
+            else if (GameMng.I.selectedTile.tileneighbor[i] != null && GameMng.I.selectedTile.tileneighbor[i]._unitObj != null)
+                attackRangeTr[i].transform.position = GameMng.I.selectedTile.tileneighbor[i].transform.position;
         }
     }
     /**

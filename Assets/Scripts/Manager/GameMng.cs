@@ -32,7 +32,6 @@ public class GameMng : MonoBehaviour
     public UnitMng _UnitGM;
     public BuiltMng _BuiltGM;
     public RangeControl _range;
-
     /**********
      * 레이케스트 위한 변수
      */
@@ -437,7 +436,7 @@ public class GameMng : MonoBehaviour
             }
         }
 
-        if (obj._uniqueNumber.Equals(NetworkMng.getInstance.uniqueNumber))
+        if (obj._uniqueNumber.Equals(NetworkMng.getInstance.uniqueNumber) && myTurn)
         {
             // 행동을 가진 오브젝트는 actList 를 뿌려줘야 함
             // 1. _unitObj 로 부터 해당 유닛이 가진 행동의 량을 가져옴
@@ -543,7 +542,11 @@ public class GameMng : MonoBehaviour
         if (hit.collider != null)
         {
             if (isTarget) targetTile = hit.collider.gameObject.GetComponent<Tile>();
-            else selectedTile = hit.collider.gameObject.GetComponent<Tile>();
+            else
+            {
+                selectedTile = hit.collider.gameObject.GetComponent<Tile>();
+                _range.SelectTileSetting(false);
+            }
         }
     }
 

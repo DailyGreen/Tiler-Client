@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
-using System.IO;
 using UnityEngine;
 
 public class HexTileCreate : MonoBehaviour
@@ -29,6 +28,9 @@ public class HexTileCreate : MonoBehaviour
     public const float tileXOffset = 1.24f;
     public const float tileYOffset = 1.08f;
 
+    /**********
+     * .txt 파일 가져오기, 코드 한개씩 가져오기
+     */
     TextAsset maptextload;
     String[] mapreadlines;
     char[] mapReadChar;
@@ -42,12 +44,19 @@ public class HexTileCreate : MonoBehaviour
         GameMng.I.refreshTurn();
     }
 
+    /*
+    * @brief 게임을 종료했을 떄 프리펩에 남아있는 정보 지워주기
+    */
     void OnApplicationQuit()
     {
         tilestate.PosX = 0;
         tilestate.PosY = 0;
     }
 
+    /*
+    * @brief .txt형식의 맵 데이터를 불러옴
+    * @param _filename .txt 파일 이름
+    */
     void LoadTilemapfromtxt(string _filename)
     {
         maptextload = Resources.Load(_filename) as TextAsset;
@@ -90,7 +99,7 @@ public class HexTileCreate : MonoBehaviour
                 tilestate.PosX++;
             }
             tilestate.PosX = 0;
-            tilestate.PosZ++;
+            tilestate.PosY++;
         }
     }
 
@@ -140,7 +149,6 @@ public class HexTileCreate : MonoBehaviour
                 if (x >= 0 && !x.Equals(GameMng.I.GetMapWidth - 1))
                 {
                     GameMng.I.mapTile[y, x].tileneighbor[(int)DIRECTION.E] = GameMng.I.mapTile[y, x + 1];
-
                 }
 
                 if (y > 0)
@@ -194,11 +202,15 @@ public class HexTileCreate : MonoBehaviour
             }
         }
     }
+
+    /**
+    * @brief 타일 코드 초기화(유닛이 이동했을 때, 건물이 부셔졌을 떄) 메모장에 code 를 가져와서 바꿔줌
+    */
     public void TilecodeClear()
     {
         if (GameMng.I.selectedTile._unitObj == null || GameMng.I.selectedTile._builtObj == null)
         {
-            mapReadChar = mapreadlines[GameMng.I.selectedTile.PosZ].ToCharArray();
+            mapReadChar = mapreadlines[GameMng.I.selectedTile.PosY].ToCharArray();
             if (mapReadChar[GameMng.I.selectedTile.PosX] >= (int)TILE.GRASS_START)
             {
                 GameMng.I.selectedTile._code = (int)mapReadChar[GameMng.I.selectedTile.PosX] - (int)TILE.GRASS_START;

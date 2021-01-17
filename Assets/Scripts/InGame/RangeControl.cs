@@ -8,6 +8,8 @@ public class RangeControl : MonoBehaviour
     private Transform[] moveRangeTr = new Transform[6];
     [SerializeField]
     private Transform[] attackRangeTr = new Transform[6];
+    [SerializeField]
+    private Transform selectRangeTr;
 
     private float nHeight = 0.0f;                                                                                   //맵 세로 최대 크기
     private float nwidth = 0.0f;                                                                                    //맵 가로 최대 크기
@@ -46,13 +48,16 @@ public class RangeControl : MonoBehaviour
     /**
     * @brief 공격 범위 계산
     */
+
     public void attackRange()
     {
         for (int i = 0; i < moveRangeTr.Length; i++)
         {
-            if (GameMng.I.selectedTile.tileneighbor[i] != null && GameMng.I.selectedTile.tileneighbor[i]._builtObj != null)
+            if (GameMng.I.selectedTile.tileneighbor[i] != null && GameMng.I.selectedTile.tileneighbor[i]._builtObj != null
+                && !GameMng.I.selectedTile.tileneighbor[i]._builtObj._uniqueNumber.Equals(NetworkMng.getInstance.uniqueNumber))
                 attackRangeTr[i].transform.position = GameMng.I.selectedTile.tileneighbor[i].transform.position;
-            else if (GameMng.I.selectedTile.tileneighbor[i] != null && GameMng.I.selectedTile.tileneighbor[i]._unitObj != null)
+            else if (GameMng.I.selectedTile.tileneighbor[i] != null && GameMng.I.selectedTile.tileneighbor[i]._unitObj != null
+                && !GameMng.I.selectedTile.tileneighbor[i]._unitObj._uniqueNumber.Equals(NetworkMng.getInstance.uniqueNumber))
                 attackRangeTr[i].transform.position = GameMng.I.selectedTile.tileneighbor[i].transform.position;
         }
     }
@@ -66,4 +71,13 @@ public class RangeControl : MonoBehaviour
             attackRangeTr[i].transform.localPosition = Vector2.zero;                           //범위타일 위치 초기화
         }
     }
+
+    public void SelectTileSetting(bool TrSetting = false)
+    {
+        if (TrSetting)
+            selectRangeTr.localPosition = Vector2.zero;
+        else
+            selectRangeTr.position = GameMng.I.selectedTile.transform.position;
+    }
+
 }

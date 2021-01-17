@@ -45,6 +45,7 @@ public class UnitMng : MonoBehaviour
                     UnitAttack();
                     break;
             }
+            GameMng.I._range.SelectTileSetting(true);
         }
         else if (Input.GetMouseButtonUp(1) && act != ACTIVITY.ACTING)
         {
@@ -52,6 +53,7 @@ public class UnitMng : MonoBehaviour
             GameMng.I._BuiltGM.act = ACTIVITY.NONE;
             GameMng.I._range.rangeTileReset();
             GameMng.I._range.AttackrangeTileReset();                                                     //Ãß°¡
+            GameMng.I._range.SelectTileSetting(true);
             GameMng.I.cleanActList();
             GameMng.I.cleanSelected();
         }
@@ -164,6 +166,7 @@ public class UnitMng : MonoBehaviour
                 GameMng.I.targetTile._code = index;
                 GameMng.I.minGold(cost);
                 GameMng.I._range.rangeTileReset();
+                GameMng.I._range.SelectTileSetting(true);
                 GameMng.I.targetTile._builtObj._uniqueNumber = NetworkMng.getInstance.uniqueNumber;
                 NetworkMng.getInstance.SendMsg(string.Format("CREATE_BUILT:{0}:{1}:{2}:{3}", GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosY, index, NetworkMng.getInstance.uniqueNumber));
                 act = ACTIVITY.NONE;

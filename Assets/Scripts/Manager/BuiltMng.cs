@@ -12,6 +12,8 @@ public class BuiltMng : MonoBehaviour
     [SerializeField]
     private GameObject AirDropobj = null;
 
+    private int nAirDropCount = 0;
+
 
     void Update()
     {
@@ -27,6 +29,7 @@ public class BuiltMng : MonoBehaviour
                     CreateUnit((int)UNIT.FORSET_SOILDER);
                     break;
             }
+            GameMng.I._range.SelectTileSetting(true);
         }
 
 
@@ -35,13 +38,13 @@ public class BuiltMng : MonoBehaviour
             GameMng.I._range.AttackrangeTileReset();                                                     //클릭시 터렛 공격 범위 초기화
             GameMng.I.mouseRaycast();
             if (GameMng.I.selectedTile)
-            if (GameMng.I.selectedTile._builtObj != null)
-            {
-                if (GameMng.I.selectedTile._code == (int)BUILT.ATTACK_BUILDING)
+                if (GameMng.I.selectedTile._builtObj != null)
                 {
-                    GameMng.I.selectedTile._builtObj.GetComponent<Turret>().Attack();
+                    if (GameMng.I.selectedTile._code == (int)BUILT.ATTACK_BUILDING)
+                    {
+                        GameMng.I.selectedTile._builtObj.GetComponent<Turret>().Attack();
+                    }
                 }
-            }
         }
 
         if (Input.GetKeyDown(KeyCode.N))
@@ -104,6 +107,7 @@ public class BuiltMng : MonoBehaviour
      */
     public void CreateAirDrop()
     {
+        Debug.Log(nAirDropCount);
         int nPosX, nPosY;
         nPosX = Random.Range(0, GameMng.I.GetMapWidth);
         nPosY = Random.Range(0, GameMng.I.GetMapHeight);
@@ -115,10 +119,17 @@ public class BuiltMng : MonoBehaviour
         }
         else
         {
-            Debug.Log("위치 재 선정");
-            CreateAirDrop();
+            if (nAirDropCount < 5)
+            {
+                Debug.Log("위치 재 선정");
+                nAirDropCount++;
+                CreateAirDrop();
+            }
+            else
+                nAirDropCount = 0;
         }
         Debug.Log(nPosY + " , " + nPosX);
+
     }
 
     /**
@@ -136,6 +147,7 @@ public class BuiltMng : MonoBehaviour
         GameMng.I.selectedTile._builtObj = null;
         Debug.Log("여기 수정해야함!!!!!");
         GameMng.I.selectedTile._code = (int)TILE.GRASS;                                                             // 나중에 원래 타일 알아오는법 가져오기
+        GameMng.I._range.SelectTileSetting(true);
         GameMng.I.cleanActList();
         GameMng.I.cleanSelected();
     }

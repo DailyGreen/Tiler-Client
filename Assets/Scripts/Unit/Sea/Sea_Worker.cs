@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Forest_Worker : Worker
+public class Sea_Worker : Worker
 {
     void Awake()
     {
         init();
-        _name = "Ω£ ¡æ¡∑ ¿œ≤€";
+        _name = "π∞ ¡æ¡∑ ¿œ≤€";
         _desc = "µÎ¡˜«ÿ ∫∏¿Œ¥Ÿ.";
         _cost = 0;
         _code = (int)UNIT.FOREST_WORKER;

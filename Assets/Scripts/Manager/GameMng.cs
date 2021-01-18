@@ -76,6 +76,8 @@ public class GameMng : MonoBehaviour
     [SerializeField]
     UnityEngine.UI.Text turnDescText;           // 누구 턴인지 설명
     [SerializeField]
+    UnityEngine.UI.Image[] frameImg;            // 버튼별 클릭 불가 이미지
+    [SerializeField]
     ActMessage[] actMessages;                   // 행동 도우미 메세지들
 
 
@@ -259,7 +261,7 @@ public class GameMng : MonoBehaviour
                 UnityEngine.UI.Text[] childsTxt = actList[i].GetComponentsInChildren<UnityEngine.UI.Text>();
                 try
                 {
-                    checkActivity(obj._activity[i], actList[i], childsTxt[0], childsTxt[1]);
+                    checkActivity(obj._activity[i], actList[i], childsTxt[0], childsTxt[1], frameImg[i]);
                 }
                 catch
                 {
@@ -480,7 +482,7 @@ public class GameMng : MonoBehaviour
                 try
                 {
                     // 3. actList 의 내용들을 변경해 줘야함
-                    checkActivity(obj._activity[i], actList[i], childsTxt[0], childsTxt[1]);
+                    checkActivity(obj._activity[i], actList[i], childsTxt[0], childsTxt[1], frameImg[i]);
                 }
                 catch
                 {
@@ -497,7 +499,7 @@ public class GameMng : MonoBehaviour
      * @param actName 행동 이름
      * @param actDesc 행동 설명
      */
-    public void checkActivity(ACTIVITY activity, UnityEngine.UI.Button actButton, UnityEngine.UI.Text actName, UnityEngine.UI.Text actDesc)
+    public void checkActivity(ACTIVITY activity, UnityEngine.UI.Button actButton, UnityEngine.UI.Text actName, UnityEngine.UI.Text actDesc, UnityEngine.UI.Image Frame)
     {
         switch (activity)
         {
@@ -510,21 +512,61 @@ public class GameMng : MonoBehaviour
                 actName.text = "광산";
                 actDesc.text = "한 턴 소요";
                 actButton.onClick.AddListener(delegate { _UnitGM.act = activity; Unit.buildMine(); });
+                if (_gold >= Mine.cost)
+                {
+                    actButton.interactable = true;
+                    Frame.enabled = false;
+                }
+                else
+                {
+                    actButton.enabled = false;
+                    Frame.enabled = true;
+                }
                 break;
             case ACTIVITY.BUILD_FARM:
                 actName.text = "농장";
                 actDesc.text = "한 턴 소요";
                 actButton.onClick.AddListener(delegate { _UnitGM.act = activity; Unit.buildFarm(); });
+                if (_gold >= Farm.cost)
+                {
+                    actButton.interactable = true;
+                    Frame.enabled = false;
+                }
+                else
+                {
+                    actButton.enabled = false;
+                    Frame.enabled = true;
+                }
                 break;
             case ACTIVITY.BUILD_ATTACK_BUILDING:
                 actName.text = "터렛";
                 actDesc.text = "두 턴 소요";
                 actButton.onClick.AddListener(delegate { _UnitGM.act = activity; Unit.buildAttackBuilding(); });
+                if (_gold >= Turret.cost)
+                {
+                    actButton.interactable = true;
+                    Frame.enabled = false;
+                }
+                else
+                {
+                    actButton.enabled = false;
+                    Frame.enabled = true;
+                }
                 break;
             case ACTIVITY.BUILD_MILLITARY_BASE:
                 actName.text = "군사 기지";
                 actDesc.text = "두 턴 소요";
                 actButton.onClick.AddListener(delegate { _UnitGM.act = activity; Unit.buildMillitaryBaseBuilding(); });
+                if (_gold >= MillitaryBase.cost)
+                {
+                    actButton.interactable = true;
+                    Frame.enabled = false;
+                }
+                else
+                {
+                    actButton.enabled = false;
+                    Frame.enabled = true;
+                }
                 break;
             case ACTIVITY.BUILD_SHIELD_BUILDING:
                 actName.text = "방어 건물";

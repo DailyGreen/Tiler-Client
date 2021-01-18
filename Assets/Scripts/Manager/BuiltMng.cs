@@ -17,7 +17,6 @@ public class BuiltMng : MonoBehaviour
 
     void Update()
     {
-
         if (Input.GetMouseButtonDown(0) && act != ACTIVITY.ACTING && GameMng.I._UnitGM.act == ACTIVITY.NONE && !EventSystem.current.IsPointerOverGameObject())
         {
             switch (act)
@@ -31,7 +30,6 @@ public class BuiltMng : MonoBehaviour
             }
             GameMng.I._range.SelectTileSetting(true);
         }
-
 
         if (Input.GetMouseButtonDown(0) && GameMng.I._UnitGM.act == ACTIVITY.NONE && act == ACTIVITY.NONE && !EventSystem.current.IsPointerOverGameObject())
         {
@@ -64,10 +62,10 @@ public class BuiltMng : MonoBehaviour
         GameMng.I.mouseRaycast(true);                       //캐릭터 정보와 타일 정보를 알아와야해서 false에서 true로 변경
         if (GameMng.I.targetTile._builtObj == null && GameMng.I.targetTile._code < (int)TILE.CAN_MOVE && GameMng.I.targetTile._unitObj == null && Vector2.Distance(GameMng.I.selectedTile.transform.localPosition, GameMng.I.targetTile.transform.localPosition) <= 1.5f)
         {
-            GameObject Child = Instantiate(unitobj[index - 300], GameMng.I.targetTile.transform) as GameObject;                 // enum 값 - 100
+            GameObject Child = Instantiate(unitobj[index - 300], GameMng.I.targetTile.transform) as GameObject;                 // enum 값 - 300
             Child.transform.parent = transform.parent;
             GameMng.I.targetTile._unitObj = Child.GetComponent<Unit>();
-            GameMng.I.targetTile._code = index;       // 문제는 Awake다
+            GameMng.I.targetTile._code = index;
             GameMng.I.targetTile._unitObj._uniqueNumber = NetworkMng.getInstance.uniqueNumber;
             GameMng.I._range.rangeTileReset();
             //act = ACTIVITY.ACTING;
@@ -110,7 +108,6 @@ public class BuiltMng : MonoBehaviour
      */
     public void CreateAirDrop()
     {
-        Debug.Log(nAirDropCount);
         int nPosX, nPosY;
         nPosX = Random.Range(0, GameMng.I.GetMapWidth);
         nPosY = Random.Range(0, GameMng.I.GetMapHeight);
@@ -124,7 +121,6 @@ public class BuiltMng : MonoBehaviour
         {
             if (nAirDropCount < 5)
             {
-                Debug.Log("위치 재 선정");
                 nAirDropCount++;
                 CreateAirDrop();
             }

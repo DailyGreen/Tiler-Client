@@ -222,6 +222,7 @@ public class UnitMng : MonoBehaviour
         GameMng.I.mouseRaycast(true);
         if (GameMng.I.targetTile._unitObj != null || GameMng.I.targetTile._builtObj != null)
         {
+            NetworkMng.getInstance.SendMsg("TURN");
             if (GameMng.I.targetTile._unitObj != null)
             {
                 GameMng.I.targetTile._unitObj._hp -= GameMng.I.selectedTile._unitObj._damage;
@@ -237,7 +238,6 @@ public class UnitMng : MonoBehaviour
                 GameMng.I.targetTile._builtObj._hp -= GameMng.I.selectedTile._unitObj._damage;
                 if (GameMng.I.targetTile._builtObj._code == (int)BUILT.AIRDROP)
                 {
-                    Debug.Log("asdf");
                     int nKind = Random.Range(1, 3);            // 1: ½Ä·® 2: °ñµå
                     int nResult = Random.Range(20, 60);
                     Debug.Log(nKind + ", " + nResult);

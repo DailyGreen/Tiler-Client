@@ -1000,17 +1000,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &297502588 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 338592394497751676, guid: 72cd5817f581c874fa47117e65685489, type: 3}
-  m_PrefabInstance: {fileID: 297502584}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 297502586}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1605b2800dcb57d4c977dcc4442fd065, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &373490218
 GameObject:
   m_ObjectHideFlags: 0
@@ -1206,9 +1195,9 @@ MonoBehaviour:
   _anim: {fileID: 0}
   createCount: 0
   _turn: 0
-  mine: {fileID: 297502588}
-  farm: {fileID: 1097345920049463511}
-  turret: {fileID: 2141912703}
+  mine: {fileID: 338592394497751676, guid: 72cd5817f581c874fa47117e65685489, type: 3}
+  farm: {fileID: 5357498240524976434, guid: ad10b7efbca2568458e3cc2c35ca9fdc, type: 3}
+  turret: {fileID: 3825997978883725422, guid: fd87e1c2e0bebca44baf7ab146c37f65, type: 3}
   millitarybase: {fileID: 770179197}
 --- !u!1 &403906066
 GameObject:
@@ -1947,6 +1936,7 @@ MonoBehaviour:
   _maxMem: 0
   unitSpeed: 3
   distanceOfTiles: 0
+  CastlePos: {x: 0, y: 0, z: 0}
   myTurnCount: 0
   myMaxTurnCount: 10
   myTurn: 0
@@ -4933,6 +4923,7 @@ MonoBehaviour:
   - {fileID: 1432667296307985390, guid: 73e51d56aaec7054bb662f2d82d14c70, type: 3}
   - {fileID: 5243883629224959465, guid: 96d08809f9fb5a645b2666ddeedbfe98, type: 3}
   AirDropobj: {fileID: 6037629846481577511, guid: 25eba5b7256c874468747a19e105d280, type: 3}
+  test: {fileID: 0}
 --- !u!4 &1923391221
 Transform:
   m_ObjectHideFlags: 0
@@ -5415,17 +5406,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3825997978883725423, guid: fd87e1c2e0bebca44baf7ab146c37f65, type: 3}
   m_PrefabInstance: {fileID: 3825997980667799057}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2141912703 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3825997978883725422, guid: fd87e1c2e0bebca44baf7ab146c37f65, type: 3}
-  m_PrefabInstance: {fileID: 3825997980667799057}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5bc938d632d78ef41855949014464ec1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2147093238
 GameObject:
   m_ObjectHideFlags: 0
@@ -5513,17 +5493,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5357498240524976589, guid: ad10b7efbca2568458e3cc2c35ca9fdc, type: 3}
   m_PrefabInstance: {fileID: 4999881858637382117}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1097345920049463511 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5357498240524976434, guid: ad10b7efbca2568458e3cc2c35ca9fdc, type: 3}
-  m_PrefabInstance: {fileID: 4999881858637382117}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1561408689}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 743c8b3c437d5144f8eef1f25583d3a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1183078787168141920
 MonoBehaviour:
   m_ObjectHideFlags: 0

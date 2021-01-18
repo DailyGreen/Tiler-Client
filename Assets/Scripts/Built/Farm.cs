@@ -31,6 +31,15 @@ public class Farm : Built
         GameMng.I.addFood(making);
     }
 
+    /**
+     * @brief  식량 약탈 공격력 퍼센트 (밸런스 조정 필요)
+     * @param attactdmg 공격유닛 대미지
+     */
+    public void FoodPlunder(int attactdmg)
+    {
+        GameMng.I._food = GameMng.I._food * attactdmg / 100;
+    }
+
     void OnDestroy()
     {
         GameMng.I.RemoveDelegate(MakingFood);

@@ -47,6 +47,18 @@ public class Mine : Built
     }
 
     /**
+     * @brief  골드 약탈 공격력 퍼센트 (밸런스 조정 필요)
+     * @param attactdmg 공격유닛 대미지
+     * @param attacker 공격한 사람의 고유 번호
+     * @param attected 공격 당한 사람 고유 번호
+     */
+    public void GoldPlunder(int attactdmg, int attacker, int attected)
+    {
+        if (GameMng.I.selectedTile._builtObj._uniqueNumber.Equals(attected))
+            NetworkMng.getInstance.SendMsg(string.Format("GOLD_PLUNDER:{0}:{1}:{2}", attacker, attected, GameMng.I._gold * attactdmg / 100));
+    }
+
+    /**
      * @brief 골드 생산
      */
     void MakingGold()

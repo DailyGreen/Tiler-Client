@@ -14,6 +14,13 @@ public class BuiltMng : MonoBehaviour
 
     private int nAirDropCount = 0;
 
+    public Mine mine = null;
+
+    public Farm farm = null;
+
+    public Turret turret = null;
+
+    public MillitaryBase millitarybase = null;
 
     void Update()
     {
@@ -50,6 +57,12 @@ public class BuiltMng : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.N))
         {
             CreateAirDrop();
+        }
+        if(Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            Debug.Log(GameMng.I._gold);
+            //Debug.Log(GameMng.I.selectedTile._builtObj.GetComponent<Mine>().GoldPlunder(10, NetworkMng.getInstance.uniqueNumber));
+            GameMng.I.selectedTile._builtObj.GetComponent<Mine>().GoldPlunder(10, NetworkMng.getInstance.uniqueNumber, GameMng.I.selectedTile._builtObj._uniqueNumber);
         }
     }
 

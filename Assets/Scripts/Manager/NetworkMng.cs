@@ -357,6 +357,18 @@ public class NetworkMng : MonoBehaviour
             // 오브젝트 x값, y값, 공격할 x값, y값
             // 현재 오브젝트를 찾아서 공격력 찾은 다음 대상 위치의 hp 를 깎음
         }
+        else if (txt[0].Equals("GOLD_PLUNDER"))
+        {
+            // 공격한 사람 고유번호, 공격당한 사람 고유번호, 약달한 골드
+            if (uniqueNumber.Equals(int.Parse(txt[1])))
+            {
+                GameMng.I.addGold(int.Parse(txt[3]));
+            }
+            else if (uniqueNumber.Equals(int.Parse(txt[2])))
+            {
+                GameMng.I.minGold(int.Parse(txt[3]));
+            }
+        }
         else if (txt[0].Equals("TRIBE"))
         {
             // 종족을 변경하는 유저의 코드와 변경하는 종족의 코드

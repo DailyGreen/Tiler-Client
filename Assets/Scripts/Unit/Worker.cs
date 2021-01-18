@@ -14,7 +14,7 @@ public class Worker : Unit
         _activity.Add(ACTIVITY.BUILD_SHIELD_BUILDING);
         _activity.Add(ACTIVITY.BUILD_UPGRADE_BUILDING);
         //_activity.Add(ACTIVITY.ATTACK);             // 임시입니다!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        StartCoroutine("creating");
+        //StartCoroutine("creating");
     }
 
     IEnumerator creating()

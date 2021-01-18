@@ -70,12 +70,15 @@ public class BuiltMng : MonoBehaviour
             GameMng.I.targetTile._code = index;       // 문제는 Awake다
             GameMng.I.targetTile._unitObj._uniqueNumber = NetworkMng.getInstance.uniqueNumber;
             GameMng.I._range.rangeTileReset();
-            act = ACTIVITY.ACTING;
+            //act = ACTIVITY.ACTING;
+            act = ACTIVITY.NONE;
 
             NetworkMng.getInstance.SendMsg(string.Format("CREATE_UNIT:{0}:{1}:{2}:{3}", GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosY, index, NetworkMng.getInstance.uniqueNumber));
 
             GameMng.I.cleanActList();
             GameMng.I.cleanSelected();
+
+            NetworkMng.getInstance.SendMsg("TURN");
         }
         else                                     // 범위가 아닌 다른 곳을 누름
         {

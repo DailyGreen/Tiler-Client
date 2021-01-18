@@ -11,11 +11,14 @@ public class MillitaryBase : Built
         _name = "군사 기지";
         _desc = "유닛들을 생성한다";
         _hp = 10;
-        _activity.Add(ACTIVITY.ATTACK_UNIT_CREATE);
-        _activity.Add(ACTIVITY.DESTROY_BUILT);
         _code = (int)BUILT.MILLITARY_BASE;
     }
 
+    void init()
+    {
+        _activity.Add(ACTIVITY.ATTACK_UNIT_CREATE);
+        _activity.Add(ACTIVITY.DESTROY_BUILT);
+    }
 
     public static void CreateAttackUnitBtn()
     {

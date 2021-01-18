@@ -4,16 +4,11 @@ using UnityEngine;
 
 public class Unit : DynamicObject
 {
-    /*
+    /**
      * 유닛 고유 스탯
      * 반드시 상속받는 자식의 Start 에서 값을 변경해 주시길 바랍니다.
      */
     public int _damage = 0;
-
-    /*
-     * 유닛 애니메이션 관리
-     */
-    public Animator _anim;
 
     public static void Move()
     {

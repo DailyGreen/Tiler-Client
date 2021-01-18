@@ -31,7 +31,7 @@ public class MainCamera : MonoBehaviour
 
     void LateUpdate()
     {
-        CameraMove();
+        //CameraMove();
         MouseScrollzoom();
         // 클릭시 타일 이름 내용 가져오는곳 (임시)\
         if (Input.GetMouseButtonDown(0) && GameMng.I._UnitGM.act == ACTIVITY.NONE && GameMng.I._BuiltGM.act == ACTIVITY.NONE && !EventSystem.current.IsPointerOverGameObject())
@@ -39,6 +39,10 @@ public class MainCamera : MonoBehaviour
             GameMng.I.mouseRaycast();
             if (GameMng.I.selectedTile)
             GameMng.I.clickTile(GameMng.I.selectedTile);
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Camera.main.transform.position = GameMng.I.CastlePos;
         }
     }
 

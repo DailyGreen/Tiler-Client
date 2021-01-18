@@ -59,6 +59,9 @@ public class UnitMng : MonoBehaviour
         }
     }
 
+    /**
+     * @brief 유닛 이동 검사 (대상이 올바른지)
+     */
     public void CheckMove()
     {
         GameMng.I.mouseRaycast(true);
@@ -86,6 +89,9 @@ public class UnitMng : MonoBehaviour
         }
     }
 
+    /**
+     * @brief 유닛 이동 (클라 전용)
+     */
     IEnumerator Moving()
     {
         if (Vector2.Distance(GameMng.I.selectedTile._unitObj.transform.localPosition, GameMng.I.targetTile.transform.localPosition) >= 0.01f
@@ -104,10 +110,53 @@ public class UnitMng : MonoBehaviour
             GameMng.I.targetTile._code = GameMng.I.selectedTile._unitObj._code;
             GameMng.I.selectedTile._unitObj = null;
             //GameMng.I.selectedTile._code = (int)TILE.CAN_MOVE - 1;
-            Hc.TilecodeClear();
+            Hc.TilecodeClear(GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosY);
+            NetworkMng.getInstance.SendMsg("TURN");
         }
     }
 
+    /**
+     * @brief 유닛 이동 (상대편의 이동, 서버 전용)
+     * @param posX 대상 x 좌표
+     * @param posY 대상 y 좌표
+     * @param toX 이동할 x 좌표
+     * @param toY 이동할 y 좌표
+     */
+    public IEnumerator MovingUnit(int posX, int posY, int toX, int toY)
+    {
+        bool isRun = true;
+        reversalUnit(GameMng.I.mapTile[posY, posX]._unitObj.transform, GameMng.I.mapTile[toY, toX].transform);
+        GameMng.I.mapTile[posY, posX]._unitObj._anim.SetTrigger("isRunning");
+        GameMng.I.mapTile[toY, toX]._code = GameMng.I.mapTile[posY, posX]._code;
+        Hc.TilecodeClear(posX, posY);
+
+        GameMng.I.addActMessage(string.Format("{0}님의 유닛이 이동했습니다.", GameMng.I.mapTile[posY, posX]._unitObj._uniqueNumber), toX, toY);
+
+        while (isRun)
+        {
+            if (Vector2.Distance(GameMng.I.mapTile[posY, posX]._unitObj.transform.localPosition, GameMng.I.mapTile[toY, toX].transform.localPosition) >= 0.01f)
+            {
+                GameMng.I.mapTile[posY, posX]._unitObj.transform.localPosition = Vector2.Lerp(GameMng.I.mapTile[posY, posX]._unitObj.transform.localPosition, GameMng.I.mapTile[toY, toX].transform.localPosition, GameMng.I.unitSpeed * Time.deltaTime);        //타일 간 부드러운 이동
+                yield return null;
+            }
+            else
+            {
+                //act = ACTIVITY.NONE;
+
+                GameMng.I.mapTile[posY, posX]._unitObj.transform.localPosition = GameMng.I.mapTile[toY, toX].transform.localPosition;
+                GameMng.I.mapTile[toY, toX]._unitObj = GameMng.I.mapTile[posY, posX]._unitObj;
+                GameMng.I.mapTile[posY, posX]._unitObj = null;
+                //GameMng.I.mapTile[posY, posX]._code = (int)TILE.CAN_MOVE - 1;
+                isRun = false;
+            }
+        }
+    }
+
+    /**
+     * @brief 유닛의 이동 방향으로 방향 전환
+     * @param selectedObj 대상 유닛 오브젝트
+     * @param targetObj 이동할 오브젝트
+     */
     public void reversalUnit(Transform selectedObj, Transform targetObj)
     {
         if (selectedObj.localPosition.x < targetObj.localPosition.x)                // 가는 방향 회전 오른쪽
@@ -120,31 +169,6 @@ public class UnitMng : MonoBehaviour
         else
         {
             selectedObj.rotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));       // 가는 방향 회전 왼쪽
-        }
-    }
-
-    public IEnumerator MovingUnit(int posX, int posY, int toX, int toY)
-    {
-        bool isRun = true;
-        reversalUnit(GameMng.I.mapTile[posY, posX]._unitObj.transform, GameMng.I.mapTile[toY, toX].transform);
-        GameMng.I.mapTile[posY, posX]._unitObj._anim.SetTrigger("isRunning");
-        while (isRun)
-        {
-            if (Vector2.Distance(GameMng.I.mapTile[posY, posX]._unitObj.transform.localPosition, GameMng.I.mapTile[toY, toX].transform.localPosition) >= 0.01f)
-            {
-                GameMng.I.mapTile[posY, posX]._unitObj.transform.localPosition = Vector2.Lerp(GameMng.I.mapTile[posY, posX]._unitObj.transform.localPosition, GameMng.I.mapTile[toY, toX].transform.localPosition, GameMng.I.unitSpeed * Time.deltaTime);        //타일 간 부드러운 이동
-                yield return null;
-            }
-            else
-            {
-                act = ACTIVITY.NONE;
-
-                GameMng.I.mapTile[posY, posX]._unitObj.transform.localPosition = GameMng.I.mapTile[toY, toX].transform.localPosition;
-                GameMng.I.mapTile[toY, toX]._unitObj = GameMng.I.mapTile[posY, posX]._unitObj;
-                GameMng.I.mapTile[posY, posX]._unitObj = null;
-                GameMng.I.mapTile[posY, posX]._code = (int)TILE.CAN_MOVE - 1;
-                isRun = false;
-            }
         }
     }
 
@@ -170,6 +194,7 @@ public class UnitMng : MonoBehaviour
                 GameMng.I.targetTile._builtObj._uniqueNumber = NetworkMng.getInstance.uniqueNumber;
                 NetworkMng.getInstance.SendMsg(string.Format("CREATE_BUILT:{0}:{1}:{2}:{3}", GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosY, index, NetworkMng.getInstance.uniqueNumber));
                 act = ACTIVITY.NONE;
+                NetworkMng.getInstance.SendMsg("TURN");
             }
         }
     }
@@ -189,6 +214,9 @@ public class UnitMng : MonoBehaviour
         GameMng.I.mapTile[posY, posX]._builtObj._uniqueNumber = uniqueNumber;
     }
 
+    /**
+     * @brief 유닛 공격
+     */
     public void UnitAttack()
     {
         GameMng.I.mouseRaycast(true);

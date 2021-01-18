@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Castle : Built
 {
-    void Start()
+    void Awake()
     {
         //uniqueNumber = NetworkMng.getInstance.uniqueNumber;                                         //己狼 蜡聪农 逞滚甫 沥秦淋
         _name = "己";
@@ -14,19 +14,17 @@ public class Castle : Built
         _activity.Add(ACTIVITY.WORKER_UNIT_CREATE);
     }
 
-    void Update()
-    {
-
-    }
-
+    /*
+    * @brief 老槽 积己
+    */
     public static void CreateUnitBtn()
     {
-        if (GameMng.I.selectedTile._code == (int)BUILT.CASTLE)
-        {
-            GameMng.I._BuiltGM.act = ACTIVITY.WORKER_UNIT_CREATE;
-            GameMng.I._range.moveRange();
-        }
+        GameMng.I._range.moveRange();
+        //if (GameMng.I.selectedTile._code == (int)BUILT.CASTLE)
+        //{
+        //    GameMng.I._BuiltGM.act = ACTIVITY.WORKER_UNIT_CREATE;
+        //    GameMng.I._range.moveRange();
+        //}
         Debug.Log("老槽 蜡粗 积己");
-
     }
 }

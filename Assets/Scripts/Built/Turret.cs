@@ -9,17 +9,18 @@ public class Turret : Built
 
     void Start()
     {
-        init();
-        //GameMng.I.AddDelegate();
-    }
-
-    void init()
-    {
         _name = "터렛";
         _desc = "턴이 끝날 때 사정거리 안의 적을 공격한다";
         _hp = 7;
         _code = (int)BUILT.ATTACK_BUILDING;
         attack = 2;
+
+        //init();
+        //GameMng.I.AddDelegate();
+    }
+
+    void init()
+    {
         _activity.Add(ACTIVITY.DESTROY_BUILT);
     }
 

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 338592394497751664}
   - component: {fileID: 338592394497751676}
-  - component: {fileID: 1148815024258146688}
+  - component: {fileID: 297502587}
   m_Layer: 0
   m_Name: Mine
   m_TagString: Untagged
@@ -25,7 +25,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 338592394497751679}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -57,7 +57,7 @@ MonoBehaviour:
   _hp: 0
   _cost: 0
   _uniqueNumber: 0
-  _anim: {fileID: 1148815024258146688}
+  _anim: {fileID: 0}
   createCount: 0
   _turn: 0
   mine: {fileID: 0}
@@ -65,7 +65,7 @@ MonoBehaviour:
   turret: {fileID: 0}
   millitarybase: {fileID: 0}
   making: 0
---- !u!95 &1148815024258146688
+--- !u!95 &297502587
 Animator:
   serializedVersion: 3
   m_ObjectHideFlags: 0

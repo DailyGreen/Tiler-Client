@@ -506,6 +506,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5357498240524976589}
   - component: {fileID: 5357498240524976434}
+  - component: {fileID: 1561408690}
   m_Layer: 0
   m_Name: Farm
   m_TagString: Untagged
@@ -520,7 +521,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5357498240524976432}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
@@ -550,11 +551,33 @@ MonoBehaviour:
   _hp: 0
   _cost: 0
   _uniqueNumber: 0
+  _anim: {fileID: 0}
+  createCount: 0
   _turn: 0
   mine: {fileID: 0}
   farm: {fileID: 0}
   turret: {fileID: 0}
+  millitarybase: {fileID: 0}
   making: 0
+--- !u!95 &1561408690
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5357498240524976432}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ba1c2f61c62bfaa47a080237c5fe48fe, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &7651780784623385848
 GameObject:
   m_ObjectHideFlags: 0

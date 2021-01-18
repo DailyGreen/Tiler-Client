@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class AirDrop : Built
 {
-    // Start is called before the first frame update
     void Start()
     {
         _name = "º¸±ÞÇ°";
@@ -13,9 +12,4 @@ public class AirDrop : Built
         _code = (int)BUILT.AIRDROP;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 }

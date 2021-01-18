@@ -33,6 +33,8 @@ public class GameMng : MonoBehaviour
     public UnitMng _UnitGM;
     public BuiltMng _BuiltGM;
     public RangeControl _range;
+    public ChatMng _chat;
+
     /**********
      * 레이케스트 위한 변수
      */
@@ -70,11 +72,13 @@ public class GameMng : MonoBehaviour
     [SerializeField]
     UnityEngine.UI.Image objImage;              // 오브젝트이미지
     [SerializeField]
-    UnityEngine.UI.Image[] logoImage;           //메인바 로고 이미지         0: HP로고 1: 데미지 로고
+    UnityEngine.UI.Image[] logoImage;           // 메인바 로고 이미지         0: HP로고 1: 데미지 로고
     [SerializeField]
     UnityEngine.UI.Text turnCountText;          // 턴 수
     [SerializeField]
     UnityEngine.UI.Text turnDescText;           // 누구 턴인지 설명
+    [SerializeField]
+    UnityEngine.UI.Image[] frameImg;            // 버튼별 클릭 불가 이미지
     [SerializeField]
     ActMessage[] actMessages;                   // 행동 도우미 메세지들
 
@@ -259,7 +263,7 @@ public class GameMng : MonoBehaviour
                 UnityEngine.UI.Text[] childsTxt = actList[i].GetComponentsInChildren<UnityEngine.UI.Text>();
                 try
                 {
-                    checkActivity(obj._activity[i], actList[i], childsTxt[0], childsTxt[1]);
+                    checkActivity(obj._activity[i], actList[i], childsTxt[0], childsTxt[1], frameImg[i]);
                 }
                 catch
                 {
@@ -480,7 +484,7 @@ public class GameMng : MonoBehaviour
                 try
                 {
                     // 3. actList 의 내용들을 변경해 줘야함
-                    checkActivity(obj._activity[i], actList[i], childsTxt[0], childsTxt[1]);
+                    checkActivity(obj._activity[i], actList[i], childsTxt[0], childsTxt[1], frameImg[i]);
                 }
                 catch
                 {
@@ -497,7 +501,7 @@ public class GameMng : MonoBehaviour
      * @param actName 행동 이름
      * @param actDesc 행동 설명
      */
-    public void checkActivity(ACTIVITY activity, UnityEngine.UI.Button actButton, UnityEngine.UI.Text actName, UnityEngine.UI.Text actDesc)
+    public void checkActivity(ACTIVITY activity, UnityEngine.UI.Button actButton, UnityEngine.UI.Text actName, UnityEngine.UI.Text actDesc, UnityEngine.UI.Image Frame)
     {
         switch (activity)
         {
@@ -510,21 +514,25 @@ public class GameMng : MonoBehaviour
                 actName.text = "광산";
                 actDesc.text = "한 턴 소요";
                 actButton.onClick.AddListener(delegate { _UnitGM.act = activity; Unit.buildMine(); });
+                canUseActivity(actButton, Frame, Mine.cost);
                 break;
             case ACTIVITY.BUILD_FARM:
                 actName.text = "농장";
                 actDesc.text = "한 턴 소요";
                 actButton.onClick.AddListener(delegate { _UnitGM.act = activity; Unit.buildFarm(); });
+                canUseActivity(actButton, Frame, Farm.cost);
                 break;
             case ACTIVITY.BUILD_ATTACK_BUILDING:
                 actName.text = "터렛";
                 actDesc.text = "두 턴 소요";
                 actButton.onClick.AddListener(delegate { _UnitGM.act = activity; Unit.buildAttackBuilding(); });
+                canUseActivity(actButton, Frame, Turret.cost);
                 break;
             case ACTIVITY.BUILD_MILLITARY_BASE:
                 actName.text = "군사 기지";
                 actDesc.text = "두 턴 소요";
                 actButton.onClick.AddListener(delegate { _UnitGM.act = activity; Unit.buildMillitaryBaseBuilding(); });
+                canUseActivity(actButton, Frame, MillitaryBase.cost);
                 break;
             case ACTIVITY.BUILD_SHIELD_BUILDING:
                 actName.text = "방어 건물";
@@ -556,6 +564,26 @@ public class GameMng : MonoBehaviour
                 break;
             default:
                 break;
+        }
+    }
+
+    /**
+     * @brief 사용할 수 있는 행동인지 확인(골드량 비교)
+     * @param actButton 버튼
+     * @param Frame 비활성화 이미지
+     * @param cost 비용
+     */
+    public void canUseActivity(UnityEngine.UI.Button actButton, UnityEngine.UI.Image Frame, int cost)
+    {
+        if (_gold >= cost)
+        {
+            actButton.interactable = true;
+            Frame.enabled = false;
+        }
+        else
+        {
+            actButton.enabled = false;
+            Frame.enabled = true;
         }
     }
 

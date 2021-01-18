@@ -10,15 +10,23 @@ public class Forest_Soldier_0 : Unit
         _desc = "모조리 죽여주마!";
         _cost = 0;
         _code = (int)UNIT.FORSET_SOILDER;
-        _activity.Add(ACTIVITY.MOVE);
-        _activity.Add(ACTIVITY.ATTACK);
-        StartCoroutine("creating");
+
+        GameMng.I._BuiltGM.act = ACTIVITY.NONE;
+        GameMng.I.AddDelegate(this.waitingCreate);
     }
 
-    IEnumerator creating()
+    public void waitingCreate()
     {
-        yield return new WaitForSeconds(1);
-        GameMng.I._BuiltGM.act = ACTIVITY.NONE;
+        createCount++;
+        if (createCount > 2)        // 2턴 후에 생성됨
+        {
+            _anim.SetTrigger("isSpawn");
+
+            _activity.Add(ACTIVITY.MOVE);
+            _activity.Add(ACTIVITY.ATTACK);
+
+            GameMng.I.RemoveDelegate(this.waitingCreate);
+        }
     }
 
     public void walking()
@@ -29,5 +37,11 @@ public class Forest_Soldier_0 : Unit
     public void dying()
     {
         _anim.SetTrigger("isDying");
+    }
+
+    void OnDestroy()
+    {
+        if (!(createCount > 2))
+            GameMng.I.RemoveDelegate(waitingCreate);
     }
 }

@@ -21,6 +21,7 @@ public class GameMng : MonoBehaviour
     public Tile[,] mapTile = new Tile[mapWidth, mapHeight];      // 타일의 2차원 배열 값
     public float unitSpeed = 3.0f;
     public float distanceOfTiles = 0.0f;
+    public Vector3 CastlePos;
 
     public int myTurnCount = 0;                     // 내 차례
     public int myMaxTurnCount = 10;                 // 최대 차례
@@ -74,6 +75,9 @@ public class GameMng : MonoBehaviour
     UnityEngine.UI.Text turnCountText;          // 턴 수
     [SerializeField]
     UnityEngine.UI.Text turnDescText;           // 누구 턴인지 설명
+    [SerializeField]
+    ActMessage[] actMessages;                   // 행동 도우미 메세지들
+
 
     // ---- 맵의 가로 세로 크기 읽기
     public int GetMapWidth
@@ -238,10 +242,38 @@ public class GameMng : MonoBehaviour
     {
         countDel();
 
+        // 누르고 있던 오브젝트가 있다면 턴이 지나고 바꼈을 가능성이 있으니 새로고침 해주기
+        Object obj = null;
+        if (selectedTile != null)
+            if (selectedTile._unitObj != null) obj = selectedTile._unitObj;
+            else if (selectedTile._builtObj != null) obj = selectedTile._builtObj;
+
+        if (obj != null)
+        {
+            objectNameTxt.text = obj._name;
+            objectDescTxt.text = obj._desc;
+
+            for (int i = 0; i < obj._activity.Count; i++)
+            {
+                actList[i].gameObject.SetActive(true);
+                UnityEngine.UI.Text[] childsTxt = actList[i].GetComponentsInChildren<UnityEngine.UI.Text>();
+                try
+                {
+                    checkActivity(obj._activity[i], actList[i], childsTxt[0], childsTxt[1]);
+                }
+                catch
+                {
+                    Debug.LogError("childTxt 의 인덱스 값이 옳지 않음");
+                }
+            }
+        }
+
+        // 누구 차례인지 뿌려주기
         if (NetworkMng.getInstance.uniqueNumber == uniqueNumber)
         {
             this.myTurn = true;
             this.turnDescText.text = "내 차례";
+
             return;
         }
         this.myTurn = false;
@@ -286,7 +318,7 @@ public class GameMng : MonoBehaviour
 
         if (tile._unitObj == null && tile._builtObj == null)
         {
-            cleanActList();
+            //cleanActList();
 
             maskImage.color = Color.white;
             objectNameTxt.text = tile._name;
@@ -561,6 +593,35 @@ public class GameMng : MonoBehaviour
             actList[i].gameObject.SetActive(false);
         }
         setMainInterface(false);
+    }
+
+    /**
+    * @brief 레이케스트 레이저 생성 및 hit 리턴
+    * @param isTarget 레이케스트 타겟을 변경할때 사용. targetTile 값을 받아올때 true 해주면 됨
+    */
+    public void addActMessage(string msg, int posX, int posY)
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            if (actMessages[i].gameObject.activeSelf == false)
+            {
+                actMessages[i].gameObject.SetActive(true);
+                actMessages[i].setMessage(msg);
+                actMessages[i].posX = posX;
+                actMessages[i].posY = posY;
+                return;
+            }
+        }
+        // 모두 활성화가 되 있는 상태면 이쪽으로 오게 되어 있음
+        for (int i = 0; i < 4; i++)
+        {
+            actMessages[i].setMessage(actMessages[i + 1].msg.text);
+            actMessages[i].posX = actMessages[i + 1].posX;
+            actMessages[i].posY = actMessages[i + 1].posY;
+        }
+        actMessages[4].setMessage(msg);
+        actMessages[4].posX = posX;
+        actMessages[4].posY = posY;
     }
 
     /**

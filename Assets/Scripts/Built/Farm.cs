@@ -7,19 +7,18 @@ public class Farm : Built
     public int making;              // 식량 생산량
     public static int cost = 4;     // 건설 비용
 
-    void Start()
-    {
-        init();
-        GameMng.I.AddDelegate(MakingFood);
-    }
-
-    void init()
+    void Awake()
     {
         _name = "농장";
         _desc = "식량을 생산한다";
         _hp = 10;
         _code = (int)BUILT.FARM;
         making = 2;
+        GameMng.I.AddDelegate(MakingFood);
+    }
+
+    void init()
+    {
         _activity.Add(ACTIVITY.DESTROY_BUILT);
     }
 

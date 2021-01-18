@@ -371,6 +371,10 @@ public class NetworkMng : MonoBehaviour
         {
             uniqueNumber = int.Parse(txt[1]);
         }
+        else if (txt[0].Equals("CHAT"))
+        {
+            GameMng.I._chat.newMessage(txt[1], txt[2]);
+        }
         // 누군가 들어올때 받음
         else if (txt[0].Equals("SOMEONE_ENTER"))
         {

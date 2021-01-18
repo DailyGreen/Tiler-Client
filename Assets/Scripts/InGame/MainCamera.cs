@@ -17,12 +17,14 @@ public class MainCamera : MonoBehaviour
     private float maxZoom = 4.5f;
     private float scrollData;
 
+
     // ----
     // 카메라 움직임 쓰임
     [SerializeField]
     private Vector3 limitPos;
     public float fMoveSpeed = 10f;
     private const float borderThickness = 10f;      // 마우스가 스크린 밖에 닿는 범위( 두께 )
+
     void Start()
     {
         //MainCamera = Camera.main;
@@ -38,7 +40,7 @@ public class MainCamera : MonoBehaviour
         {
             GameMng.I.mouseRaycast();
             if (GameMng.I.selectedTile)
-            GameMng.I.clickTile(GameMng.I.selectedTile);
+                GameMng.I.clickTile(GameMng.I.selectedTile);
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {

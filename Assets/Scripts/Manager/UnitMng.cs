@@ -104,7 +104,8 @@ public class UnitMng : MonoBehaviour
             GameMng.I.targetTile._code = GameMng.I.selectedTile._unitObj._code;
             GameMng.I.selectedTile._unitObj = null;
             //GameMng.I.selectedTile._code = (int)TILE.CAN_MOVE - 1;
-            Hc.TilecodeClear();
+            Hc.TilecodeClear(GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosY);
+            NetworkMng.getInstance.SendMsg("TURN");
         }
     }
 
@@ -128,6 +129,9 @@ public class UnitMng : MonoBehaviour
         bool isRun = true;
         reversalUnit(GameMng.I.mapTile[posY, posX]._unitObj.transform, GameMng.I.mapTile[toY, toX].transform);
         GameMng.I.mapTile[posY, posX]._unitObj._anim.SetTrigger("isRunning");
+        GameMng.I.mapTile[toY, toX]._code = GameMng.I.mapTile[posY, posX]._code;
+        Hc.TilecodeClear(posX, posY);
+
         while (isRun)
         {
             if (Vector2.Distance(GameMng.I.mapTile[posY, posX]._unitObj.transform.localPosition, GameMng.I.mapTile[toY, toX].transform.localPosition) >= 0.01f)
@@ -142,7 +146,7 @@ public class UnitMng : MonoBehaviour
                 GameMng.I.mapTile[posY, posX]._unitObj.transform.localPosition = GameMng.I.mapTile[toY, toX].transform.localPosition;
                 GameMng.I.mapTile[toY, toX]._unitObj = GameMng.I.mapTile[posY, posX]._unitObj;
                 GameMng.I.mapTile[posY, posX]._unitObj = null;
-                GameMng.I.mapTile[posY, posX]._code = (int)TILE.CAN_MOVE - 1;
+                //GameMng.I.mapTile[posY, posX]._code = (int)TILE.CAN_MOVE - 1;
                 isRun = false;
             }
         }

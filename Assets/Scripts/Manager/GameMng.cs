@@ -19,7 +19,7 @@ public class GameMng : MonoBehaviour
     private const int mapWidth = 50;                             // 맵 가로
     private const int mapHeight = 50;                            // 맵 높이
     public Tile[,] mapTile = new Tile[mapWidth, mapHeight];      // 타일의 2차원 배열 값
-    public float unitSpeed = 3.0f;
+    public float unitSpeed = 1.0f;
     public float distanceOfTiles = 0.0f;
 
     public int myTurnCount = 0;                     // 내 차례

@@ -25,6 +25,7 @@ public class Castle : Built
         {
             GameMng.I._BuiltGM.act = ACTIVITY.WORKER_UNIT_CREATE;
             GameMng.I._range.moveRange();
+            NetworkMng.getInstance.SendMsg("TURN");
         }
         Debug.Log("ÀÏ²Û À¯´Ö »ý¼º");
 

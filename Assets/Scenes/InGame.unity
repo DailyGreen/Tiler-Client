@@ -1598,7 +1598,6 @@ MonoBehaviour:
   _UnitGM: {fileID: 1655282530}
   _BuiltGM: {fileID: 1923391220}
   _range: {fileID: 3629599983884118296}
-  _hexTile: {fileID: 1670251634}
   selectedTile: {fileID: 0}
   targetTile: {fileID: 0}
   objSprite:
@@ -2593,7 +2592,7 @@ MonoBehaviour:
   minZoom: 8
   maxZoom: 4.5
   limitPos: {x: 0, y: 0, z: 0}
-  fMoveSpeed: 10
+  fMoveSpeed: 0
 --- !u!1 &1375063062
 GameObject:
   m_ObjectHideFlags: 0

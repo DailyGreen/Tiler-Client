@@ -205,17 +205,19 @@ public class HexTileCreate : MonoBehaviour
 
     /**
     * @brief 타일 코드 초기화(유닛이 이동했을 때, 건물이 부셔졌을 떄) 메모장에 code 를 가져와서 바꿔줌
+    * @param posX GameMng.I.seleteTile.PoX 역활
+    * @param posY GameMng.I.seleteTile.PoY 역활
     */
-    public void TilecodeClear()
+    public void TilecodeClear(int posX,int posY)
     {
-        if (GameMng.I.selectedTile._unitObj == null || GameMng.I.selectedTile._builtObj == null)
+        if (GameMng.I.mapTile[posY,posX]._unitObj == null || GameMng.I.mapTile[posY, posX]._builtObj == null)
         {
-            mapReadChar = mapreadlines[GameMng.I.selectedTile.PosY].ToCharArray();
-            if (mapReadChar[GameMng.I.selectedTile.PosX] >= (int)TILE.GRASS_START)
+            mapReadChar = mapreadlines[posY].ToCharArray();
+            if (mapReadChar[posX] >= (int)TILE.GRASS_START)
             {
-                GameMng.I.selectedTile._code = (int)mapReadChar[GameMng.I.selectedTile.PosX] - (int)TILE.GRASS_START;
+                GameMng.I.mapTile[posY, posX]._code = (int)mapReadChar[posX] - (int)TILE.GRASS_START;
             }
-            else { GameMng.I.selectedTile._code = (int)Char.GetNumericValue(mapReadChar[GameMng.I.selectedTile.PosX]); }
+            else { GameMng.I.mapTile[posY, posX]._code = (int)Char.GetNumericValue(mapReadChar[posX]); }
         }
     }
 }

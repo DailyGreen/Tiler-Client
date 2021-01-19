@@ -18,7 +18,8 @@ public class MillitaryBase : Built
 
     void init()
     {
-        _activity.Add(ACTIVITY.ATTACK_UNIT_CREATE);
+        _activity.Add(ACTIVITY.SOLDIER_0_UNIT_CREATE);
+        _activity.Add(ACTIVITY.SOLDIER_1_UNIT_CREATE);
         _activity.Add(ACTIVITY.DESTROY_BUILT);
     }
 
@@ -39,15 +40,23 @@ public class MillitaryBase : Built
         }
     }
 
-    public static void CreateAttackUnitBtn()
+    public static void CreateAttackFirstUnitBtn()
     {
         if (GameMng.I.selectedTile._code == (int)BUILT.MILLITARY_BASE)
         {
-            GameMng.I._BuiltGM.act = ACTIVITY.ATTACK_UNIT_CREATE;
+            GameMng.I._BuiltGM.act = ACTIVITY.SOLDIER_0_UNIT_CREATE;
             GameMng.I._range.moveRange();
         }
-        Debug.Log("병력 유닛 생성할 위치 선정");
 
+    }
+
+    public static void CreateAttackSecondUnitBtn()
+    {
+        if (GameMng.I.selectedTile._code == (int)BUILT.MILLITARY_BASE)
+        {
+            GameMng.I._BuiltGM.act = ACTIVITY.SOLDIER_1_UNIT_CREATE;
+            GameMng.I._range.moveRange();
+        }
     }
 
     void OnDestroy()

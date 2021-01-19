@@ -222,8 +222,7 @@ public class UnitMng : MonoBehaviour
         GameMng.I.mouseRaycast(true);
         if (GameMng.I.targetTile._unitObj != null || GameMng.I.targetTile._builtObj != null)
         {
-            NetworkMng.getInstance.SendMsg("TURN");
-            if (GameMng.I.targetTile._unitObj != null)
+            if (GameMng.I.targetTile._unitObj != null && GameMng.I.targetTile._unitObj._uniqueNumber != NetworkMng.getInstance.uniqueNumber)
             {
                 GameMng.I.targetTile._unitObj._hp -= GameMng.I.selectedTile._unitObj._damage;
                 if (GameMng.I.targetTile._unitObj._hp <= 0)
@@ -232,8 +231,9 @@ public class UnitMng : MonoBehaviour
                     GameMng.I.targetTile._unitObj = null;
                     GameMng.I.targetTile._code = 0;
                 }
+                NetworkMng.getInstance.SendMsg("TURN");
             }
-            else if (GameMng.I.targetTile._builtObj != null)
+            else if (GameMng.I.targetTile._builtObj != null && GameMng.I.targetTile._builtObj._uniqueNumber != NetworkMng.getInstance.uniqueNumber)
             {
                 GameMng.I.targetTile._builtObj._hp -= GameMng.I.selectedTile._unitObj._damage;
                 if (GameMng.I.targetTile._builtObj._code == (int)BUILT.AIRDROP)
@@ -259,6 +259,7 @@ public class UnitMng : MonoBehaviour
                     GameMng.I.targetTile._builtObj = null;
                     GameMng.I.targetTile._code = 0;
                 }
+                NetworkMng.getInstance.SendMsg("TURN");
             }
             GameMng.I.cleanActList();
             GameMng.I.cleanSelected();

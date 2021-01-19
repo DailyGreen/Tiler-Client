@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class Forest_Worker : Worker
 {
+    public static int cost = 4;
     void Awake()
     {
         _name = "숲 종족 일꾼";
         _desc = "생성까지 " + (3 - createCount) + "턴 남음";
-        _cost = 0;
         _code = (int)UNIT.FOREST_WORKER;
+        _hp = 10;
 
         GameMng.I._BuiltGM.act = ACTIVITY.NONE;
         GameMng.I.AddDelegate(this.waitingCreate);

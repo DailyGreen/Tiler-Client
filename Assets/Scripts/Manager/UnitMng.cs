@@ -222,6 +222,15 @@ public class UnitMng : MonoBehaviour
         GameMng.I.mouseRaycast(true);
         if (GameMng.I.targetTile._unitObj != null || GameMng.I.targetTile._builtObj != null)
         {
+            GameMng.I.selectedTile._unitObj._anim.SetTrigger("isAttacking");
+
+            NetworkMng.getInstance.SendMsg(string.Format("ATTACK:{0}:{1}:{2}:{3}:{4}",
+                GameMng.I.selectedTile.PosX,
+                GameMng.I.selectedTile.PosY,
+                GameMng.I.targetTile.PosX,
+                GameMng.I.targetTile.PosY,
+                GameMng.I.selectedTile._unitObj._damage));
+
             NetworkMng.getInstance.SendMsg("TURN");
             if (GameMng.I.targetTile._unitObj != null)
             {

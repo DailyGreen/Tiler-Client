@@ -2763,6 +2763,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Castle
       objectReference: {fileID: 0}
+    - target: {fileID: 3015001381892330010, guid: 01603de81d6f5db45bd9d350120093da, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3416306300016884369, guid: 01603de81d6f5db45bd9d350120093da, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -3418,7 +3422,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2006621125}
   m_HandleRect: {fileID: 2006621124}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

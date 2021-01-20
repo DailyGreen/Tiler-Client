@@ -51,6 +51,16 @@ public class BuiltMng : MonoBehaviour
         {
             CreateAirDrop();
         }
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            NetworkMng.getInstance.SendMsg(string.Format("ATTACK:{0}:{1}:{2}:{3}:{4}",
+                          GameMng.I.selectedTile.PosX,
+                          GameMng.I.selectedTile.PosY,
+                          GameMng.I.targetTile.PosX,
+                          GameMng.I.targetTile.PosY,
+                          10));
+            //GameMng.I.selectedTile._builtObj.GetComponent<Mine>().GoldPlunder(10, NetworkMng.getInstance.uniqueNumber, GameMng.I.selectedTile._builtObj._uniqueNumber);
+        }
     }
 
     /**

@@ -132,6 +132,52 @@ public class GameMng : MonoBehaviour
         AddDelegate(SampleTurnFunc);
     }
 
+    /**
+    * @brief 유저 이름 변경
+    */
+    public void attack(int posX, int posY, int toX, int toY, int damage)
+    {
+        // 공격하는 대상이 공격하는 애니메이션을 취하도록 해줌
+        DynamicObject obj = null;
+        if (mapTile[posY, posX]._unitObj != null) obj = mapTile[posY, posX]._unitObj;
+        else if (mapTile[posY, posX]._builtObj != null) obj = mapTile[posY, posX]._builtObj;
+        else return;
+        obj._anim.SetTrigger("isAttacking");
+
+        // 공격받는 대상의 HP 가 줄어들게 해줌
+        obj = null;
+        if (mapTile[toY, toX]._unitObj != null) obj = mapTile[toY, toX]._unitObj;
+        else if (mapTile[toY, toX]._builtObj != null) obj = mapTile[toY, toX]._builtObj;
+        else return;
+
+        // 
+        if (mapTile[toY, toX]._builtObj != null)
+        {
+            if (obj._uniqueNumber.Equals(NetworkMng.getInstance.uniqueNumber) && mapTile[toY, toX]._code.Equals((int)BUILT.MINE))
+            {
+                NetworkMng.getInstance.SendMsg(string.Format("PLUNDER:{0}:{1}:{2}:{3}", 
+                    mapTile[posY, posX]._unitObj._uniqueNumber, mapTile[toY, toX]._builtObj._uniqueNumber, _gold * (damage * 2) / 100, 1));
+            }
+            else
+            {
+                NetworkMng.getInstance.SendMsg(string.Format("PLUNDER:{0}:{1}:{2}:{3}", 
+                    mapTile[posY, posX]._unitObj._uniqueNumber, mapTile[toY, toX]._builtObj._uniqueNumber, _food * (damage * 2) / 100, 1));
+            }
+        }
+
+        obj._hp -= damage;
+        
+        if (obj._hp <= 0)
+        {
+            // 파괴
+            Destroy(obj.gameObject);
+            mapTile[toY, toX]._unitObj = null;
+            mapTile[toY, toX]._builtObj = null;
+            mapTile[toY, toX]._code = 0;            // TODO : 코드 값 원래 값으로
+        }
+
+    }
+
     void SampleTurnFunc()
     {
         Debug.Log("countTurn 호출됨! ! !");

@@ -375,11 +375,15 @@ public class GameMng : MonoBehaviour
             switch (tile._unitObj._code)
             {
                 case (int)UNIT.FOREST_WORKER:
-                    objImage.sprite = objSprite[10];
+                    objImage.sprite = objSprite[12];
                     break;
-                case (int)UNIT.FORSET_SOILDER:
-                    objImage.sprite = objSprite[11];
+                case (int)UNIT.FOREST_SOLDIER_0:
+                    objImage.sprite = objSprite[13];
                     break;
+                case (int)UNIT.FOREST_SOLDIER_1:
+                    objImage.sprite = objSprite[14];
+                    break;
+
             }
             setMainInterface(true);
         }
@@ -429,7 +433,7 @@ public class GameMng : MonoBehaviour
                     objectDescTxt.enabled = true;
                     break;
                 case (int)BUILT.AIRDROP:
-                    objImage.sprite = objSprite[13];
+                    objImage.sprite = objSprite[10];
                     hpText.enabled = false;
                     damageText.enabled = false;
                     logoImage[0].enabled = false;
@@ -439,7 +443,7 @@ public class GameMng : MonoBehaviour
                     objectDescTxt.enabled = true;
                     break;
                 case (int)BUILT.MILLITARY_BASE:
-                    objImage.sprite = objSprite[14];
+                    objImage.sprite = objSprite[11];
                     hpText.enabled = true;
                     damageText.enabled = false;
                     logoImage[0].enabled = true;
@@ -509,6 +513,8 @@ public class GameMng : MonoBehaviour
                 actName.text = "이동";
                 actDesc.text = "한 턴 소요";
                 actButton.onClick.AddListener(delegate { _UnitGM.act = activity; _range.AttackrangeTileReset(); Unit.Move(); });
+                actButton.interactable = true;
+                Frame.enabled = false;
                 break;
             case ACTIVITY.BUILD_MINE:
                 actName.text = "광산";
@@ -547,20 +553,28 @@ public class GameMng : MonoBehaviour
             case ACTIVITY.WORKER_UNIT_CREATE:
                 actName.text = "일꾼 생성";
                 actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; Castle.CreateUnitBtn(); });
+                canUseActivity(actButton, Frame, Forest_Worker.cost);
                 break;
             case ACTIVITY.DESTROY_BUILT:
                 actName.text = "건물 파괴";
                 actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; _BuiltGM.DestroyBuilt(); });
                 break;
-            case ACTIVITY.ATTACK:                                                               // 임시입니다!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            case ACTIVITY.ATTACK:                                                            
                 actName.text = "공격";
                 actDesc.text = "두 턴 소요";
                 actButton.onClick.AddListener(delegate { _UnitGM.act = activity; _range.rangeTileReset(); Unit.unitAttacking(); });
                 break;
-            case ACTIVITY.ATTACK_UNIT_CREATE:
-                actName.text = "병력 생성";
+            case ACTIVITY.SOLDIER_0_UNIT_CREATE:
+                actName.text = "전사1 생성";
                 actDesc.text = "두 턴 소요";
-                actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; MillitaryBase.CreateAttackUnitBtn(); });
+                actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; MillitaryBase.CreateAttackFirstUnitBtn(); });
+                canUseActivity(actButton, Frame, Forest_Soldier_0.cost);
+                break;
+            case ACTIVITY.SOLDIER_1_UNIT_CREATE:
+                actName.text = "전사2 생성";
+                actDesc.text = "두 턴 소요";
+                actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; MillitaryBase.CreateAttackSecondUnitBtn(); });
+                canUseActivity(actButton, Frame, Forest_Soldier_1.cost);
                 break;
             default:
                 break;
@@ -582,7 +596,7 @@ public class GameMng : MonoBehaviour
         }
         else
         {
-            actButton.enabled = false;
+            actButton.interactable = false;
             Frame.enabled = true;
         }
     }
@@ -675,6 +689,51 @@ public class GameMng : MonoBehaviour
         targetTile = null;
     }
 
+    /**
+     * @brief 유저 이름 변경
+     */
+    public void attack(int posX, int posY, int toX, int toY, int damage)
+    {
+
+        // 공격하는 대상이 공격하는 애니메이션을 취하도록 해줌
+        DynamicObject obj = null;
+        if (mapTile[posY, posX]._unitObj != null) obj = mapTile[posY, posX]._unitObj;
+        else if (mapTile[posY, posX]._builtObj != null) obj = mapTile[posY, posX]._builtObj;
+        else return;
+        _UnitGM.reversalUnit(obj.transform, mapTile[toY, toX].transform);
+        obj._anim.SetTrigger("isAttacking");
+
+        // 공격받는 대상의 HP 가 줄어들게 해줌
+        obj = null;
+        if (mapTile[toY, toX]._unitObj != null) obj = mapTile[toY, toX]._unitObj;
+        else if (mapTile[toY, toX]._builtObj != null) obj = mapTile[toY, toX]._builtObj;
+        else return;
+
+        if (mapTile[toY, toX]._builtObj != null)
+        {
+            if (obj._uniqueNumber.Equals(NetworkMng.getInstance.uniqueNumber) && mapTile[toY, toX]._code.Equals((int)BUILT.MINE))
+            {
+                NetworkMng.getInstance.SendMsg(string.Format("PLUNDER:{0}:{1}:{2}:{3}",
+                    mapTile[posY, posX]._unitObj._uniqueNumber, mapTile[toY, toX]._builtObj._uniqueNumber, _gold * (damage * 2) / 100, 1));
+            }
+            else
+            {
+                NetworkMng.getInstance.SendMsg(string.Format("PLUNDER:{0}:{1}:{2}:{3}",
+                    mapTile[posY, posX]._unitObj._uniqueNumber, mapTile[toY, toX]._builtObj._uniqueNumber, _food * (damage * 2) / 100, 1));
+            }
+        }
+
+        obj._hp -= damage;
+        if (obj._hp <= 0)
+        {
+            // 파괴
+            Destroy(obj.gameObject);
+            mapTile[toY, toX]._unitObj = null;
+            mapTile[toY, toX]._builtObj = null;
+            mapTile[toY, toX]._code = 0;            // TODO : 코드 값 원래 값으로
+        }
+
+    }
     public void uiClickBT()
     {
         NetworkMng.getInstance._soundGM.uiBTClick();

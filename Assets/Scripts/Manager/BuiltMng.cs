@@ -23,10 +23,13 @@ public class BuiltMng : MonoBehaviour
             switch (act)
             {
                 case ACTIVITY.WORKER_UNIT_CREATE:
-                    CreateUnit((int)UNIT.FOREST_WORKER);
+                    CreateUnit(Forest_Worker.cost, (int)UNIT.FOREST_WORKER + (int)(NetworkMng.getInstance.myTribe) * 6);
                     break;
-                case ACTIVITY.ATTACK_UNIT_CREATE:
-                    CreateUnit((int)UNIT.FORSET_SOILDER);
+                case ACTIVITY.SOLDIER_0_UNIT_CREATE:
+                    CreateUnit(Forest_Soldier_0.cost, (int)UNIT.FOREST_SOLDIER_0 + (int)(NetworkMng.getInstance.myTribe) * 6);
+                    break;
+                case ACTIVITY.SOLDIER_1_UNIT_CREATE:
+                    CreateUnit(Forest_Soldier_1.cost, (int)UNIT.FOREST_SOLDIER_1 + (int)(NetworkMng.getInstance.myTribe) * 6);
                     break;
             }
             GameMng.I._range.SelectTileSetting(true);
@@ -58,27 +61,31 @@ public class BuiltMng : MonoBehaviour
      * @param cost 사용된 코스트
      * @param index 유닛 코드
      */
-    public void CreateUnit(/*int cost,*/ int index)
+    public void CreateUnit(int cost, int index)
     {
+
         GameMng.I.minGold(3);       // TODO : 코스트로 변경
         GameMng.I.mouseRaycast(true);                       //캐릭터 정보와 타일 정보를 알아와야해서 false에서 true로 변경
         if (GameMng.I.targetTile._builtObj == null && GameMng.I.targetTile._code < (int)TILE.CAN_MOVE && GameMng.I.targetTile._unitObj == null && Vector2.Distance(GameMng.I.selectedTile.transform.localPosition, GameMng.I.targetTile.transform.localPosition) <= 1.5f)
         {
-            GameObject Child = Instantiate(unitobj[index - 300], GameMng.I.targetTile.transform) as GameObject;                 // enum 값 - 300
-            Child.transform.parent = transform.parent;
-            GameMng.I.targetTile._unitObj = Child.GetComponent<Unit>();
-            GameMng.I.targetTile._code = index;       // 문제는 Awake다
-            GameMng.I.targetTile._unitObj._uniqueNumber = NetworkMng.getInstance.uniqueNumber;
-            GameMng.I._range.rangeTileReset();
-            //act = ACTIVITY.ACTING;
-            act = ACTIVITY.NONE;
+            if (GameMng.I._gold >= cost)
+            {
+                GameObject Child = Instantiate(unitobj[index - 300], GameMng.I.targetTile.transform) as GameObject;                 // enum 값 - 300
+                Child.transform.parent = transform.parent;
+                GameMng.I.targetTile._unitObj = Child.GetComponent<Unit>();
+                GameMng.I.targetTile._code = index;       // 문제는 Awake다
+                GameMng.I.targetTile._unitObj._uniqueNumber = NetworkMng.getInstance.uniqueNumber;
+                GameMng.I._range.rangeTileReset();
+                //act = ACTIVITY.ACTING;
+                act = ACTIVITY.NONE;
 
-            NetworkMng.getInstance.SendMsg(string.Format("CREATE_UNIT:{0}:{1}:{2}:{3}", GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosY, index, NetworkMng.getInstance.uniqueNumber));
+                NetworkMng.getInstance.SendMsg(string.Format("CREATE_UNIT:{0}:{1}:{2}:{3}", GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosY, index, NetworkMng.getInstance.uniqueNumber));
 
-            GameMng.I.cleanActList();
-            GameMng.I.cleanSelected();
+                GameMng.I.cleanActList();
+                GameMng.I.cleanSelected();
 
-            NetworkMng.getInstance.SendMsg("TURN");
+                NetworkMng.getInstance.SendMsg("TURN");
+            }
         }
         else                                     // 범위가 아닌 다른 곳을 누름
         {

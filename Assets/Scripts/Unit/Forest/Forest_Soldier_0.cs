@@ -4,16 +4,23 @@ using UnityEngine;
 
 public class Forest_Soldier_0 : Unit
 {
+    public static int cost = 4;
     void Awake()
     {
-        _name = "전사 1";
+        _name = "전사 0";
         _desc = "생성까지 " + (3 - createCount) + "턴 남음";
-        _cost = 0;
-        _code = (int)UNIT.FORSET_SOILDER;
+        _hp = 15;
+        _code = (int)UNIT.FOREST_SOLDIER_0;
         _damage = 5;
 
         GameMng.I._BuiltGM.act = ACTIVITY.NONE;
         GameMng.I.AddDelegate(this.waitingCreate);
+    }
+
+    void init()
+    {
+        _activity.Add(ACTIVITY.MOVE);
+        _activity.Add(ACTIVITY.ATTACK);
     }
 
     public void waitingCreate()
@@ -27,8 +34,8 @@ public class Forest_Soldier_0 : Unit
 
             _anim.SetTrigger("isSpawn");
 
-            _activity.Add(ACTIVITY.MOVE);
-            _activity.Add(ACTIVITY.ATTACK);
+            if (NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))
+                init();
 
             GameMng.I.RemoveDelegate(this.waitingCreate);
         }

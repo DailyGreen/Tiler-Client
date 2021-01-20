@@ -47,7 +47,11 @@ public enum ACTIVITY
     BUILD_SHIELD_BUILDING,      // 방어 건물 짓기
     BUILD_UPGRADE_BUILDING,     // 업그레이드 건물 짓기
     WORKER_UNIT_CREATE,         // 워커 유닛 생성
-    ATTACK_UNIT_CREATE,         // 공격 유닛 생성
+    SOLDIER_0_UNIT_CREATE,      // 군사 유닛 0 생성
+    SOLDIER_1_UNIT_CREATE,      // 군사 유닛 1 생성
+    SOLDIER_2_UNIT_CREATE,      // 군사 유닛 2 생성
+    WITCH_0_UNIT_CREATE,        // 마녀 유닛 0 생성
+    WITCH_1_UNIT_CREATE,        // 마녀 유닛 1 생성
     DESTROY_BUILT,              // 건물 파괴
     ATTACK,                     // 공격
 }
@@ -67,9 +71,30 @@ public enum BUILT
 public enum UNIT
 {
     FOREST_WORKER = 300,
-    FORSET_SOILDER,
+    FOREST_SOLDIER_0,
+    FOREST_SOLDIER_1,
+    FOREST_SOLDIER_2,
+    FOREST_WITCH_0,
+    FOREST_WITCH_1,
+    SEA_WORKER,
+    SEA_SOLDIER_0,
+    SEA_SOLDIER_1,
+    SEA_SOLDIER_2,
+    SEA_WITCH_0,
+    SEA_WITCH_1,
+    DESERT_WORKER,
+    DESERT_SOLDIER_0,
+    DESERT_SOLDIER_1,
+    DESERT_SOLDIER_2,
+    DESERT_WITCH_0,
+    DESERT_WITCH_1,
 }
-
+public enum TRIBE
+{
+    FOREST = 0,
+    SEA,
+    DESERT
+}
 public enum COLOR
 {
     COLOR_0 = 0,

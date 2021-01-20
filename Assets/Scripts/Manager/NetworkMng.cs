@@ -27,6 +27,7 @@ public class NetworkMng : MonoBehaviour
     int recvLen = 0;
     public int myRoom = 0;
     public int uniqueNumber = 0;        // 나 자신을 가리키는 고유 숫자
+    public TRIBE myTribe = TRIBE.FOREST;
 
     public GameObject mainPanel;
     public GameObject loadingPanel;
@@ -356,17 +357,34 @@ public class NetworkMng : MonoBehaviour
         {
             // 오브젝트 x값, y값, 공격할 x값, y값
             // 현재 오브젝트를 찾아서 공격력 찾은 다음 대상 위치의 hp 를 깎음
+            GameMng.I.attack(int.Parse(txt[1]), int.Parse(txt[2]), int.Parse(txt[3]), int.Parse(txt[4]), int.Parse(txt[5]));
         }
-        else if (txt[0].Equals("GOLD_PLUNDER"))
+        else if (txt[0].Equals("PLUNDER"))
         {
+            Debug.Log(txt[1] + "," + txt[2] + "," + txt[3] + "," + txt[4]);
             // 공격한 사람 고유번호, 공격당한 사람 고유번호, 약달한 골드
-            if (uniqueNumber.Equals(int.Parse(txt[1])))
+            switch (int.Parse(txt[1]))
             {
-                GameMng.I.addGold(int.Parse(txt[3]));
-            }
-            else if (uniqueNumber.Equals(int.Parse(txt[2])))
-            {
-                GameMng.I.minGold(int.Parse(txt[3]));
+                case 0:
+                    if (uniqueNumber.Equals(int.Parse(txt[1])))
+                    {
+                        GameMng.I.addGold(int.Parse(txt[3]));
+                    }
+                    else if (uniqueNumber.Equals(int.Parse(txt[2])))
+                    {
+                        GameMng.I.minGold(int.Parse(txt[3]));
+                    }
+                    break;
+                case 1:
+                    if (uniqueNumber.Equals(int.Parse(txt[1])))
+                    {
+                        GameMng.I.addFood(int.Parse(txt[3]));
+                    }
+                    else if (uniqueNumber.Equals(int.Parse(txt[2])))
+                    {
+                        GameMng.I.minFood(int.Parse(txt[3]));
+                    }
+                    break;
             }
         }
         else if (txt[0].Equals("TRIBE"))

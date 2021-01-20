@@ -9,12 +9,18 @@ public class Forest_Soldier_1 : Unit
     {
         _name = "전사 1";
         _desc = "생성까지 " + (3 - createCount) + "턴 남음";
+        _hp = 20;
         _code = (int)UNIT.FOREST_SOLDIER_1;
         _damage = 10;
-        _hp = 10;
 
         GameMng.I._BuiltGM.act = ACTIVITY.NONE;
         GameMng.I.AddDelegate(this.waitingCreate);
+    }
+
+    void init()
+    {
+        _activity.Add(ACTIVITY.MOVE);
+        _activity.Add(ACTIVITY.ATTACK);
     }
 
     public void waitingCreate()
@@ -27,9 +33,10 @@ public class Forest_Soldier_1 : Unit
             _desc = "뼈와 살을 분리시켜주지!";
 
             _anim.SetTrigger("isSpawn");
-
-            _activity.Add(ACTIVITY.MOVE);
-            _activity.Add(ACTIVITY.ATTACK);
+            
+            if (NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))
+                init();
+            
 
             GameMng.I.RemoveDelegate(this.waitingCreate);
         }

@@ -89,7 +89,12 @@ public enum UNIT
     DESERT_WITCH_0,
     DESERT_WITCH_1,
 }
-
+public enum TRIBE
+{
+    FOREST = 0,
+    SEA,
+    DESERT
+}
 public enum COLOR
 {
     COLOR_0 = 0,

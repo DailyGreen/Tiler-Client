@@ -23,13 +23,13 @@ public class BuiltMng : MonoBehaviour
             switch (act)
             {
                 case ACTIVITY.WORKER_UNIT_CREATE:
-                    CreateUnit(Forest_Worker.cost, (int)UNIT.FOREST_WORKER);
+                    CreateUnit(Forest_Worker.cost, (int)UNIT.FOREST_WORKER + (int)(NetworkMng.getInstance.myTribe) * 6);
                     break;
                 case ACTIVITY.SOLDIER_0_UNIT_CREATE:
-                    CreateUnit(Forest_Soldier_0.cost, (int)UNIT.FOREST_SOLDIER_0);
+                    CreateUnit(Forest_Soldier_0.cost, (int)UNIT.FOREST_SOLDIER_0 + (int)(NetworkMng.getInstance.myTribe) * 6);
                     break;
                 case ACTIVITY.SOLDIER_1_UNIT_CREATE:
-                    CreateUnit(Forest_Soldier_1.cost, (int)UNIT.FOREST_SOLDIER_1);
+                    CreateUnit(Forest_Soldier_1.cost, (int)UNIT.FOREST_SOLDIER_1 + (int)(NetworkMng.getInstance.myTribe) * 6);
                     break;
             }
             GameMng.I._range.SelectTileSetting(true);

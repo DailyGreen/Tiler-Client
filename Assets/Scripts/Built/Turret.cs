@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Turret : Built
 {
-    public int attack;   // 공격력
-    public static int cost = 5;   // 건설 비용
+    public int attack;              // 공격력
+    public static int cost = 5;     // 건설 비용
 
     void Start()
     {

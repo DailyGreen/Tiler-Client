@@ -932,6 +932,7 @@ MonoBehaviour:
   address: 127.0.0.1
   myRoom: 0
   uniqueNumber: 0
+  myTribe: 0
   mainPanel: {fileID: 1170754498625171}
   loadingPanel: {fileID: 1754629225}
   loginPanel: {fileID: 2114617591}
@@ -12854,7 +12855,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1641786539
 RectTransform:
   m_ObjectHideFlags: 0
@@ -16017,7 +16018,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2050590065
 RectTransform:
   m_ObjectHideFlags: 0

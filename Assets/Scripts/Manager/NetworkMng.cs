@@ -27,6 +27,7 @@ public class NetworkMng : MonoBehaviour
     int recvLen = 0;
     public int myRoom = 0;
     public int uniqueNumber = 0;        // 나 자신을 가리키는 고유 숫자
+    public TRIBE myTribe = TRIBE.FOREST;
 
     public GameObject mainPanel;
     public GameObject loadingPanel;
@@ -356,6 +357,7 @@ public class NetworkMng : MonoBehaviour
         {
             // 오브젝트 x값, y값, 공격할 x값, y값
             // 현재 오브젝트를 찾아서 공격력 찾은 다음 대상 위치의 hp 를 깎음
+            GameMng.I.attack(int.Parse(txt[1]), int.Parse(txt[2]), int.Parse(txt[3]), int.Parse(txt[4]), int.Parse(txt[5]));
         }
         else if (txt[0].Equals("GOLD_PLUNDER"))
         {

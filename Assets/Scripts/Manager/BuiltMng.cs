@@ -23,10 +23,11 @@ public class BuiltMng : MonoBehaviour
             switch (act)
             {
                 case ACTIVITY.WORKER_UNIT_CREATE:
-                    CreateUnit((int)UNIT.FOREST_WORKER);
+                    // 
+                    CreateUnit((int)UNIT.FOREST_WORKER + (int)(NetworkMng.getInstance.myTribe) * 6);
                     break;
                 case ACTIVITY.ATTACK_UNIT_CREATE:
-                    CreateUnit((int)UNIT.FORSET_SOILDER);
+                    CreateUnit((int)UNIT.FOREST_SOLDIER_0 + (int)(NetworkMng.getInstance.myTribe) * 6);
                     break;
             }
             GameMng.I._range.SelectTileSetting(true);

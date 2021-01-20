@@ -222,7 +222,19 @@ public class UnitMng : MonoBehaviour
         GameMng.I.mouseRaycast(true);
         if (GameMng.I.targetTile._unitObj != null || GameMng.I.targetTile._builtObj != null)
         {
+            reversalUnit(GameMng.I.selectedTile._unitObj.transform, GameMng.I.targetTile.transform);
+
+            GameMng.I.selectedTile._unitObj._anim.SetTrigger("isAttacking");
+
+            NetworkMng.getInstance.SendMsg(string.Format("ATTACK:{0}:{1}:{2}:{3}:{4}", 
+                GameMng.I.selectedTile.PosX, 
+                GameMng.I.selectedTile.PosY, 
+                GameMng.I.targetTile.PosX, 
+                GameMng.I.targetTile.PosY, 
+                GameMng.I.selectedTile._unitObj._damage));
+
             NetworkMng.getInstance.SendMsg("TURN");
+
             if (GameMng.I.targetTile._unitObj != null)
             {
                 GameMng.I.targetTile._unitObj._hp -= GameMng.I.selectedTile._unitObj._damage;
@@ -257,7 +269,7 @@ public class UnitMng : MonoBehaviour
                 {
                     Destroy(GameMng.I.targetTile._builtObj.gameObject);
                     GameMng.I.targetTile._builtObj = null;
-                    GameMng.I.targetTile._code = 0;
+                    GameMng.I.targetTile._code = 0;             // TODO : 코드 값 원래 값으로
                 }
             }
             GameMng.I.cleanActList();

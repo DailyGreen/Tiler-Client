@@ -377,7 +377,7 @@ public class GameMng : MonoBehaviour
                 case (int)UNIT.FOREST_WORKER:
                     objImage.sprite = objSprite[10];
                     break;
-                case (int)UNIT.FORSET_SOILDER:
+                case (int)UNIT.FOREST_SOLDIER_0:
                     objImage.sprite = objSprite[11];
                     break;
             }
@@ -673,6 +673,38 @@ public class GameMng : MonoBehaviour
     {
         selectedTile = null;
         targetTile = null;
+    }
+
+    /**
+     * @brief 유저 이름 변경
+     */
+    public void attack(int posX, int posY, int toX, int toY, int damage)
+    {
+
+        // 공격하는 대상이 공격하는 애니메이션을 취하도록 해줌
+        DynamicObject obj = null;
+        if (mapTile[posY, posX]._unitObj != null) obj = mapTile[posY, posX]._unitObj;
+        else if (mapTile[posY, posX]._builtObj != null) obj = mapTile[posY, posX]._builtObj;
+        else return;
+        _UnitGM.reversalUnit(obj.transform, mapTile[toY, toX].transform);
+        obj._anim.SetTrigger("isAttacking");
+
+        // 공격받는 대상의 HP 가 줄어들게 해줌
+        obj = null;
+        if (mapTile[toY, toX]._unitObj != null) obj = mapTile[toY, toX]._unitObj;
+        else if (mapTile[toY, toX]._builtObj != null) obj = mapTile[toY, toX]._builtObj;
+        else return;
+
+        obj._hp -= damage;
+        if (obj._hp <= 0)
+        {
+            // 파괴
+            Destroy(obj.gameObject);
+            mapTile[toY, toX]._unitObj = null;
+            mapTile[toY, toX]._builtObj = null;
+            mapTile[toY, toX]._code = 0;            // TODO : 코드 값 원래 값으로
+        }
+
     }
 
     public void uiClickBT()

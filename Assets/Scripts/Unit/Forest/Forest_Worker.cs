@@ -7,8 +7,9 @@ public class Forest_Worker : Worker
     void Awake()
     {
         _name = "숲 종족 일꾼";
-        _desc = "생성까지 " + (3 - createCount) + "턴 남음";
+        _desc = "생성까지 " + (2 - createCount) + "턴 남음";
         _cost = 0;
+        _hp = 10;
         _code = (int)UNIT.FOREST_WORKER;
 
         GameMng.I._BuiltGM.act = ACTIVITY.NONE;
@@ -18,13 +19,14 @@ public class Forest_Worker : Worker
     public void waitingCreate()
     {
         createCount++;
-        _desc = "생성까지 " + (3 - createCount) + "턴 남음";
+        _desc = "생성까지 " + (2 - createCount) + "턴 남음";
         // 2턴 후에 생성됨
-        if (createCount > 2)
+        if (createCount > 1)
         {
             _anim.SetTrigger("isSpawn");
 
-            init();
+            if (NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))
+                init();
 
             _desc = "듬직해 보인다.";
 
@@ -34,7 +36,7 @@ public class Forest_Worker : Worker
 
     void OnDestroy()
     {
-        if (!(createCount > 2))
+        if (!(createCount > 1))
             GameMng.I.RemoveDelegate(waitingCreate);
     }
 }

@@ -277,6 +277,7 @@ public class RoomMng : MonoBehaviour
 
     public void wantChangeTribe(int tribeNum)
     {
+        NetworkMng.getInstance.myTribe = (TRIBE)tribeNum;
         NetworkMng.getInstance.SendMsg(string.Format("TRIBE:{0}", tribeNum));
     }
     public void wantChangeColor (int colorNum)

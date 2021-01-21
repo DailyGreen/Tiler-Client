@@ -57,6 +57,7 @@ MonoBehaviour:
   _hp: 0
   _uniqueNumber: 0
   _anim: {fileID: 297502587}
+  dyingClip: {fileID: 7400000, guid: 88b2bce321c58fe4e837e32bc1e7c867, type: 2}
   createCount: 0
   _turn: 0
   mine: {fileID: 0}

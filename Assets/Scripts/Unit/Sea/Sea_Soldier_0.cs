@@ -5,29 +5,45 @@ using UnityEngine;
 public class Sea_Soldier_0 : Unit
 {
     public static int cost = 4;
+
     void Awake()
     {
-        _name = "물 종족 전사 1";
-        _desc = "모조리 죽여주마!";
+        _name = "물 종족 전사 0";
+        _max_hp = 15;
+        _hp = _max_hp;
         _code = (int)UNIT.SEA_SOLDIER_0;
+        _damage = 5;
+        maxCreateCount = 3;
+        _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
+    }
+
+    public void init()
+    {
         _activity.Add(ACTIVITY.MOVE);
         _activity.Add(ACTIVITY.ATTACK);
-        StartCoroutine("creating");
     }
 
-    IEnumerator creating()
+    public void waitingCreate()
     {
-        yield return new WaitForSeconds(1);
-        GameMng.I._BuiltGM.act = ACTIVITY.NONE;
+        createCount++;
+        _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
+        // 2턴 후에 생성됨
+        if (createCount > maxCreateCount-1)
+        {
+            _anim.SetTrigger("isSpawn");
+
+            if (NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))
+                init();
+
+            _desc = "모조리 죽여주마!";
+
+            GameMng.I.RemoveDelegate(this.waitingCreate);
+        }
     }
 
-    public void walking()
+    void OnDestroy()
     {
-        _anim.SetTrigger("isRunning");
-    }
-
-    public void dying()
-    {
-        _anim.SetTrigger("isDying");
+        if (!(createCount > maxCreateCount-1))
+            GameMng.I.RemoveDelegate(waitingCreate);
     }
 }

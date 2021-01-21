@@ -6,11 +6,12 @@ public class MillitaryBase : Built
 {
     public static int cost = 10;   // 건설 비용
 
-    void Start()
+    void Awake()
     {
         _name = "군사 기지";
         _desc = "생성까지 " + (3 - createCount) + "턴 남음";
-        _hp = 10;
+        _max_hp = 10;
+        _hp = _max_hp;
         _code = (int)BUILT.MILLITARY_BASE;
 
         GameMng.I.AddDelegate(this.waitingCreate);
@@ -34,7 +35,8 @@ public class MillitaryBase : Built
 
             //_anim.SetTrigger("isSpawn");
 
-            init();
+            if (NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))
+                init();
 
             GameMng.I.RemoveDelegate(this.waitingCreate);
         }
@@ -61,7 +63,7 @@ public class MillitaryBase : Built
 
     void OnDestroy()
     {
-        if (createCount < 2)
+        if (!(createCount > 2))
             GameMng.I.RemoveDelegate(waitingCreate);
     }
 }

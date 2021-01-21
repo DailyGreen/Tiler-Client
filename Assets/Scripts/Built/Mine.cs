@@ -10,10 +10,12 @@ public class Mine : Built
     void Awake()
     {
         _name = "광산";
-        _desc = "생성까지 " + (3 - createCount) + "턴 남음";
-        _hp = 10;
+        _max_hp = 10;
+        _hp = _max_hp;
         _code = (int)BUILT.MINE;
         making = 5;
+        maxCreateCount = 3;
+        _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
         GameMng.I.AddDelegate(this.waitingCreate);
     }
 
@@ -25,10 +27,10 @@ public class Mine : Built
     public void waitingCreate()
     {
         createCount++;
-        _desc = "생성까지 " + (3 - createCount) + "턴 남음";
+        _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
 
         // 2턴 후에 생성됨
-        if (createCount > 2)
+        if (createCount > maxCreateCount-1)
         {
             _desc = "골드를 캘 수 있다";
 
@@ -57,7 +59,7 @@ public class Mine : Built
 
     void OnDestroy()
     {
-        if (createCount > 2 && NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))
+        if (createCount > maxCreateCount-1 && NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))
             GameMng.I.RemoveDelegate(MakingGold);
         else
             GameMng.I.RemoveDelegate(waitingCreate);

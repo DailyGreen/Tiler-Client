@@ -5,12 +5,15 @@ using UnityEngine;
 public class Forest_Worker : Worker
 {
     public static int cost = 4;
+
     void Awake()
     {
         _name = "숲 종족 일꾼";
-        _desc = "생성까지 " + (2 - createCount) + "턴 남음";
         _code = (int)UNIT.FOREST_WORKER;
-        _hp = 10;
+        _max_hp = 10;
+        _hp = _max_hp;
+        maxCreateCount = 2;
+        _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
 
         GameMng.I._BuiltGM.act = ACTIVITY.NONE;
         GameMng.I.AddDelegate(this.waitingCreate);
@@ -19,9 +22,9 @@ public class Forest_Worker : Worker
     public void waitingCreate()
     {
         createCount++;
-        _desc = "생성까지 " + (2 - createCount) + "턴 남음";
+        _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
         // 2턴 후에 생성됨
-        if (createCount > 1)
+        if (createCount > maxCreateCount-1)
         {
             _anim.SetTrigger("isSpawn");
 
@@ -36,7 +39,7 @@ public class Forest_Worker : Worker
 
     void OnDestroy()
     {
-        if (!(createCount > 1))
+        if (!(createCount > maxCreateCount-1))
             GameMng.I.RemoveDelegate(waitingCreate);
     }
 }

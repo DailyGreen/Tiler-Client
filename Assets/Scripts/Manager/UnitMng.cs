@@ -111,6 +111,7 @@ public class UnitMng : MonoBehaviour
             GameMng.I.selectedTile._unitObj = null;
             //GameMng.I.selectedTile._code = (int)TILE.CAN_MOVE - 1;
             Hc.TilecodeClear(GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosY);
+            GameMng.I.refreshMainUI();
             NetworkMng.getInstance.SendMsg("TURN");
         }
     }
@@ -148,6 +149,8 @@ public class UnitMng : MonoBehaviour
                 GameMng.I.mapTile[posY, posX]._unitObj = null;
                 //GameMng.I.mapTile[posY, posX]._code = (int)TILE.CAN_MOVE - 1;
                 isRun = false;
+
+                GameMng.I.refreshMainUI();
             }
         }
     }
@@ -228,7 +231,8 @@ public class UnitMng : MonoBehaviour
                 GameMng.I.targetTile._unitObj._hp -= GameMng.I.selectedTile._unitObj._damage;
                 if (GameMng.I.targetTile._unitObj._hp <= 0)
                 {
-                    Destroy(GameMng.I.targetTile._unitObj.gameObject);
+                    //Destroy(GameMng.I.targetTile._unitObj.gameObject);
+                    GameMng.I.targetTile._unitObj.DestroyMyself();
                     GameMng.I.targetTile._unitObj = null;
                     GameMng.I.targetTile._code = 0;
                 }
@@ -256,7 +260,8 @@ public class UnitMng : MonoBehaviour
                 }
                 if (GameMng.I.targetTile._builtObj._hp <= 0)
                 {
-                    Destroy(GameMng.I.targetTile._builtObj.gameObject);
+                    //Destroy(GameMng.I.targetTile._builtObj.gameObject);
+                    GameMng.I.targetTile._builtObj.DestroyMyself();
                     GameMng.I.targetTile._builtObj = null;
                     GameMng.I.targetTile._code = 0;                 // TODO : 코드 값 원래 값으로
                 }

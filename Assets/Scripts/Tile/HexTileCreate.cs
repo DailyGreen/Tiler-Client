@@ -54,6 +54,7 @@ public class HexTileCreate : MonoBehaviour
         tilestate.PosX = 0;
         tilestate.PosY = 0;
         tilestate.PosZ = 0;
+        tilestate.tileuniquecode = 0;
     }
 
     /**
@@ -79,9 +80,10 @@ public class HexTileCreate : MonoBehaviour
             {
                 tilestate.PosX = x - y / 2; ;
                 tilestate.PosY = tilestate.PosY;
-                tilestate.tileuniquecode = mapReadChar[x];
                 if (mapReadChar[x] >= (char)TILE.GRASS_START) { tilestate._code = (int)mapReadChar[x]; }
                 else { tilestate._code = (int)Char.GetNumericValue(mapReadChar[x]); }
+                tilestate.tileuniquecode = tilestate._code;
+               
                 GameObject child = Instantiate(hextile) as GameObject;
                 child.transform.parent = parentObject.transform;
                 cells[i] = child.GetComponent<Tile>();

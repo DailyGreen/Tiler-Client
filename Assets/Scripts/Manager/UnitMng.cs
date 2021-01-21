@@ -5,8 +5,6 @@ using UnityEngine.EventSystems;
 
 public class UnitMng : MonoBehaviour
 {
-    public HexTileCreate Hc = null;
-
     public ACTIVITY act = ACTIVITY.NONE;
 
     public Worker worker = null;
@@ -109,8 +107,7 @@ public class UnitMng : MonoBehaviour
             GameMng.I.targetTile._unitObj = GameMng.I.selectedTile._unitObj;
             GameMng.I.targetTile._code = GameMng.I.selectedTile._unitObj._code;
             GameMng.I.selectedTile._unitObj = null;
-            //GameMng.I.selectedTile._code = (int)TILE.CAN_MOVE - 1;
-            Hc.TilecodeClear(GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosZ);
+            GameMng.I._hextile.TilecodeClear(GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosZ);
             GameMng.I.refreshMainUI();
             NetworkMng.getInstance.SendMsg("TURN");
         }
@@ -126,11 +123,11 @@ public class UnitMng : MonoBehaviour
     public IEnumerator MovingUnit(int posX, int posY, int toX, int toY)
     {
         bool isRun = true;
-        Hc.TilecodeClear(posX, posY);
         Debug.Log(GameMng.I._hextile.GetCell(posX, posY)._code);
         reversalUnit(GameMng.I._hextile.GetCell(posX, posY)._unitObj.transform, GameMng.I._hextile.GetCell(toX, toY).transform);
         GameMng.I._hextile.GetCell(posX, posY)._unitObj._anim.SetTrigger("isRunning");
         GameMng.I._hextile.GetCell(toX, toY)._code = GameMng.I._hextile.GetCell(posX, posY)._code;
+        GameMng.I._hextile.TilecodeClear(posX, posY);
 
         GameMng.I.addActMessage(string.Format("{0}님의 유닛이 이동했습니다.", GameMng.I._hextile.GetCell(posX, posY)._unitObj._uniqueNumber), toX, toY);
 
@@ -148,7 +145,6 @@ public class UnitMng : MonoBehaviour
                 GameMng.I._hextile.GetCell(posX, posY)._unitObj.transform.localPosition = GameMng.I._hextile.GetCell(toX, toY).transform.localPosition;
                 GameMng.I._hextile.GetCell(toX, toY)._unitObj = GameMng.I._hextile.GetCell(posX, posY)._unitObj;
                 GameMng.I._hextile.GetCell(posX, posY)._unitObj = null;
-                //GameMng.I_hextile.GetCell(posX, posY)._code = (int)TILE.CAN_MOVE - 1;
                 GameMng.I.refreshMainUI();
 
                 isRun = false;

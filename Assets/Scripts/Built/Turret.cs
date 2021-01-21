@@ -32,7 +32,7 @@ public class Turret : Built
         {
             _desc = "턴이 끝날 때 사정거리 안의 적을 공격한다";
 
-            //_anim.SetTrigger("isSpawn");
+            _anim.SetTrigger("isSpawn");
 
             init();
 

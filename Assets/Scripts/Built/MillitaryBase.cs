@@ -32,7 +32,7 @@ public class MillitaryBase : Built
         {
             _desc = "병력들을 생성한다";
 
-            //_anim.SetTrigger("isSpawn");
+            _anim.SetTrigger("isSpawn");
 
             init();
 

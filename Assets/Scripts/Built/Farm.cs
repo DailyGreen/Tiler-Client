@@ -31,7 +31,7 @@ public class Farm : Built
         {
             _desc = "식량을 생산한다";
 
-            //_anim.SetTrigger("isSpawn");
+            _anim.SetTrigger("isSpawn");
 
             GameMng.I.RemoveDelegate(this.waitingCreate);
 

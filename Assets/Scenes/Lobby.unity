@@ -932,6 +932,7 @@ MonoBehaviour:
   address: 127.0.0.1
   myRoom: 0
   uniqueNumber: 0
+  myTribe: 0
   mainPanel: {fileID: 1170754498625171}
   loadingPanel: {fileID: 1754629225}
   loginPanel: {fileID: 2114617591}

@@ -8,7 +8,8 @@ public class AirDrop : Built
     {
         _name = "보급품";
         _desc = "식량과 골드중 랜덤으로 획득할 수 있다";
-        _hp = 1;
+        _max_hp = 1;
+        _hp = _max_hp;
         _code = (int)BUILT.AIRDROP;
     }
 

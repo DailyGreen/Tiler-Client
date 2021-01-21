@@ -10,6 +10,7 @@ public class Tile : Object
     private int posX, posY, posZ;
     [SerializeField]
     private int distance;
+    public int tileuniquecode = 0;
 
     GameObject tile;
     [SerializeField]

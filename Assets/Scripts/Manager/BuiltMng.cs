@@ -148,7 +148,8 @@ public class BuiltMng : MonoBehaviour
     public void DestroyBuilt()
     {
         NetworkMng.getInstance.SendMsg(string.Format("DESTROY_BUILT:{0}:{1}", GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosZ));
-        Destroy(GameMng.I.selectedTile._builtObj.gameObject);
+        GameMng.I.selectedTile._builtObj.DestroyMyself();
+        //Destroy(GameMng.I.selectedTile._builtObj.gameObject);
         if (GameMng.I.selectedTile._builtObj._code == (int)BUILT.ATTACK_BUILDING)
         {
             GameMng.I._range.AttackrangeTileReset();
@@ -167,7 +168,8 @@ public class BuiltMng : MonoBehaviour
      */
     public void DestroyBuilt(int posX, int posY)
     {
-        Destroy(GameMng.I._hextile.GetCell(posX, posY)._builtObj.gameObject);
+        GameMng.I._hextile.GetCell(posX, posY)._builtObj.DestroyMyself();
+        //Destroy(GameMng.I._hextile.GetCell(posX, posY)._builtObj.gameObject);
         GameMng.I._hextile.GetCell(posX, posY)._builtObj = null;
         GameMng.I._hextile.GetCell(posX, posY)._code = (int)TILE.GRASS;
     }

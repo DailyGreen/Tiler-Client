@@ -79,6 +79,7 @@ public class HexTileCreate : MonoBehaviour
             {
                 tilestate.PosX = x - y / 2; ;
                 tilestate.PosY = tilestate.PosY;
+                tilestate.tileuniquecode = mapReadChar[x];
                 if (mapReadChar[x] >= (char)TILE.GRASS_START) { tilestate._code = (int)mapReadChar[x]; }
                 else { tilestate._code = (int)Char.GetNumericValue(mapReadChar[x]); }
                 GameObject child = Instantiate(hextile) as GameObject;
@@ -204,15 +205,10 @@ public class HexTileCreate : MonoBehaviour
     */
     public void TilecodeClear(int posX, int posY)
     {
-        if (GameMng.I._hextile.GetCell(posX, posY)._unitObj == null || GameMng.I._hextile.GetCell(posX, posY)._builtObj == null)
-        {
-            mapReadChar = mapreadlines[posY].ToCharArray();
-            if (mapReadChar[posX] >= (int)TILE.GRASS_START)
-            {
-                GameMng.I._hextile.GetCell(posX, posY)._code = (int)mapReadChar[posX] - (int)TILE.GRASS_START;
-            }
-            else { GameMng.I._hextile.GetCell(posX, posY)._code = (int)Char.GetNumericValue(mapReadChar[posX]); }
-        }
+        if (GameMng.I._hextile.GetCell(posX, posY).tileuniquecode >= (int)TILE.GRASS_START)
+            GameMng.I._hextile.GetCell(posX, posY)._code = GameMng.I._hextile.GetCell(posX, posY).tileuniquecode - (int)TILE.GRASS_START;
+        else
+            GameMng.I._hextile.GetCell(posX, posY)._code = GameMng.I._hextile.GetCell(posX, posY).tileuniquecode;
     }
 
     /**

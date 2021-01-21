@@ -68,8 +68,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 114986449
+  m_SortingLayer: 1
   m_SortingOrder: 4
   m_Sprite: {fileID: 21300000, guid: 76ad0c6b4830e6348bb3969971cdc211, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -133,11 +133,14 @@ MonoBehaviour:
   _desc: 
   _activity: 
   _hp: 0
+  _uniqueNumber: 0
+  _anim: {fileID: 0}
+  createCount: 0
   _turn: 0
-  uniqueNumber: 0
   mine: {fileID: 0}
   farm: {fileID: 0}
   turret: {fileID: 0}
+  millitarybase: {fileID: 0}
   attack: 0
 --- !u!1 &4333750150877872538
 GameObject:
@@ -207,8 +210,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 114986449
+  m_SortingLayer: 1
   m_SortingOrder: 5
   m_Sprite: {fileID: 21300000, guid: 1ab85b7f9f9b23442b16cb229b79ae75, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -289,8 +292,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 114986449
+  m_SortingLayer: 1
   m_SortingOrder: 4
   m_Sprite: {fileID: 21300000, guid: 76ad0c6b4830e6348bb3969971cdc211, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

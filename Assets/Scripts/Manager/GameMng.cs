@@ -18,7 +18,7 @@ public class GameMng : MonoBehaviour
     public int _maxMem = 0;
     private const int mapWidth = 50;                             // 맵 가로
     private const int mapHeight = 50;                            // 맵 높이
-    public Tile[,] mapTile = new Tile[mapWidth, mapHeight];      // 타일의 2차원 배열 값
+    //public Tile[,] mapTile = new Tile[mapWidth, mapHeight];      // 타일의 2차원 배열 값
     public float unitSpeed = 3.0f;
     public float distanceOfTiles = 0.0f;
     public Vector3 CastlePos;
@@ -34,6 +34,7 @@ public class GameMng : MonoBehaviour
     public BuiltMng _BuiltGM;
     public RangeControl _range;
     public ChatMng _chat;
+    public HexTileCreate _hextile;
 
     /**********
      * 레이케스트 위한 변수
@@ -619,6 +620,7 @@ public class GameMng : MonoBehaviour
             else
             {
                 selectedTile = hit.collider.gameObject.GetComponent<Tile>();
+                _hextile.FindDistancesTo(selectedTile);
                 _range.SelectTileSetting(false);
             }
         }
@@ -697,29 +699,29 @@ public class GameMng : MonoBehaviour
 
         // 공격하는 대상이 공격하는 애니메이션을 취하도록 해줌
         DynamicObject obj = null;
-        if (mapTile[posY, posX]._unitObj != null) obj = mapTile[posY, posX]._unitObj;
-        else if (mapTile[posY, posX]._builtObj != null) obj = mapTile[posY, posX]._builtObj;
+        if (_hextile.GetCell(posX, posY)._unitObj != null) obj = _hextile.GetCell(posX, posY)._unitObj;
+        else if (_hextile.GetCell(posX, posY)._builtObj != null) obj = _hextile.GetCell(posX, posY)._builtObj;
         else return;
-        _UnitGM.reversalUnit(obj.transform, mapTile[toY, toX].transform);
+        _UnitGM.reversalUnit(obj.transform, _hextile.GetCell(toX, toY).transform);
         obj._anim.SetTrigger("isAttacking");
 
         // 공격받는 대상의 HP 가 줄어들게 해줌
         obj = null;
-        if (mapTile[toY, toX]._unitObj != null) obj = mapTile[toY, toX]._unitObj;
-        else if (mapTile[toY, toX]._builtObj != null) obj = mapTile[toY, toX]._builtObj;
+        if (_hextile.GetCell(toX, toY)._unitObj != null) obj = _hextile.GetCell(toX, toY)._unitObj;
+        else if (_hextile.GetCell(toX, toY)._builtObj != null) obj = _hextile.GetCell(toX, toY)._builtObj;
         else return;
 
-        if (mapTile[toY, toX]._builtObj != null)
+        if (_hextile.GetCell(toX, toY)._builtObj != null)
         {
-            if (obj._uniqueNumber.Equals(NetworkMng.getInstance.uniqueNumber) && mapTile[toY, toX]._code.Equals((int)BUILT.MINE))
+            if (obj._uniqueNumber.Equals(NetworkMng.getInstance.uniqueNumber) && _hextile.GetCell(toX, toY)._code.Equals((int)BUILT.MINE))
             {
                 NetworkMng.getInstance.SendMsg(string.Format("PLUNDER:{0}:{1}:{2}:{3}",
-                    mapTile[posY, posX]._unitObj._uniqueNumber, mapTile[toY, toX]._builtObj._uniqueNumber, _gold * (damage * 2) / 100, 1));
+                    _hextile.GetCell(posX, posY)._unitObj._uniqueNumber, _hextile.GetCell(toX, toY)._builtObj._uniqueNumber, _gold * (damage * 2) / 100, 1));
             }
             else
             {
                 NetworkMng.getInstance.SendMsg(string.Format("PLUNDER:{0}:{1}:{2}:{3}",
-                    mapTile[posY, posX]._unitObj._uniqueNumber, mapTile[toY, toX]._builtObj._uniqueNumber, _food * (damage * 2) / 100, 1));
+                    _hextile.GetCell(posX, posY)._unitObj._uniqueNumber, _hextile.GetCell(toX, toY)._builtObj._uniqueNumber, _food * (damage * 2) / 100, 1));
             }
         }
 
@@ -728,9 +730,9 @@ public class GameMng : MonoBehaviour
         {
             // 파괴
             Destroy(obj.gameObject);
-            mapTile[toY, toX]._unitObj = null;
-            mapTile[toY, toX]._builtObj = null;
-            mapTile[toY, toX]._code = 0;            // TODO : 코드 값 원래 값으로
+            _hextile.GetCell(toX, toY)._unitObj = null;
+            _hextile.GetCell(toX, toY)._builtObj = null;
+            _hextile.GetCell(toX, toY)._code = 0;            // TODO : 코드 값 원래 값으로
         }
 
     }

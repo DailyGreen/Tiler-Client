@@ -76,7 +76,7 @@ public class UnitMng : MonoBehaviour
                 act = ACTIVITY.ACTING;
                 reversalUnit(GameMng.I.selectedTile._unitObj.transform, GameMng.I.targetTile.transform);
                 GameMng.I.selectedTile._unitObj._anim.SetTrigger("isRunning");
-                NetworkMng.getInstance.SendMsg(string.Format("MOVE_UNIT:{0}:{1}:{2}:{3}", GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosY, GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosY));
+                NetworkMng.getInstance.SendMsg(string.Format("MOVE_UNIT:{0}:{1}:{2}:{3}", GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosZ, GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosZ));
                 StartCoroutine("Moving");
             }
             else                                     // 범위가 아닌 다른 곳을 누름
@@ -110,7 +110,7 @@ public class UnitMng : MonoBehaviour
             GameMng.I.targetTile._code = GameMng.I.selectedTile._unitObj._code;
             GameMng.I.selectedTile._unitObj = null;
             //GameMng.I.selectedTile._code = (int)TILE.CAN_MOVE - 1;
-            Hc.TilecodeClear(GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosY);
+            Hc.TilecodeClear(GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosZ);
             NetworkMng.getInstance.SendMsg("TURN");
         }
     }
@@ -125,28 +125,28 @@ public class UnitMng : MonoBehaviour
     public IEnumerator MovingUnit(int posX, int posY, int toX, int toY)
     {
         bool isRun = true;
-        reversalUnit(GameMng.I.mapTile[posY, posX]._unitObj.transform, GameMng.I.mapTile[toY, toX].transform);
-        GameMng.I.mapTile[posY, posX]._unitObj._anim.SetTrigger("isRunning");
-        GameMng.I.mapTile[toY, toX]._code = GameMng.I.mapTile[posY, posX]._code;
+        reversalUnit(GameMng.I._hextile.GetCell(posX, posY)._unitObj.transform, GameMng.I._hextile.GetCell(toX, toY).transform);
+        GameMng.I._hextile.GetCell(posX, posY)._unitObj._anim.SetTrigger("isRunning");
+        GameMng.I._hextile.GetCell(toX, toY)._code = GameMng.I._hextile.GetCell(posX, posY)._code;
         Hc.TilecodeClear(posX, posY);
 
-        GameMng.I.addActMessage(string.Format("{0}님의 유닛이 이동했습니다.", GameMng.I.mapTile[posY, posX]._unitObj._uniqueNumber), toX, toY);
+        GameMng.I.addActMessage(string.Format("{0}님의 유닛이 이동했습니다.", GameMng.I._hextile.GetCell(posX, posY)._unitObj._uniqueNumber), toX, toY);
 
         while (isRun)
         {
-            if (Vector2.Distance(GameMng.I.mapTile[posY, posX]._unitObj.transform.localPosition, GameMng.I.mapTile[toY, toX].transform.localPosition) >= 0.01f)
+            if (Vector2.Distance(GameMng.I._hextile.GetCell(posX, posY)._unitObj.transform.localPosition, GameMng.I._hextile.GetCell(toX, toY).transform.localPosition) >= 0.01f)
             {
-                GameMng.I.mapTile[posY, posX]._unitObj.transform.localPosition = Vector2.Lerp(GameMng.I.mapTile[posY, posX]._unitObj.transform.localPosition, GameMng.I.mapTile[toY, toX].transform.localPosition, GameMng.I.unitSpeed * Time.deltaTime);        //타일 간 부드러운 이동
+                GameMng.I._hextile.GetCell(posX, posY)._unitObj.transform.localPosition = Vector2.Lerp(GameMng.I._hextile.GetCell(posX, posY)._unitObj.transform.localPosition, GameMng.I._hextile.GetCell(toX, toY).transform.localPosition, GameMng.I.unitSpeed * Time.deltaTime);        //타일 간 부드러운 이동
                 yield return null;
             }
             else
             {
                 //act = ACTIVITY.NONE;
 
-                GameMng.I.mapTile[posY, posX]._unitObj.transform.localPosition = GameMng.I.mapTile[toY, toX].transform.localPosition;
-                GameMng.I.mapTile[toY, toX]._unitObj = GameMng.I.mapTile[posY, posX]._unitObj;
-                GameMng.I.mapTile[posY, posX]._unitObj = null;
-                //GameMng.I.mapTile[posY, posX]._code = (int)TILE.CAN_MOVE - 1;
+                GameMng.I._hextile.GetCell(posX, posY)._unitObj.transform.localPosition = GameMng.I._hextile.GetCell(toX, toY).transform.localPosition;
+                GameMng.I._hextile.GetCell(toX, toY)._unitObj = GameMng.I._hextile.GetCell(posX, posY)._unitObj;
+                GameMng.I._hextile.GetCell(posX, posY)._unitObj = null;
+                //GameMng.I_hextile.GetCell(posX, posY)._code = (int)TILE.CAN_MOVE - 1;
                 isRun = false;
             }
         }
@@ -192,7 +192,7 @@ public class UnitMng : MonoBehaviour
                 GameMng.I._range.rangeTileReset();
                 GameMng.I._range.SelectTileSetting(true);
                 GameMng.I.targetTile._builtObj._uniqueNumber = NetworkMng.getInstance.uniqueNumber;
-                NetworkMng.getInstance.SendMsg(string.Format("CREATE_BUILT:{0}:{1}:{2}:{3}", GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosY, index, NetworkMng.getInstance.uniqueNumber));
+                NetworkMng.getInstance.SendMsg(string.Format("CREATE_BUILT:{0}:{1}:{2}:{3}", GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosZ, index, NetworkMng.getInstance.uniqueNumber));
                 act = ACTIVITY.NONE;
                 NetworkMng.getInstance.SendMsg("TURN");
             }
@@ -208,10 +208,10 @@ public class UnitMng : MonoBehaviour
      */
     public void CreateBuilt(int posX, int posY, int index, int uniqueNumber)
     {
-        GameObject Child = Instantiate(builtObj[index - 200], GameMng.I.mapTile[posY, posX].transform) as GameObject;
-        GameMng.I.mapTile[posY, posX]._builtObj = Child.GetComponent<Built>();
-        GameMng.I.mapTile[posY, posX]._code = index;
-        GameMng.I.mapTile[posY, posX]._builtObj._uniqueNumber = uniqueNumber;
+        GameObject Child = Instantiate(builtObj[index - 200], GameMng.I._hextile.GetCell(posX, posY).transform) as GameObject;
+        GameMng.I._hextile.GetCell(posX, posY)._builtObj = Child.GetComponent<Built>();
+        GameMng.I._hextile.GetCell(posX, posY)._code = index;
+        GameMng.I._hextile.GetCell(posX, posY)._builtObj._uniqueNumber = uniqueNumber;
     }
 
     /**
@@ -276,9 +276,9 @@ public class UnitMng : MonoBehaviour
 
         NetworkMng.getInstance.SendMsg(string.Format("ATTACK:{0}:{1}:{2}:{3}:{4}",
             GameMng.I.selectedTile.PosX,
-            GameMng.I.selectedTile.PosY,
+            GameMng.I.selectedTile.PosZ,
             GameMng.I.targetTile.PosX,
-            GameMng.I.targetTile.PosY,
+            GameMng.I.targetTile.PosZ,
             GameMng.I.selectedTile._unitObj._damage));
 
         NetworkMng.getInstance.SendMsg("TURN");

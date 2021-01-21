@@ -18,7 +18,9 @@ public class HexTileCreate : MonoBehaviour
      * 세팅
      */
     public Tile[] starttile = new Tile[24];
-    int index = 0;
+    public Tile[] cells;
+    int index = 0;      // 시작 지점 인덱스
+    int i = 0;          // 타일 인덱스
     [SerializeField]
     GameObject mainCamera;
 
@@ -38,25 +40,26 @@ public class HexTileCreate : MonoBehaviour
     void Awake()
     {
         LoadTilemapfromtxt("mapinfo");
-        CreateHexTileMap();
+        CreateHexTilePostion();
         CastleCreate();
         SetTileInfo();
         GameMng.I.refreshTurn();
     }
 
-    /*
-    * @brief 게임을 종료했을 떄 프리펩에 남아있는 정보 지워주기
-    */
+    /**
+     * @brief 게임을 종료했을 떄 프리펩에 남아있는 정보 지워주기
+     */
     void OnApplicationQuit()
     {
         tilestate.PosX = 0;
         tilestate.PosY = 0;
+        tilestate.PosZ = 0;
     }
 
-    /*
-    * @brief .txt형식의 맵 데이터를 불러옴
-    * @param _filename .txt 파일 이름
-    */
+    /**
+     * @brief .txt형식의 맵 데이터를 불러옴
+     * @param _filename .txt 파일 이름
+     */
     void LoadTilemapfromtxt(string _filename)
     {
         maptextload = Resources.Load(_filename) as TextAsset;
@@ -66,24 +69,26 @@ public class HexTileCreate : MonoBehaviour
     /**
      * @brief 헥사 타일맵 생성, 타일 posX posY 설정, 시작 위치 설정
      */
-    void CreateHexTileMap()
+    void CreateHexTilePostion()
     {
+        cells = new Tile[GameMng.I.GetMapHeight * GameMng.I.GetMapWidth];
         for (int y = 0; y < GameMng.I.GetMapHeight; y++)
         {
             mapReadChar = mapreadlines[y].ToCharArray();
             for (int x = 0; x < GameMng.I.GetMapWidth; x++)
             {
+                tilestate.PosX = x - y / 2; ;
+                tilestate.PosY = tilestate.PosY;
                 if (mapReadChar[x] >= (char)TILE.GRASS_START) { tilestate._code = (int)mapReadChar[x]; }
                 else { tilestate._code = (int)Char.GetNumericValue(mapReadChar[x]); }
                 GameObject child = Instantiate(hextile) as GameObject;
                 child.transform.parent = parentObject.transform;
-
-                GameMng.I.mapTile[y, x] = child.transform.GetComponent<Tile>();      // 각각의 타일 스크립트 GameMng.I.mapTile 2차원 배열에 저장
+                cells[i] = child.GetComponent<Tile>();
 
                 // mapinfo.txt  에 start_point 코드일때 starttile 에 타일 스크립트 넣어줌
                 if (tilestate._code >= (int)TILE.GRASS_START)
                 {
-                    starttile[index] = GameMng.I.mapTile[y, x];
+                    starttile[index] = cells[i];
                     index++;
                 }
                 child.name = x.ToString() + "," + y.ToString();
@@ -95,11 +100,39 @@ public class HexTileCreate : MonoBehaviour
                 {
                     child.transform.position = new Vector2(x * tileXOffset + tileXOffset / 2, y * tileYOffset);
                 }
-
-                tilestate.PosX++;
+                SetNeighborTile(x, y, i++);
             }
-            tilestate.PosX = 0;
-            tilestate.PosY++;
+            tilestate.PosZ++;
+        }
+    }
+
+    /**
+     * @brief 이웃타일 생성
+     */
+    void SetNeighborTile(int x, int z, int i)
+    {
+        if (x > 0)
+        {
+            cells[i].SetNeighbor(DIRECTION.W, cells[i - 1]);
+        }
+        if (z > 0)
+        {
+            if ((z & 1) == 0)
+            {
+                cells[i].SetNeighbor(DIRECTION.SE, cells[i - GameMng.I.GetMapWidth]);
+                if (x > 0)
+                {
+                    cells[i].SetNeighbor(DIRECTION.SW, cells[i - GameMng.I.GetMapWidth - 1]);
+                }
+            }
+            else
+            {
+                cells[i].SetNeighbor(DIRECTION.SW, cells[i - GameMng.I.GetMapWidth]);
+                if (x < GameMng.I.GetMapWidth - 1)
+                {
+                    cells[i].SetNeighbor(DIRECTION.SE, cells[i - GameMng.I.GetMapWidth + 1]);
+                }
+            }
         }
     }
 
@@ -131,96 +164,66 @@ public class HexTileCreate : MonoBehaviour
     }
 
     /**
-    * @brief 타일의 x,y,z 값 설정 및 시작지점에 성이 생성이 안됐을때 기본 타일값으로 초기화 및 타일 주변 스크립트 가져옴
+    * @brief 시작지점에 성이 생성이 안됐을때 기본 타일값으로 초기화
     */
     void SetTileInfo()
     {
-        for (int y = 0; y < GameMng.I.GetMapHeight; y++)
+        for (int i = 0; i < starttile.Length; i++)
         {
-            for (int x = 0; x < GameMng.I.GetMapWidth; x++)
+            if (starttile[i]._code >= (int)TILE.GRASS_START && starttile[i]._code < (int)BUILT.CASTLE)
             {
-                //GameMng.I.mapTile[y, x].PosX = GameMng.I.mapTile[y, x].PosX - GameMng.I.mapTile[y, x].PosZ / 2;
-                //GameMng.I.mapTile[y, x].PosY = -GameMng.I.mapTile[y, x].PosX - GameMng.I.mapTile[y, x].PosZ;
-                if (GameMng.I.mapTile[y, x]._code >= (int)TILE.GRASS_START && GameMng.I.mapTile[y, x]._code < (int)BUILT.CASTLE)
-                {
-                    GameMng.I.mapTile[y, x]._code -= (int)TILE.GRASS_START;
-                }
-                if (x > 0)
-                {
-                    GameMng.I.mapTile[y, x].tileneighbor[(int)DIRECTION.W] = GameMng.I.mapTile[y, x - 1];
-                }
-                if (x >= 0 && !x.Equals(GameMng.I.GetMapWidth - 1))
-                {
-                    GameMng.I.mapTile[y, x].tileneighbor[(int)DIRECTION.E] = GameMng.I.mapTile[y, x + 1];
-                }
-
-                if (y > 0)
-                {
-                    if (y % 2 == 0)         // 짝수
-                    {
-                        if (x > 0)
-                        {
-                            GameMng.I.mapTile[y, x].tileneighbor[(int)DIRECTION.SW] = GameMng.I.mapTile[y - 1, x - 1];
-                            GameMng.I.mapTile[y, x].tileneighbor[(int)DIRECTION.NW] = GameMng.I.mapTile[y + 1, x - 1];
-                        }
-                        Debug.Log("Asdf");
-                        if (x >= 0 /*&& !(x < GameMng.I.GetMapWidth)*/)
-                        {
-                            GameMng.I.mapTile[y, x].tileneighbor[(int)DIRECTION.SE] = GameMng.I.mapTile[y - 1, x];
-                            GameMng.I.mapTile[y, x].tileneighbor[(int)DIRECTION.NE] = GameMng.I.mapTile[y + 1, x];
-                        }
-                    }
-                    else
-                    {
-                        GameMng.I.mapTile[y, x].tileneighbor[(int)DIRECTION.SW] = GameMng.I.mapTile[y - 1, x];      // 좌하
-                        if (!y.Equals(GameMng.I.GetMapHeight - 1))
-                            GameMng.I.mapTile[y, x].tileneighbor[(int)DIRECTION.NW] = GameMng.I.mapTile[y + 1, x];      // 좌상   
-
-                        if (x >= 0 && !x.Equals(GameMng.I.GetMapWidth - 1))
-                        {
-                            GameMng.I.mapTile[y, x].tileneighbor[(int)DIRECTION.SE] = GameMng.I.mapTile[y - 1, x + 1];      // 우하
-                            if (!y.Equals(GameMng.I.GetMapHeight - 1) && !x.Equals(GameMng.I.GetMapWidth - 1))
-                                GameMng.I.mapTile[y, x].tileneighbor[(int)DIRECTION.NE] = GameMng.I.mapTile[y + 1, x + 1];      // 우상
-
-                        }
-                    }
-                }
-                else
-                {
-                    if (y % 2 == 0)
-                    {
-                        if (x > 0)
-                            GameMng.I.mapTile[y, x].tileneighbor[(int)DIRECTION.NW] = GameMng.I.mapTile[y + 1, x - 1];
-
-                        GameMng.I.mapTile[y, x].tileneighbor[(int)DIRECTION.NE] = GameMng.I.mapTile[y + 1, x];
-                    }
-                    else
-                    {
-                        if (!y.Equals(GameMng.I.GetMapHeight - 1))
-                            GameMng.I.mapTile[y, x].tileneighbor[(int)DIRECTION.NW] = GameMng.I.mapTile[y + 1, x];
-                        if (!y.Equals(GameMng.I.GetMapHeight - 1) && !x.Equals(GameMng.I.GetMapWidth - 1))
-                            GameMng.I.mapTile[y, x].tileneighbor[(int)DIRECTION.NE] = GameMng.I.mapTile[y + 1, x + 1];
-                    }
-                }
+                starttile[i]._code -= (int)TILE.GRASS_START;
             }
         }
     }
 
     /**
-        * @brief 타일 코드 초기화(유닛이 이동했을 때, 건물이 부셔졌을 떄) 메모장에 code 를 가져와서 바꿔줌
-        * @param posX GameMng.I.seleteTile.PoX 역활
-        * @param posY GameMng.I.seleteTile.PoY 역활
-        */
+     * @brief 타일 값 알아오기
+     * @param posX 타일 x값
+     * @param posy 타일 y값
+     */
+    public Tile GetCell(int posX, int posZ)
+    {
+        int z = posZ;
+        if (z < 0 || z >= GameMng.I.GetMapHeight)
+        {
+            return null;
+        }
+        int x = posX + z / 2;
+        if (x < 0 || x >= GameMng.I.GetMapWidth)
+        {
+            return null;
+        }
+        return cells[x + z * GameMng.I.GetMapWidth];
+    }
+
+    /**
+    * @brief 타일 코드 초기화(유닛이 이동했을 때, 건물이 부셔졌을 떄) 메모장에 code 를 가져와서 바꿔줌
+    * @param posX GameMng.I.seleteTile.PoX 역활
+    * @param posY GameMng.I.seleteTile.PoY 역활
+    */
     public void TilecodeClear(int posX, int posY)
     {
-        if (GameMng.I.mapTile[posY, posX]._unitObj == null || GameMng.I.mapTile[posY, posX]._builtObj == null)
+        if (GameMng.I._hextile.GetCell(posX, posY)._unitObj == null || GameMng.I._hextile.GetCell(posX, posY)._builtObj == null)
         {
             mapReadChar = mapreadlines[posY].ToCharArray();
             if (mapReadChar[posX] >= (int)TILE.GRASS_START)
             {
-                GameMng.I.mapTile[posY, posX]._code = (int)mapReadChar[posX] - (int)TILE.GRASS_START;
+                GameMng.I._hextile.GetCell(posX, posY)._code = (int)mapReadChar[posX] - (int)TILE.GRASS_START;
             }
-            else { GameMng.I.mapTile[posY, posX]._code = (int)Char.GetNumericValue(mapReadChar[posX]); }
+            else { GameMng.I._hextile.GetCell(posX, posY)._code = (int)Char.GetNumericValue(mapReadChar[posX]); }
+        }
+    }
+
+    /**
+     * @brief 타일간 거리 찾기
+     * @param cell 선택한 타일
+     */
+    public void FindDistancesTo(Tile cell)
+    {
+        for (int i = 0; i < cells.Length; i++)
+        {
+            cells[i].Distance = cell.DistanceTo(cells[i]);
         }
     }
 }

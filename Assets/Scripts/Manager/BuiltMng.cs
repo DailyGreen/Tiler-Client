@@ -79,7 +79,7 @@ public class BuiltMng : MonoBehaviour
                 //act = ACTIVITY.ACTING;
                 act = ACTIVITY.NONE;
 
-                NetworkMng.getInstance.SendMsg(string.Format("CREATE_UNIT:{0}:{1}:{2}:{3}", GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosY, index, NetworkMng.getInstance.uniqueNumber));
+                NetworkMng.getInstance.SendMsg(string.Format("CREATE_UNIT:{0}:{1}:{2}:{3}", GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosZ, index, NetworkMng.getInstance.uniqueNumber));
 
                 GameMng.I.cleanActList();
                 GameMng.I.cleanSelected();
@@ -105,11 +105,11 @@ public class BuiltMng : MonoBehaviour
      */
     public void CreateUnit(int posX, int posY, int index, int uniqueNumber)
     {
-        GameObject Child = Instantiate(unitobj[index - 300], GameMng.I.mapTile[posY, posX].transform) as GameObject;
+        GameObject Child = Instantiate(unitobj[index - 300], GameMng.I._hextile.GetCell(posX, posY).transform) as GameObject;
         Child.transform.parent = transform.parent;
-        GameMng.I.mapTile[posY, posX]._unitObj = Child.GetComponent<Unit>();
-        GameMng.I.mapTile[posY, posX]._code = GameMng.I.mapTile[posY, posX]._unitObj._code;
-        GameMng.I.mapTile[posY, posX]._unitObj._uniqueNumber = uniqueNumber;
+        GameMng.I._hextile.GetCell(posX, posY)._unitObj = Child.GetComponent<Unit>();
+        GameMng.I._hextile.GetCell(posX, posY)._code = GameMng.I._hextile.GetCell(posX, posY)._unitObj._code;
+        GameMng.I._hextile.GetCell(posX, posY)._unitObj._uniqueNumber = uniqueNumber;
     }
 
     /**
@@ -121,11 +121,11 @@ public class BuiltMng : MonoBehaviour
         int nPosX, nPosY;
         nPosX = Random.Range(0, GameMng.I.GetMapWidth);
         nPosY = Random.Range(0, GameMng.I.GetMapHeight);
-        if (GameMng.I.mapTile[nPosY, nPosX]._builtObj == null && GameMng.I.mapTile[nPosY, nPosX]._unitObj == null && GameMng.I.mapTile[nPosY, nPosX]._code < (int)TILE.CAN_MOVE)
+        if (GameMng.I._hextile.GetCell(nPosX, nPosY)._builtObj == null && GameMng.I._hextile.GetCell(nPosX, nPosY)._unitObj == null && GameMng.I._hextile.GetCell(nPosX, nPosY)._code < (int)TILE.CAN_MOVE)
         {
-            GameObject Child = Instantiate(AirDropobj, GameMng.I.mapTile[nPosY, nPosX].transform) as GameObject;
-            GameMng.I.mapTile[nPosY, nPosX]._code = (int)TILE.CAN_MOVE;
-            GameMng.I.mapTile[nPosY, nPosX]._builtObj = Child.GetComponent<AirDrop>();
+            GameObject Child = Instantiate(AirDropobj, GameMng.I._hextile.GetCell(nPosX, nPosY).transform) as GameObject;
+            GameMng.I._hextile.GetCell(nPosX, nPosY)._code = (int)TILE.CAN_MOVE;
+            GameMng.I._hextile.GetCell(nPosX, nPosY)._builtObj = Child.GetComponent<AirDrop>();
         }
         else
         {
@@ -147,7 +147,7 @@ public class BuiltMng : MonoBehaviour
      */
     public void DestroyBuilt()
     {
-        NetworkMng.getInstance.SendMsg(string.Format("DESTROY_BUILT:{0}:{1}", GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosY));
+        NetworkMng.getInstance.SendMsg(string.Format("DESTROY_BUILT:{0}:{1}", GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosZ));
         Destroy(GameMng.I.selectedTile._builtObj.gameObject);
         if (GameMng.I.selectedTile._builtObj._code == (int)BUILT.ATTACK_BUILDING)
         {
@@ -167,8 +167,8 @@ public class BuiltMng : MonoBehaviour
      */
     public void DestroyBuilt(int posX, int posY)
     {
-        Destroy(GameMng.I.mapTile[posY, posX]._builtObj.gameObject);
-        GameMng.I.mapTile[posY, posX]._builtObj = null;
-        GameMng.I.mapTile[posY, posX]._code = (int)TILE.GRASS;
+        Destroy(GameMng.I._hextile.GetCell(posX, posY)._builtObj.gameObject);
+        GameMng.I._hextile.GetCell(posX, posY)._builtObj = null;
+        GameMng.I._hextile.GetCell(posX, posY)._code = (int)TILE.GRASS;
     }
 }

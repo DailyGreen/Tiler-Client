@@ -625,7 +625,7 @@ Animator:
   m_GameObject: {fileID: 5243883629224959465}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 8930e76a7a3ae414db39fa9716abe3f1, type: 2}
+  m_Controller: {fileID: 9100000, guid: 74794b2d4a49e6c4da67e1c9da928dce, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -651,10 +651,13 @@ MonoBehaviour:
   _desc: 
   _activity: 
   _hp: 0
-  _cost: 0
+  _max_hp: 0
   _uniqueNumber: 0
-  _damage: 0
   _anim: {fileID: 1428659777133418341}
+  dyingClip: {fileID: 7400000, guid: 61b46fa3dfa68ae46b55c80304529db3, type: 2}
+  createCount: 0
+  maxCreateCount: 0
+  _damage: 0
 --- !u!1 &5243901520795453053
 GameObject:
   m_ObjectHideFlags: 0

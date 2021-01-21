@@ -27,10 +27,10 @@ public class RangeControl : MonoBehaviour
     {
         for (int i = 0; i < moveRangeTr.Length; i++)
         {
-            if (GameMng.I.selectedTile.tileneighbor[i] == null)
+            if (GameMng.I.selectedTile.neighbors[i] == null)
                 continue;
-            if (GameMng.I.selectedTile.tileneighbor[i] != null && GameMng.I.selectedTile.tileneighbor[i]._code < (int)TILE.CAN_MOVE)
-                moveRangeTr[i].transform.position = GameMng.I.selectedTile.tileneighbor[i].transform.position;
+            if (GameMng.I.selectedTile.neighbors[i] != null && GameMng.I.selectedTile.neighbors[i]._code < (int)TILE.CAN_MOVE)
+                moveRangeTr[i].transform.position = GameMng.I.selectedTile.neighbors[i].transform.position;
         }
     }
     
@@ -53,12 +53,12 @@ public class RangeControl : MonoBehaviour
     {
         for (int i = 0; i < moveRangeTr.Length; i++)
         {
-            if (GameMng.I.selectedTile.tileneighbor[i] != null && GameMng.I.selectedTile.tileneighbor[i]._builtObj != null
-                && !GameMng.I.selectedTile.tileneighbor[i]._builtObj._uniqueNumber.Equals(NetworkMng.getInstance.uniqueNumber))
-                attackRangeTr[i].transform.position = GameMng.I.selectedTile.tileneighbor[i].transform.position;
-            else if (GameMng.I.selectedTile.tileneighbor[i] != null && GameMng.I.selectedTile.tileneighbor[i]._unitObj != null
-                && !GameMng.I.selectedTile.tileneighbor[i]._unitObj._uniqueNumber.Equals(NetworkMng.getInstance.uniqueNumber))
-                attackRangeTr[i].transform.position = GameMng.I.selectedTile.tileneighbor[i].transform.position;
+            if (GameMng.I.selectedTile.neighbors[i] != null && GameMng.I.selectedTile.neighbors[i]._builtObj != null
+                && !GameMng.I.selectedTile.neighbors[i]._builtObj._uniqueNumber.Equals(NetworkMng.getInstance.uniqueNumber))
+                attackRangeTr[i].transform.position = GameMng.I.selectedTile.neighbors[i].transform.position;
+            else if (GameMng.I.selectedTile.neighbors[i] != null && GameMng.I.selectedTile.neighbors[i]._unitObj != null
+                && !GameMng.I.selectedTile.neighbors[i]._unitObj._uniqueNumber.Equals(NetworkMng.getInstance.uniqueNumber))
+                attackRangeTr[i].transform.position = GameMng.I.selectedTile.neighbors[i].transform.position;
         }
     }
     /**

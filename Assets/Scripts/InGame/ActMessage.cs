@@ -25,7 +25,7 @@ public class ActMessage : MonoBehaviour
 
     IEnumerator waiting()
     {
-        yield return new WaitForSeconds(30);
+        yield return new WaitForSeconds(15);
 
         this.msg.text = "";     // 정상 종료 되었을때만 빈 텍스트로 초기화
         this.gameObject.SetActive(false);

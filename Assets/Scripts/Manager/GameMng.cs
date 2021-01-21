@@ -18,7 +18,7 @@ public class GameMng : MonoBehaviour
     public int _maxMem = 0;
     private const int mapWidth = 50;                             // 맵 가로
     private const int mapHeight = 50;                            // 맵 높이
-    public Tile[,] mapTile = new Tile[mapWidth, mapHeight];      // 타일의 2차원 배열 값
+    //public Tile[,] mapTile = new Tile[mapWidth, mapHeight];      // 타일의 2차원 배열 값
     public float unitSpeed = 3.0f;
     public float distanceOfTiles = 0.0f;
     public Vector3 CastlePos;
@@ -34,6 +34,7 @@ public class GameMng : MonoBehaviour
     public BuiltMng _BuiltGM;
     public RangeControl _range;
     public ChatMng _chat;
+    public HexTileCreate _hextile;
 
     /**********
      * 레이케스트 위한 변수
@@ -126,7 +127,7 @@ public class GameMng : MonoBehaviour
         _gold = 100;
         _nowMem = 0;
         _maxMem = 0;
-        setMainInterface(false);
+        setMainInterface(false, false, false);
         if (NetworkMng.getInstance.uniqueNumber == NetworkMng.getInstance.firstPlayerUniqueNumber)
             myTurn = true;
         AddDelegate(SampleTurnFunc);
@@ -245,32 +246,7 @@ public class GameMng : MonoBehaviour
     public void turnManage(int uniqueNumber)
     {
         countDel();
-
-        // 누르고 있던 오브젝트가 있다면 턴이 지나고 바꼈을 가능성이 있으니 새로고침 해주기
-        Object obj = null;
-        if (selectedTile != null)
-            if (selectedTile._unitObj != null) obj = selectedTile._unitObj;
-            else if (selectedTile._builtObj != null) obj = selectedTile._builtObj;
-
-        if (obj != null)
-        {
-            objectNameTxt.text = obj._name;
-            objectDescTxt.text = obj._desc;
-
-            for (int i = 0; i < obj._activity.Count; i++)
-            {
-                actList[i].gameObject.SetActive(true);
-                UnityEngine.UI.Text[] childsTxt = actList[i].GetComponentsInChildren<UnityEngine.UI.Text>();
-                try
-                {
-                    checkActivity(obj._activity[i], actList[i], childsTxt[0], childsTxt[1], frameImg[i]);
-                }
-                catch
-                {
-                    Debug.LogError("childTxt 의 인덱스 값이 옳지 않음");
-                }
-            }
-        }
+        refreshMainUI();
 
         // 누구 차례인지 뿌려주기
         if (NetworkMng.getInstance.uniqueNumber == uniqueNumber)
@@ -288,6 +264,55 @@ public class GameMng : MonoBehaviour
                 this.turnDescText.text = NetworkMng.getInstance.v_user[i].nickName + " 차례";
                 break;
             }
+        }
+    }
+    
+    /**
+     * @brief 메인 UI 새로고침
+     */
+    public void refreshMainUI()
+    {
+        if (selectedTile == null)
+            return;
+
+        // 누르고 있던 오브젝트가 있다면 턴이 지나고 바꼈을 가능성이 있으니 새로고침 해주기
+        DynamicObject obj = null;
+        if (selectedTile._unitObj != null) { obj = selectedTile._unitObj; }
+        else if (selectedTile._builtObj != null) { obj = selectedTile._builtObj; }
+
+
+        // 내 턴이 아닐떄 건물이나 유닛이 어떤 행동을 했는지 새로고침
+        if (obj != null)
+        {
+            objImage.sprite = getObjSprite(obj._code);
+            objectNameTxt.text = obj._name;
+            objectDescTxt.text = obj._desc;
+            hpText.text = obj._hp + " / " + obj._max_hp;
+            setMainInterface();
+
+            for (int i = 0; i < obj._activity.Count; i++)
+            {
+                actList[i].gameObject.SetActive(true);
+                UnityEngine.UI.Text[] childsTxt = actList[i].GetComponentsInChildren<UnityEngine.UI.Text>();
+                try
+                {
+                    checkActivity(obj._activity[i], actList[i], childsTxt[0], childsTxt[1], frameImg[i]);
+                }
+                catch
+                {
+                    Debug.LogError("childTxt 의 인덱스 값이 옳지 않음");
+                }
+            }
+        }
+        // 내 턴이 아닐때 타일에 어떤 반응이 있는지 새로고침
+        else if (!myTurn)
+        {
+            // 이동했거나 사망했음. 빈타일임 (내가 한 행동이였다면 바꿀 필요가 없음)
+            objImage.sprite = getObjSprite(selectedTile._code);
+            maskImage.color = Color.white;      // TODO : 오브젝트 주인꺼 색 뿌리기
+            objectNameTxt.text = selectedTile._name;
+            objectDescTxt.text = selectedTile._desc;
+            setMainInterface(false, false);
         }
     }
 
@@ -318,147 +343,40 @@ public class GameMng : MonoBehaviour
     public void clickTile(Tile tile)
     {
         cleanActList();
-        // 유닛이 없다면 정적인 타일이란 뜻
 
+        // 유닛이 없다면 정적인 타일이란 뜻
         if (tile._unitObj == null && tile._builtObj == null)
         {
-            //cleanActList();
-
             maskImage.color = Color.white;
             objectNameTxt.text = tile._name;
             objectDescTxt.text = tile._desc;
-            hpText.enabled = false;
-            damageText.enabled = false;
-            logoImage[0].enabled = false;                                                   //Hp로고 이미지 꺼둠
-            logoImage[1].enabled = false;                                                   //데미지 로고 이미지 꺼둠
+
+            objImage.sprite = getObjSprite(tile._code);
+            setMainInterface(false, false);
 
             NetworkMng.getInstance._soundGM.tileClick();
 
-            objImage.enabled = true;
-            objectNameTxt.enabled = true;
-            objectDescTxt.enabled = true;
-
-            switch (tile._code)                                                              //클릭한 타일의 코드에 따른 스프라이트값 조정
-            {
-                case (int)TILE.GRASS:
-                    objImage.sprite = objSprite[4];
-                    break;
-                case (int)TILE.SAND:
-                    objImage.sprite = objSprite[5];
-                    break;
-                case (int)TILE.DIRT:
-                    objImage.sprite = objSprite[6];
-                    break;
-                case (int)TILE.MARS:
-                    objImage.sprite = objSprite[7];
-                    break;
-                case (int)TILE.STONE:
-                    objImage.sprite = objSprite[8];
-                    break;
-                case (int)TILE.SEA_01:
-                    objImage.sprite = objSprite[9];
-                    break;
-                case (int)TILE.SEA_02:
-                    objImage.sprite = objSprite[9];
-                    break;
-                case (int)TILE.SEA_03:
-                    objImage.sprite = objSprite[9];
-                    break;
-            }
             return;
         }
-        DynamicObject obj;
 
+        DynamicObject obj;
         if (tile._unitObj)
         {
             obj = tile._unitObj;
-            switch (tile._unitObj._code)
-            {
-                case (int)UNIT.FOREST_WORKER:
-                    objImage.sprite = objSprite[12];
-                    break;
-                case (int)UNIT.FOREST_SOLDIER_0:
-                    objImage.sprite = objSprite[13];
-                    break;
-                case (int)UNIT.FOREST_SOLDIER_1:
-                    objImage.sprite = objSprite[14];
-                    break;
-
-            }
-            setMainInterface(true);
+            objImage.sprite = getObjSprite(tile._unitObj._code);
+            setMainInterface();
         }
         else
         {
             obj = tile._builtObj;
-            switch (tile._builtObj._code)        //타일에 있는 건물의 코드의 따른 스프라이트 변경, 로고 text 켜고 끄기
-            {
-                case (int)BUILT.MINE:
-                    objImage.sprite = objSprite[0];
-                    hpText.enabled = true;
-                    damageText.enabled = false;
-                    logoImage[0].enabled = true;
-                    logoImage[1].enabled = false;
-                    objImage.enabled = true;
-                    objectNameTxt.enabled = true;
-                    objectDescTxt.enabled = true;
-                    break;
-                case (int)BUILT.FARM:
-                    objImage.sprite = objSprite[1];
-                    hpText.enabled = true;
-                    damageText.enabled = false;
-                    logoImage[0].enabled = true;
-                    logoImage[1].enabled = false;
-                    objImage.enabled = true;
-                    objectNameTxt.enabled = true;
-                    objectDescTxt.enabled = true;
-                    break;
-                case (int)BUILT.ATTACK_BUILDING:
-                    objImage.sprite = objSprite[2];
-                    hpText.enabled = true;
-                    damageText.enabled = true;
-                    logoImage[0].enabled = true;
-                    logoImage[1].enabled = true;
-                    objImage.enabled = true;
-                    objectNameTxt.enabled = true;
-                    objectDescTxt.enabled = true;
-                    break;
-                case (int)BUILT.CASTLE:
-                    objImage.sprite = objSprite[3];
-                    hpText.enabled = true;
-                    damageText.enabled = false;
-                    logoImage[0].enabled = true;
-                    logoImage[1].enabled = false;
-                    objImage.enabled = true;
-                    objectNameTxt.enabled = true;
-                    objectDescTxt.enabled = true;
-                    break;
-                case (int)BUILT.AIRDROP:
-                    objImage.sprite = objSprite[10];
-                    hpText.enabled = false;
-                    damageText.enabled = false;
-                    logoImage[0].enabled = false;
-                    logoImage[1].enabled = false;
-                    objImage.enabled = true;
-                    objectNameTxt.enabled = true;
-                    objectDescTxt.enabled = true;
-                    break;
-                case (int)BUILT.MILLITARY_BASE:
-                    objImage.sprite = objSprite[11];
-                    hpText.enabled = true;
-                    damageText.enabled = false;
-                    logoImage[0].enabled = true;
-                    logoImage[1].enabled = false;
-                    objImage.enabled = true;
-                    objectNameTxt.enabled = true;
-                    objectDescTxt.enabled = true;
-                    break;
-            }
+            //타일에 있는 건물의 코드의 따른 스프라이트 변경, 로고 text 켜고 끄기
+            objImage.sprite = getObjSprite(tile._builtObj._code);
         }
 
         objectNameTxt.text = obj._name;
         objectDescTxt.text = obj._desc;
 
-        hpText.text = (tile._unitObj ? tile._unitObj._hp : tile._builtObj._hp) + "" + " / " + (tile._unitObj ? tile._unitObj._hp : tile._builtObj._hp); //나중에 최대체력, 현재체력 구분할 것
+        hpText.text = (tile._unitObj ? tile._unitObj._hp : tile._builtObj._hp) + "" + " / " + (tile._unitObj ? tile._unitObj._max_hp : tile._builtObj._max_hp);
         NetworkMng.getInstance._soundGM.unitClick(UNIT.FOREST_WORKER);
         //damageText.text = tile._unitObj._damage + "";
 
@@ -619,6 +537,7 @@ public class GameMng : MonoBehaviour
             else
             {
                 selectedTile = hit.collider.gameObject.GetComponent<Tile>();
+                _hextile.FindDistancesTo(selectedTile);
                 _range.SelectTileSetting(false);
             }
         }
@@ -669,15 +588,16 @@ public class GameMng : MonoBehaviour
     /**
      * @brief 메인인터페이스 설정
      */
-    public void setMainInterface(bool isShow)
+    public void setMainInterface(bool showHP = true, bool showDamage = true, bool showObj = true)
     {
-        hpText.enabled = isShow;
-        objImage.enabled = isShow;
-        damageText.enabled = isShow;
-        objectNameTxt.enabled = isShow;
-        objectDescTxt.enabled = isShow;
-        logoImage[0].enabled = isShow;
-        logoImage[1].enabled = isShow;
+        hpText.enabled = showHP;
+        logoImage[0].enabled = showHP;
+        damageText.enabled = showDamage;
+        logoImage[1].enabled = showDamage;
+
+        objImage.enabled = showObj;
+        objectNameTxt.enabled = showObj;
+        objectDescTxt.enabled = showObj;
     }
 
     /**
@@ -697,29 +617,29 @@ public class GameMng : MonoBehaviour
 
         // 공격하는 대상이 공격하는 애니메이션을 취하도록 해줌
         DynamicObject obj = null;
-        if (mapTile[posY, posX]._unitObj != null) obj = mapTile[posY, posX]._unitObj;
-        else if (mapTile[posY, posX]._builtObj != null) obj = mapTile[posY, posX]._builtObj;
+        if (_hextile.GetCell(posX, posY)._unitObj != null) obj = _hextile.GetCell(posX, posY)._unitObj;
+        else if (_hextile.GetCell(posX, posY)._builtObj != null) obj = _hextile.GetCell(posX, posY)._builtObj;
         else return;
-        _UnitGM.reversalUnit(obj.transform, mapTile[toY, toX].transform);
+        _UnitGM.reversalUnit(obj.transform, _hextile.GetCell(toX, toY).transform);
         obj._anim.SetTrigger("isAttacking");
 
         // 공격받는 대상의 HP 가 줄어들게 해줌
         obj = null;
-        if (mapTile[toY, toX]._unitObj != null) obj = mapTile[toY, toX]._unitObj;
-        else if (mapTile[toY, toX]._builtObj != null) obj = mapTile[toY, toX]._builtObj;
+        if (_hextile.GetCell(toX, toY)._unitObj != null) obj = _hextile.GetCell(toX, toY)._unitObj;
+        else if (_hextile.GetCell(toX, toY)._builtObj != null) obj = _hextile.GetCell(toX, toY)._builtObj;
         else return;
 
-        if (mapTile[toY, toX]._builtObj != null)
+        if (_hextile.GetCell(toX, toY)._builtObj != null)
         {
-            if (obj._uniqueNumber.Equals(NetworkMng.getInstance.uniqueNumber) && mapTile[toY, toX]._code.Equals((int)BUILT.MINE))
+            if (obj._uniqueNumber.Equals(NetworkMng.getInstance.uniqueNumber) && _hextile.GetCell(toX, toY)._code.Equals((int)BUILT.MINE))
             {
                 NetworkMng.getInstance.SendMsg(string.Format("PLUNDER:{0}:{1}:{2}:{3}",
-                    mapTile[posY, posX]._unitObj._uniqueNumber, mapTile[toY, toX]._builtObj._uniqueNumber, _gold * (damage * 2) / 100, 1));
+                    _hextile.GetCell(posX, posY)._unitObj._uniqueNumber, _hextile.GetCell(toX, toY)._builtObj._uniqueNumber, _gold * (damage * 2) / 100, 1));
             }
             else
             {
                 NetworkMng.getInstance.SendMsg(string.Format("PLUNDER:{0}:{1}:{2}:{3}",
-                    mapTile[posY, posX]._unitObj._uniqueNumber, mapTile[toY, toX]._builtObj._uniqueNumber, _food * (damage * 2) / 100, 1));
+                    _hextile.GetCell(posX, posY)._unitObj._uniqueNumber, _hextile.GetCell(toX, toY)._builtObj._uniqueNumber, _food * (damage * 2) / 100, 1));
             }
         }
 
@@ -727,16 +647,70 @@ public class GameMng : MonoBehaviour
         if (obj._hp <= 0)
         {
             // 파괴
-            Destroy(obj.gameObject);
-            mapTile[toY, toX]._unitObj = null;
-            mapTile[toY, toX]._builtObj = null;
-            mapTile[toY, toX]._code = 0;            // TODO : 코드 값 원래 값으로
+            obj.DestroyMyself();
+            //Destroy(obj.gameObject);
+            _hextile.GetCell(toX, toY)._unitObj = null;
+            _hextile.GetCell(toX, toY)._builtObj = null;
+            _hextile.GetCell(toX, toY)._code = 0;            // TODO : 코드 값 원래 값으로
         }
 
     }
     public void uiClickBT()
     {
         NetworkMng.getInstance._soundGM.uiBTClick();
+    }
+
+    /**
+    * @brief 클릭한 타일의 코드에 따른 스프라이트값 조정
+    * @param code 코드
+    * @return 스프라이트 이미지
+    */
+    public Sprite getObjSprite(int code)
+    {
+        switch (code)
+        {
+            case (int)TILE.GRASS:
+                return objSprite[4];
+            case (int)TILE.SAND:
+                return objSprite[5];
+            case (int)TILE.DIRT:
+                return objSprite[6];
+            case (int)TILE.MARS:
+                return objSprite[7];
+            case (int)TILE.STONE:
+                return objSprite[8];
+            case (int)TILE.SEA_01:
+                return objSprite[9];
+            case (int)TILE.SEA_02:
+                return objSprite[9];
+            case (int)TILE.SEA_03:
+                return objSprite[9];
+            case (int)UNIT.FOREST_WORKER:
+                return objSprite[12];
+            case (int)UNIT.FOREST_SOLDIER_0:
+                return objSprite[13];
+            case (int)UNIT.FOREST_SOLDIER_1:
+                return objSprite[14];
+            case (int)BUILT.MINE:
+                setMainInterface(true, false);
+                return objSprite[0];
+            case (int)BUILT.FARM:
+                setMainInterface(true, false);
+                return objSprite[1];
+            case (int)BUILT.ATTACK_BUILDING:
+                setMainInterface();
+                return objSprite[2];
+            case (int)BUILT.CASTLE:
+                setMainInterface(true, false);
+                return objSprite[3];
+            case (int)BUILT.AIRDROP:
+                setMainInterface(false, false);
+                return objSprite[10];
+            case (int)BUILT.MILLITARY_BASE:
+                setMainInterface(true, false);
+                return objSprite[11];
+        }
+        return null;
     }
 }
 

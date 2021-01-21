@@ -10,10 +10,12 @@ public class Turret : Built
     void Start()
     {
         _name = "터렛";
-        _desc = "생성까지 " + (3 - createCount) + "턴 남음";
-        _hp = 7;
+        _max_hp = 7;
+        _hp = _max_hp;
         _code = (int)BUILT.ATTACK_BUILDING;
         attack = 2;
+        maxCreateCount = 3;
+        _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
 
         GameMng.I.AddDelegate(this.waitingCreate);
     }
@@ -26,13 +28,13 @@ public class Turret : Built
     public void waitingCreate()
     {
         createCount++;
-        _desc = "생성까지 " + (3 - createCount) + "턴 남음";
+        _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
         // 2턴 후에 생성됨
-        if (createCount > 2)
+        if (createCount > maxCreateCount - 1)
         {
             _desc = "턴이 끝날 때 사정거리 안의 적을 공격한다";
 
-            //_anim.SetTrigger("isSpawn");
+            _anim.SetTrigger("isSpawn");
 
             init();
 
@@ -42,7 +44,6 @@ public class Turret : Built
 
     public void Attack()
     {
-        Debug.Log("터렛을 클릭하였습니다.");
         if (GameMng.I.selectedTile._code == (int)BUILT.ATTACK_BUILDING)
         {
             GameMng.I._range.attackRange();
@@ -51,7 +52,7 @@ public class Turret : Built
 
     void OnDestroy()
     {
-        if (createCount < 2)
+        if (createCount < maxCreateCount - 1)
             GameMng.I.RemoveDelegate(waitingCreate);
     }
 }

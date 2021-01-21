@@ -2471,6 +2471,7 @@ MonoBehaviour:
   _BuiltGM: {fileID: 1923391220}
   _range: {fileID: 3629599983884118296}
   _chat: {fileID: 101512738}
+  _hextile: {fileID: 1670251634}
   selectedTile: {fileID: 0}
   targetTile: {fileID: 0}
   objSprite:
@@ -3421,7 +3422,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2006621125}
   m_HandleRect: {fileID: 2006621124}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -5028,6 +5029,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  cells: []
   mainCamera: {fileID: 1354095962}
 --- !u!4 &1670251635
 Transform:

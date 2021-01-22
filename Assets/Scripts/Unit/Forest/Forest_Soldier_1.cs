@@ -12,6 +12,8 @@ public class Forest_Soldier_1 : Unit
         _hp = _max_hp;
         _code = (int)UNIT.FOREST_SOLDIER_1;
         _damage = 10;
+        _basedistance = 1;
+        _attackdistance = 2;
         maxCreateCount = 3;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
 

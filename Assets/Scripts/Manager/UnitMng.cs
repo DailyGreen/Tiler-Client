@@ -40,7 +40,7 @@ public class UnitMng : MonoBehaviour
                     Building(MillitaryBase.cost, (int)BUILT.MILLITARY_BASE);
                     break;
                 case ACTIVITY.ATTACK:
-                    UnitAttack();
+                    UnitAttack(GameMng.I.selectedTile._unitObj._attackdistance);
                     break;
             }
             GameMng.I._range.SelectTileSetting(true);
@@ -217,14 +217,14 @@ public class UnitMng : MonoBehaviour
     /**
      * @brief 유닛 공격
      */
-    public void UnitAttack()
+    public void UnitAttack(int distance)
     {
         GameMng.I.mouseRaycast(true);
         float setDis = Vector2.Distance(GameMng.I.selectedTile.transform.position, GameMng.I.targetTile.transform.position);
         if (GameMng.I.targetTile._unitObj != null || GameMng.I.targetTile._builtObj != null)
         {
 
-            if (GameMng.I.targetTile._unitObj != null && GameMng.I.targetTile._unitObj._uniqueNumber != NetworkMng.getInstance.uniqueNumber && setDis <= 1.5f)
+            if (GameMng.I.targetTile._unitObj != null && GameMng.I.targetTile._unitObj._uniqueNumber != NetworkMng.getInstance.uniqueNumber && GameMng.I.targetTile.Distance <= distance)
             {
                 GameMng.I.targetTile._unitObj._hp -= GameMng.I.selectedTile._unitObj._damage;
                 if (GameMng.I.targetTile._unitObj._hp <= 0)
@@ -236,7 +236,7 @@ public class UnitMng : MonoBehaviour
                 }
                 EnforceAttack();
             }
-            else if (GameMng.I.targetTile._builtObj != null && GameMng.I.targetTile._builtObj._uniqueNumber != NetworkMng.getInstance.uniqueNumber && setDis <= 1.5f)
+            else if (GameMng.I.targetTile._builtObj != null && GameMng.I.targetTile._builtObj._uniqueNumber != NetworkMng.getInstance.uniqueNumber && GameMng.I.targetTile.Distance <= distance)
             {
                 GameMng.I.targetTile._builtObj._hp -= GameMng.I.selectedTile._unitObj._damage;
                 if (GameMng.I.targetTile._builtObj._code == (int)BUILT.AIRDROP)
@@ -288,4 +288,48 @@ public class UnitMng : MonoBehaviour
 
     }
 
+    public void Move()
+    {
+        GameMng.I._range.moveRange(GameMng.I.selectedTile._unitObj._basedistance);
+        Debug.Log("캐릭터 이동");
+    }
+
+    public void buildMine()
+    {
+        GameMng.I._range.moveRange(GameMng.I.selectedTile._unitObj._basedistance);
+    }
+
+    public void buildFarm()
+    {
+        GameMng.I._range.moveRange(GameMng.I.selectedTile._unitObj._basedistance);
+    }
+
+    public void buildAttackBuilding()
+    {
+        GameMng.I._range.moveRange(GameMng.I.selectedTile._unitObj._basedistance);
+    }
+
+    public void buildMillitaryBaseBuilding()
+    {
+        GameMng.I._range.moveRange(GameMng.I.selectedTile._unitObj._basedistance);
+        Debug.Log("군사 기지 생성");
+    }
+
+    public void buildShieldBuilding()
+    {
+        GameMng.I._range.moveRange(GameMng.I.selectedTile._unitObj._basedistance);
+        Debug.Log("방어 건물 생성");
+    }
+
+    public void buildUpgradeBuilding()
+    {
+        GameMng.I._range.moveRange(GameMng.I.selectedTile._unitObj._basedistance);
+        Debug.Log("강화 건물 생성");
+    }
+
+    public void unitAttacking()
+    {
+        GameMng.I._range.attackRange(GameMng.I.selectedTile._unitObj._attackdistance);
+        Debug.Log("공격 준비 완료");
+    }
 }

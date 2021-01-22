@@ -13,6 +13,7 @@ public class MillitaryBase : Built
         _hp = _max_hp;
         _code = (int)BUILT.MILLITARY_BASE;
         maxCreateCount = 3;
+        _basedistance = 1;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
         GameMng.I.AddDelegate(this.waitingCreate);
     }
@@ -48,7 +49,7 @@ public class MillitaryBase : Built
         if (GameMng.I.selectedTile._code == (int)BUILT.MILLITARY_BASE)
         {
             GameMng.I._BuiltGM.act = ACTIVITY.SOLDIER_0_UNIT_CREATE;
-            GameMng.I._range.moveRange();
+            GameMng.I._range.moveRange(1);
         }
 
     }
@@ -58,7 +59,7 @@ public class MillitaryBase : Built
         if (GameMng.I.selectedTile._code == (int)BUILT.MILLITARY_BASE)
         {
             GameMng.I._BuiltGM.act = ACTIVITY.SOLDIER_1_UNIT_CREATE;
-            GameMng.I._range.moveRange();
+            GameMng.I._range.moveRange(1);
         }
     }
 

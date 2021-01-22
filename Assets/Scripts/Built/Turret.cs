@@ -14,7 +14,7 @@ public class Turret : Built
         _hp = _max_hp;
         _code = (int)BUILT.ATTACK_BUILDING;
         attack = 2;
-        maxCreateCount = 3;
+        _attackdistance = 2;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
 
         GameMng.I.AddDelegate(this.waitingCreate);
@@ -46,7 +46,7 @@ public class Turret : Built
     {
         if (GameMng.I.selectedTile._code == (int)BUILT.ATTACK_BUILDING)
         {
-            GameMng.I._range.attackRange();
+            GameMng.I._range.attackRange(_attackdistance);
         }
     }
 

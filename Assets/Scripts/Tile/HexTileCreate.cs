@@ -214,7 +214,7 @@ public class HexTileCreate : MonoBehaviour
     }
 
     /**
-     * @brief 타일간 거리 찾기
+     * @brief 타일간 거리 정하기
      * @param cell 선택한 타일
      */
     public void FindDistancesTo(Tile cell)

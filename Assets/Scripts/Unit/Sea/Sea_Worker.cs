@@ -13,6 +13,7 @@ public class Sea_Worker : Worker
         _max_hp = 10;
         _hp = _max_hp;
         maxCreateCount = 2;
+        _basedistance = 1;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
 
         GameMng.I._BuiltGM.act = ACTIVITY.NONE;

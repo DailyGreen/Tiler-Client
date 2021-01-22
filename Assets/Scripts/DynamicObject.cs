@@ -18,6 +18,9 @@ public class DynamicObject : Object
 
     public int createCount = 0;            // 생성시 걸리는 턴 수 
     public int maxCreateCount = 0;         // 생성되는 턴 수 (한번 정해지면 수정되선 안됨)
+
+    public int _basedistance = 0;           // 이동 거리 또는 생성 거리
+    public int _attackdistance = 0;         // 공격 거리
   
     public void DestroyMyself()
     {

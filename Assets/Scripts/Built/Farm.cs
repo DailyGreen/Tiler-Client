@@ -14,6 +14,7 @@ public class Farm : Built
         _hp = _max_hp;
         _code = (int)BUILT.FARM;
         making = 2;
+        _basedistance = 1;
         maxCreateCount = 3;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
         GameMng.I.AddDelegate(this.waitingCreate);

@@ -11,6 +11,7 @@ public class Castle : Built
         _desc = "일꾼을 생성한다";
         _max_hp = 15;
         _hp = _max_hp;
+        _basedistance = 1;
         _code = (int)BUILT.CASTLE;
         if (NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))
             _activity.Add(ACTIVITY.WORKER_UNIT_CREATE);
@@ -21,6 +22,6 @@ public class Castle : Built
     */
     public static void CreateUnitBtn()
     {
-        GameMng.I._range.moveRange();
+        GameMng.I._range.moveRange(1);
     }
 }

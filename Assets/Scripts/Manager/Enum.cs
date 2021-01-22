@@ -89,6 +89,15 @@ public enum UNIT
     DESERT_WITCH_0,
     DESERT_WITCH_1,
 }
+
+/**
+ * @brief 건물에 유닛 생성 범위 함수가 Static 일 경우에 사용
+ */
+public enum UNIQEDISTANCE
+{
+    DISTANCE = 1
+}
+
 public enum TRIBE
 {
     FOREST = 0,

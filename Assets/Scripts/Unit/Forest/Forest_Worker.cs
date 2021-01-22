@@ -12,6 +12,7 @@ public class Forest_Worker : Worker
         _code = (int)UNIT.FOREST_WORKER;
         _max_hp = 10;
         _hp = _max_hp;
+        _basedistance = 1;
         maxCreateCount = 2;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
 

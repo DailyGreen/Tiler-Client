@@ -18,6 +18,9 @@ public class UnitMng : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space))
+            NetworkMng.getInstance.SendMsg("TURN");
+
         //Debug.Log(Vector2.Distance(GameMng.I.mapTile[GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosY].transform.localPosition,
         //    GameMng.I.mapTile[GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosY].transform.localPosition));
         if (Input.GetMouseButtonDown(0) && act != ACTIVITY.ACTING && GameMng.I._BuiltGM.act == ACTIVITY.NONE && !EventSystem.current.IsPointerOverGameObject())
@@ -185,6 +188,7 @@ public class UnitMng : MonoBehaviour
         {
             if (GameMng.I._gold >= cost)
             {
+                GameMng.I.selectedTile._unitObj._bActAccess = true;
                 GameObject Child = Instantiate(builtObj[index - 200], GameMng.I.targetTile.transform) as GameObject;
                 GameMng.I.targetTile._builtObj = Child.GetComponent<Built>();
                 GameMng.I.targetTile._code = index;
@@ -193,6 +197,8 @@ public class UnitMng : MonoBehaviour
                 GameMng.I._range.SelectTileSetting(true);
                 GameMng.I.targetTile._builtObj._uniqueNumber = NetworkMng.getInstance.uniqueNumber;
                 NetworkMng.getInstance.SendMsg(string.Format("CREATE_BUILT:{0}:{1}:{2}:{3}", GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosZ, index, NetworkMng.getInstance.uniqueNumber));
+                GameMng.I.selectedTile = null;
+                GameMng.I.targetTile = null;
                 act = ACTIVITY.NONE;
                 NetworkMng.getInstance.SendMsg("TURN");
             }
@@ -241,7 +247,6 @@ public class UnitMng : MonoBehaviour
                 GameMng.I.targetTile._builtObj._hp -= GameMng.I.selectedTile._unitObj._damage;
                 if (GameMng.I.targetTile._builtObj._code == (int)BUILT.AIRDROP)
                 {
-                    Debug.Log("asdf");
                     int nKind = Random.Range(1, 3);            // 1: 골드,  2: 식량
                     int nResult = Random.Range(20, 60);
                     Debug.Log(nKind + ", " + nResult);
@@ -287,5 +292,48 @@ public class UnitMng : MonoBehaviour
         NetworkMng.getInstance.SendMsg("TURN");
 
     }
+    public void Move()
+    {
+        GameMng.I._range.moveRange(GameMng.I.selectedTile._unitObj._basedistance);
+        Debug.Log("캐릭터 이동");
+    }
 
+    public void buildMine()
+    {
+        GameMng.I._range.moveRange(GameMng.I.selectedTile._unitObj._basedistance);
+    }
+
+    public void buildFarm()
+    {
+        GameMng.I._range.moveRange(GameMng.I.selectedTile._unitObj._basedistance);
+    }
+
+    public void buildAttackBuilding()
+    {
+        GameMng.I._range.moveRange(GameMng.I.selectedTile._unitObj._basedistance);
+    }
+
+    public void buildMillitaryBaseBuilding()
+    {
+        GameMng.I._range.moveRange(GameMng.I.selectedTile._unitObj._basedistance);
+        Debug.Log("군사 기지 생성");
+    }
+
+    public void buildShieldBuilding()
+    {
+        GameMng.I._range.moveRange(GameMng.I.selectedTile._unitObj._basedistance);
+        Debug.Log("방어 건물 생성");
+    }
+
+    public void buildUpgradeBuilding()
+    {
+        GameMng.I._range.moveRange(GameMng.I.selectedTile._unitObj._basedistance);
+        Debug.Log("강화 건물 생성");
+    }
+
+    public void unitAttacking()
+    {
+        GameMng.I._range.attackRange(GameMng.I.selectedTile._unitObj._attackdistance);
+        Debug.Log("공격 준비 완료");
+    }
 }

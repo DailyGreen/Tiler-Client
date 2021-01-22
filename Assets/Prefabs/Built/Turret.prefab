@@ -223,6 +223,11 @@ MonoBehaviour:
   dyingClip: {fileID: 7400000, guid: fa2ee53c3a632b5449053abafc49f793, type: 2}
   createCount: 0
   maxCreateCount: 0
+  _basedistance: 0
+  _attackdistance: 0
+  SaveX: 0
+  SaveY: 0
+  _bActAccess: 0
   _turn: 0
   mine: {fileID: 0}
   farm: {fileID: 0}
@@ -319,15 +324,15 @@ SpriteRenderer:
   m_SortingLayerID: 114986449
   m_SortingLayer: 1
   m_SortingOrder: 5
-  m_Sprite: {fileID: 21300000, guid: 57f01bad0bb0f5f4483909ee235819d0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ff5adee40bbe2224d87303c2383f4801, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.2, y: 1.4}
+  m_Size: {x: 0.5, y: 0.56}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &8019497033513539649

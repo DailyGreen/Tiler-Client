@@ -70,6 +70,10 @@ public class BuiltMng : MonoBehaviour
         {
             if (GameMng.I._gold >= cost)
             {
+                if (index > (int)UNIT.FOREST_WORKER && (int)UNIT.SEA_WORKER > index)
+                {
+                    GameMng.I.selectedTile._builtObj._bActAccess = true;
+                }
                 GameObject Child = Instantiate(unitobj[index - 300], GameMng.I.targetTile.transform) as GameObject;                 // enum °ª - 300
                 Child.transform.parent = transform.parent;
                 GameMng.I.targetTile._unitObj = Child.GetComponent<Unit>();

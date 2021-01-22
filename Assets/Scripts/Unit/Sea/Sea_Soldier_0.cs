@@ -14,6 +14,8 @@ public class Sea_Soldier_0 : Unit
         _code = (int)UNIT.SEA_SOLDIER_0;
         _damage = 5;
         maxCreateCount = 3;
+        _basedistance = 1;
+        _attackdistance = 1;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
     }
 

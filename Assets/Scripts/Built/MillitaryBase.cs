@@ -13,6 +13,8 @@ public class MillitaryBase : Built
         _hp = _max_hp;
         _code = (int)BUILT.MILLITARY_BASE;
         maxCreateCount = 3;
+        SaveX = GameMng.I.selectedTile.PosX;
+        SaveY = GameMng.I.selectedTile.PosZ;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
         GameMng.I.AddDelegate(this.waitingCreate);
     }
@@ -31,6 +33,8 @@ public class MillitaryBase : Built
         // 2턴 후에 생성됨
         if (createCount > maxCreateCount - 1)
         {
+            GameMng.I._hextile.GetCell(SaveX, SaveY)._unitObj.GetComponent<Worker>()._bActAccess = false;
+
             _desc = "병력들을 생성한다";
 
             _anim.SetTrigger("isSpawn");
@@ -48,7 +52,7 @@ public class MillitaryBase : Built
         if (GameMng.I.selectedTile._code == (int)BUILT.MILLITARY_BASE)
         {
             GameMng.I._BuiltGM.act = ACTIVITY.SOLDIER_0_UNIT_CREATE;
-            GameMng.I._range.moveRange();
+            GameMng.I._range.moveRange((int)UNIQEDISTANCE.DISTANCE);
         }
 
     }
@@ -58,7 +62,7 @@ public class MillitaryBase : Built
         if (GameMng.I.selectedTile._code == (int)BUILT.MILLITARY_BASE)
         {
             GameMng.I._BuiltGM.act = ACTIVITY.SOLDIER_1_UNIT_CREATE;
-            GameMng.I._range.moveRange();
+            GameMng.I._range.moveRange((int)UNIQEDISTANCE.DISTANCE);
         }
     }
 

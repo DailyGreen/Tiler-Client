@@ -12,7 +12,11 @@ public class Forest_Soldier_0 : Unit
         _hp = _max_hp;
         _code = (int)UNIT.FOREST_SOLDIER_0;
         _damage = 5;
+        _basedistance = 1;
+        _attackdistance = 1;
         maxCreateCount = 3;
+        SaveX = GameMng.I.selectedTile.PosX;
+        SaveY = GameMng.I.selectedTile.PosZ;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
 
         GameMng.I._BuiltGM.act = ACTIVITY.NONE;
@@ -32,6 +36,8 @@ public class Forest_Soldier_0 : Unit
 
         if (createCount > maxCreateCount - 1)        // 2턴 후에 생성됨
         {
+            GameMng.I._hextile.GetCell(SaveX, SaveY)._builtObj.GetComponent<Built>()._bActAccess = false;
+
             _desc = "모조리 죽여주마!";
 
             _anim.SetTrigger("isSpawn");

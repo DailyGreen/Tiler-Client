@@ -7,7 +7,7 @@ public class UnitMng : MonoBehaviour
 {
     public ACTIVITY act = ACTIVITY.NONE;
 
-    public Worker worker = null;
+    public Worker worker = null;        // 쓰는곳 없음
 
     public GameObject[] builtObj = null;
 
@@ -23,7 +23,7 @@ public class UnitMng : MonoBehaviour
 
         //Debug.Log(Vector2.Distance(GameMng.I.mapTile[GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosY].transform.localPosition,
         //    GameMng.I.mapTile[GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosY].transform.localPosition));
-        if (Input.GetMouseButtonDown(0) && act != ACTIVITY.ACTING && GameMng.I._BuiltGM.act == ACTIVITY.NONE && !EventSystem.current.IsPointerOverGameObject())
+        if (Input.GetMouseButtonDown(0) && act != ACTIVITY.ACTING && GameMng.I._BuiltGM.act == ACTIVITY.NONE && !EventSystem.current.IsPointerOverGameObject() && GameMng.I.selectedTile._unitObj != null)
         {
             switch (act)
             {
@@ -31,16 +31,16 @@ public class UnitMng : MonoBehaviour
                     CheckMove();
                     break;
                 case ACTIVITY.BUILD_MINE:
-                    Building(Mine.cost, (int)BUILT.MINE);
+                    Building(Mine.cost, (int)BUILT.MINE, GameMng.I.selectedTile._code);
                     break;
                 case ACTIVITY.BUILD_FARM:
-                    Building(Farm.cost, (int)BUILT.FARM);
+                    Building(Farm.cost, (int)BUILT.FARM, GameMng.I.selectedTile._code);
                     break;
                 case ACTIVITY.BUILD_ATTACK_BUILDING:
-                    Building(Turret.cost, (int)BUILT.ATTACK_BUILDING);
+                    Building(Turret.cost, (int)BUILT.ATTACK_BUILDING, GameMng.I.selectedTile._code);
                     break;
                 case ACTIVITY.BUILD_MILLITARY_BASE:
-                    Building(MillitaryBase.cost, (int)BUILT.MILLITARY_BASE);
+                    Building(MillitaryBase.cost, (int)BUILT.MILLITARY_BASE, GameMng.I.selectedTile._code);
                     break;
                 case ACTIVITY.ATTACK:
                     UnitAttack();
@@ -179,15 +179,16 @@ public class UnitMng : MonoBehaviour
      * @brief 건물을 생성함 (클라 전용)
      * @param cost 사용된 코스트
      * @param index 건물 코드
+     * @param unitindex 건물을 짓는 유닛 코드
      */
-    public void Building(int cost, int index)
+    public void Building(int cost, int index, int unitindex)
     {
-        GameMng.I.minGold(3);       // TODO : 코스트로 변경
         GameMng.I.mouseRaycast(true);                       //캐릭터 정보와 타일 정보를 알아와야해서 false에서 true로 변경
         if (GameMng.I.targetTile._builtObj == null && GameMng.I.targetTile._code < (int)TILE.CAN_MOVE && GameMng.I.targetTile._unitObj == null && Vector2.Distance(GameMng.I.selectedTile.transform.localPosition, GameMng.I.targetTile.transform.localPosition) <= 1.5f)
         {
             if (GameMng.I._gold >= cost)
             {
+                //GameMng.I.minGold(3);       // TODO : 코스트로 변경
                 GameMng.I.selectedTile._unitObj._bActAccess = true;
                 GameObject Child = Instantiate(builtObj[index - 200], GameMng.I.targetTile.transform) as GameObject;
                 GameMng.I.targetTile._builtObj = Child.GetComponent<Built>();
@@ -202,6 +203,19 @@ public class UnitMng : MonoBehaviour
                 act = ACTIVITY.NONE;
                 NetworkMng.getInstance.SendMsg("TURN");
             }
+        }
+
+        switch (unitindex)
+        {
+            case (int)UNIT.FOREST_WORKER:
+            //GameMng.I.selectedTile._unitObj.GetComponent<Forest_Worker>();
+                break;
+            case (int)UNIT.DESERT_WORKER:
+            //GameMng.I.selectedTile._unitObj.GetComponent<>();
+                break;
+            case (int)UNIT.SEA_WORKER:
+            //GameMng.I.selectedTile._unitObj.GetComponent<Sea_Worker>();
+                break;
         }
     }
 
@@ -252,7 +266,7 @@ public class UnitMng : MonoBehaviour
                     Debug.Log(nKind + ", " + nResult);
                     if (nKind == 1)
                     {
-                        GameMng.I._gold += nResult;
+                        GameMng.I.addGold(nResult);
                     }
                     else if (nKind == 2)
                     {

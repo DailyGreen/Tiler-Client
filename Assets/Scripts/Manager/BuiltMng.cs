@@ -63,13 +63,12 @@ public class BuiltMng : MonoBehaviour
      */
     public void CreateUnit(int cost, int index)
     {
-
-        GameMng.I.minGold(3);       // TODO : 코스트로 변경
         GameMng.I.mouseRaycast(true);                       //캐릭터 정보와 타일 정보를 알아와야해서 false에서 true로 변경
         if (GameMng.I.targetTile._builtObj == null && GameMng.I.targetTile._code < (int)TILE.CAN_MOVE && GameMng.I.targetTile._unitObj == null && Vector2.Distance(GameMng.I.selectedTile.transform.localPosition, GameMng.I.targetTile.transform.localPosition) <= 1.5f)
         {
             if (GameMng.I._gold >= cost)
             {
+                GameMng.I.minGold(3);       // TODO : 코스트로 변경
                 if (index > (int)UNIT.FOREST_WORKER && (int)UNIT.SEA_WORKER > index)
                 {
                     GameMng.I.selectedTile._builtObj._bActAccess = true;

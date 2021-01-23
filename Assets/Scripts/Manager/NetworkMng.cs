@@ -444,6 +444,13 @@ public class NetworkMng : MonoBehaviour
     {
         this.nickName = nickName;
     }
+    /**
+    * @brief 서버 주소 변경
+    */
+    public void setServer(string address)
+    {
+        this.address = address;
+    }
 
     /**
      * @brief 인터넷 연결되어 있는지 확인

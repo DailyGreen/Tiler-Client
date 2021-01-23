@@ -8,19 +8,19 @@ public class DynamicObject : Object
     public int _max_hp;
     //public int _cost;
 
-    public int _uniqueNumber;      // ÇÃ·¹ÀÌ¾î ±¸º° ÄÚµå
+    public int _uniqueNumber;      // í”Œë ˆì´ì–´ êµ¬ë³„ ì½”ë“œ
 
     /*
-     * À¯´Ö ¾Ö´Ï¸ŞÀÌ¼Ç °ü¸®
+     * ìœ ë‹› ì• ë‹ˆë©”ì´ì…˜ ê´€ë¦¬
      */
     public Animator _anim;
     public AnimationClip dyingClip;
 
-    public int createCount = 0;            // »ı¼º½Ã °É¸®´Â ÅÏ ¼ö 
-    public int maxCreateCount = 0;         // »ı¼ºµÇ´Â ÅÏ ¼ö (ÇÑ¹ø Á¤ÇØÁö¸é ¼öÁ¤µÇ¼± ¾ÈµÊ)
+    public int createCount = 0;            // ìƒì„±ì‹œ ê±¸ë¦¬ëŠ” í„´ ìˆ˜ 
+    public int maxCreateCount = 0;         // ìƒì„±ë˜ëŠ” í„´ ìˆ˜ (í•œë²ˆ ì •í•´ì§€ë©´ ìˆ˜ì •ë˜ì„  ì•ˆë¨)
 
-    public int _basedistance = 0;           // ÀÌµ¿ °Å¸® ¶Ç´Â »ı¼º °Å¸®
-    public int _attackdistance = 0;         // °ø°İ °Å¸®
+    public int _basedistance = 0;           // ì´ë™ ê±°ë¦¬ ë˜ëŠ” ìƒì„± ê±°ë¦¬
+    public int _attackdistance = 0;         // ê³µê²© ê±°ë¦¬
 
     public int SaveX, SaveY;
 

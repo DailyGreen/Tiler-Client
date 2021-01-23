@@ -125,6 +125,5 @@ public class Tile : Object
             ((PosX < other.PosX ? other.PosX - PosX : PosX - other.PosX) +
             (PosY < other.PosY ? other.PosY - PosY : PosY - other.PosY) +
             (PosZ < other.PosZ ? other.PosZ - PosZ : PosZ - other.PosZ)) / 2;
-
     }
 }

@@ -6,32 +6,32 @@ using UnityEngine;
 public class HexTileCreate : MonoBehaviour
 {
     /**********
-     * 타일 오브젝트
+     * ?? ????
      */
     public GameObject parentObject;
     public GameObject hextile;
-    public Tile tilestate;      // 프림
+    public Tile tilestate;      // ??
     public GameObject castle;
     public GameObject tilecild;
 
     /**********
-     * 세팅
+     * ??
      */
     public Tile[] starttile = new Tile[24];
     public Tile[] cells;
-    int index = 0;      // 시작 지점 인덱스
-    int i = 0;          // 타일 인덱스
+    int index = 0;      // ?? ?? ???
+    int i = 0;          // ?? ???
     [SerializeField]
     GameObject mainCamera;
 
     /**********
-     * 타일 간격
+     * ?? ??
      */
     public const float tileXOffset = 1.24f;
     public const float tileYOffset = 1.08f;
 
     /**********
-     * .txt 파일 가져오기, 코드 한개씩 가져오기
+     * .txt ?? ????, ?? ??? ????
      */
     TextAsset maptextload;
     String[] mapreadlines;
@@ -47,7 +47,7 @@ public class HexTileCreate : MonoBehaviour
     }
 
     /**
-     * @brief 게임을 종료했을 떄 프리펩에 남아있는 정보 지워주기
+     * @brief ??? ???? 떄 ???? ???? ?? ????
      */
     void OnApplicationQuit()
     {
@@ -58,8 +58,8 @@ public class HexTileCreate : MonoBehaviour
     }
 
     /**
-     * @brief .txt형식의 맵 데이터를 불러옴
-     * @param _filename .txt 파일 이름
+     * @brief .txt??? ? ???? ???
+     * @param _filename .txt ?? ??
      */
     void LoadTilemapfromtxt(string _filename)
     {
@@ -68,7 +68,7 @@ public class HexTileCreate : MonoBehaviour
     }
 
     /**
-     * @brief 헥사 타일맵 생성, 타일 posX posY 설정, 시작 위치 설정
+     * @brief ?? ??? ??, ?? posX posY ??, ?? ?? ??
      */
     void CreateHexTilePostion()
     {
@@ -88,7 +88,7 @@ public class HexTileCreate : MonoBehaviour
                 child.transform.parent = parentObject.transform;
                 cells[i] = child.GetComponent<Tile>();
 
-                // mapinfo.txt  에 start_point 코드일때 starttile 에 타일 스크립트 넣어줌
+                // mapinfo.txt  ? start_point ???? starttile ? ?? ???? ???
                 if (tilestate._code >= (int)TILE.GRASS_START)
                 {
                     starttile[index] = cells[i];
@@ -101,7 +101,7 @@ public class HexTileCreate : MonoBehaviour
                 }
                 else
                 {
-                    child.transform.position = new Vector2(x * tileXOffset + tileXOffset / 2, y * tileYOffset);
+                   child.transform.position = new Vector2(x * tileXOffset + tileXOffset / 2, y * tileYOffset);
                 }
                 SetNeighborTile(x, y, i++);
             }
@@ -110,7 +110,7 @@ public class HexTileCreate : MonoBehaviour
     }
 
     /**
-     * @brief 이웃타일 생성
+     * @brief ???? ??
      */
     void SetNeighborTile(int x, int z, int i)
     {
@@ -140,7 +140,7 @@ public class HexTileCreate : MonoBehaviour
     }
 
     /**
-     * @brief NetworkMng 에서 값 받아와 성 생성 후 고유번호 분리
+     * @brief NetworkMng ?? ? ??? ? ?? ? ???? ??
      */
     void CastleCreate()
     {
@@ -167,7 +167,7 @@ public class HexTileCreate : MonoBehaviour
     }
 
     /**
-    * @brief 시작지점에 성이 생성이 안됐을때 기본 타일값으로 초기화
+    * @brief ????? ?? ??? ???? ?? ????? ???
     */
     void SetTileInfo()
     {
@@ -181,9 +181,9 @@ public class HexTileCreate : MonoBehaviour
     }
 
     /**
-     * @brief 타일 값 알아오기
-     * @param posX 타일 x값
-     * @param posy 타일 y값
+     * @brief ?? ? ????
+     * @param posX ?? x?
+     * @param posy ?? y?
      */
     public Tile GetCell(int posX, int posZ)
     {
@@ -201,9 +201,9 @@ public class HexTileCreate : MonoBehaviour
     }
 
     /**
-    * @brief 타일 코드 초기화(유닛이 이동했을 때, 건물이 부셔졌을 떄) 메모장에 code 를 가져와서 바꿔줌
-    * @param posX GameMng.I.seleteTile.PoX 역활
-    * @param posY GameMng.I.seleteTile.PoY 역활
+    * @brief ?? ?? ???(??? ???? ?, ??? ???? 떄) ???? code ? ???? ???
+    * @param posX GameMng.I.seleteTile.PoX ??
+    * @param posY GameMng.I.seleteTile.PoY ??
     */
     public void TilecodeClear(int posX, int posY)
     {
@@ -214,8 +214,8 @@ public class HexTileCreate : MonoBehaviour
     }
 
     /**
-     * @brief 타일간 거리 찾기
-     * @param cell 선택한 타일
+     * @brief ??? ?? ??
+     * @param cell ??? ??
      */
     public void FindDistancesTo(Tile cell)
     {

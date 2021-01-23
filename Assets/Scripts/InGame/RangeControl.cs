@@ -23,6 +23,16 @@ public class RangeControl : MonoBehaviour
     /**
    * @brief 이동 범위 계산
    */
+   public void moveRange()
+   {
+        for(int i = 0; i < GameMng.I.selectedTile.neighbors.Length; i++)
+        {   
+            if (!GameMng.I.selectedTile && GameMng.I._hextile.cells[i]._code < (int)TILE.CAN_MOVE)
+            {
+                moveRangeTr[i].transform.position= GameMng.I.selectedTile.neighbors[i].transform.position;
+            }   
+        }
+   }
     public void moveRange(int distance)
     {
         int count = 0;
@@ -58,7 +68,6 @@ public class RangeControl : MonoBehaviour
         {
             if (GameMng.I._hextile.cells[i].Distance <= distance && !GameMng.I._hextile.cells[i].Distance.Equals(0))
             {
-
                 if (GameMng.I._hextile.cells[i]._code < (int)TILE.CAN_MOVE && GameMng.I._hextile.cells[i]._builtObj == null && GameMng.I._hextile.cells[i]._unitObj == null)
                 {
                     attackRangeTr[count].transform.position = GameMng.I._hextile.cells[i].transform.position;

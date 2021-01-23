@@ -36,7 +36,7 @@ public class Forest_Soldier_1 : Unit
 
         if (createCount > maxCreateCount - 1)        // 2턴 후에 생성됨
         {
-            GameMng.I._hextile.GetCell(SaveX, SaveY)._builtObj.GetComponent<Built>()._bActAccess = false;
+            GameMng.I._hextile.GetCell(SaveX, SaveY)._builtObj.GetComponent<Built>()._bActAccess = true;
 
             _desc = "뼈와 살을 분리시켜주지!";
 
@@ -48,16 +48,6 @@ public class Forest_Soldier_1 : Unit
 
             GameMng.I.RemoveDelegate(this.waitingCreate);
         }
-    }
-
-    public void walking()
-    {
-        _anim.SetTrigger("isRunning");
-    }
-
-    public void dying()
-    {
-        _anim.SetTrigger("isDying");
     }
 
     void OnDestroy()

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Built : DynamicObject
 {
-    public int _turn = 0;   // 건설시 소모하는 턴수
+    //public int _turn = 0;   // 건설시 소모하는 턴수
 
     void Awake()
     {

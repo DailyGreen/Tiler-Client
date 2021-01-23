@@ -340,13 +340,13 @@ public class NetworkMng : MonoBehaviour
         }
         else if (txt[0].Equals("CREATE_UNIT"))
         {
-            // x값, y값, 유닛 코드, 생성자
-            GameMng.I._BuiltGM.CreateUnit(int.Parse(txt[1]), int.Parse(txt[2]), int.Parse(txt[3]), int.Parse(txt[4]));
+            // x값, y값, 유닛 코드, 생성자, 건물 x값, 건물 y값
+            GameMng.I._BuiltGM.CreateUnit(int.Parse(txt[1]), int.Parse(txt[2]), int.Parse(txt[3]), int.Parse(txt[4]), int.Parse(txt[5]), int.Parse(txt[6]));
         }
         else if (txt[0].Equals("CREATE_BUILT"))
         {
-            // x값, y값, 건물 코드, 생성자
-            GameMng.I._UnitGM.CreateBuilt(int.Parse(txt[1]), int.Parse(txt[2]), int.Parse(txt[3]), int.Parse(txt[4]));
+            // x값, y값, 건물 코드, 생성자, 건물 x값, 건물 y값
+            GameMng.I._UnitGM.CreateBuilt(int.Parse(txt[1]), int.Parse(txt[2]), int.Parse(txt[3]), int.Parse(txt[4]), int.Parse(txt[5]), int.Parse(txt[6]));
         }
         else if (txt[0].Equals("MOVE_UNIT"))
         {
@@ -503,6 +503,14 @@ public class NetworkMng : MonoBehaviour
             return "";
         }
         return html;
+    }
+
+    /**
+     * @brief 서버 주소 변경
+     */
+    public void setServer(string address)
+    {
+        this.address = address;
     }
 
     /**

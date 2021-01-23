@@ -33,6 +33,8 @@ public class Sea_Worker : Worker
                 init();
 
             _desc = "듬직해 보인다.";
+            
+            GameMng.I._hextile.GetCell(GameMng.I.CastlePosX, GameMng.I.CastlePosZ)._builtObj._anim.SetTrigger("isComplete");
 
             GameMng.I.RemoveDelegate(this.waitingCreate);
         }

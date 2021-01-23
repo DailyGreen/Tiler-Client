@@ -656,10 +656,17 @@ MonoBehaviour:
   _desc: "\uB4EC\uC9C1\uD574\uBCF4\uC778\uB2E4"
   _activity: 
   _hp: 10
+  _max_hp: 0
   _uniqueNumber: 0
   _anim: {fileID: 9166615808411763073}
   dyingClip: {fileID: 7400000, guid: 4b412fb651f727b44bc641f2f75542aa, type: 2}
   createCount: 0
+  maxCreateCount: 0
+  _basedistance: 0
+  _attackdistance: 0
+  SaveX: 0
+  SaveY: 0
+  _bActAccess: 1
   _damage: 0
 --- !u!1 &6683901314698154271
 GameObject:

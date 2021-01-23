@@ -12,6 +12,8 @@ public class Castle : Built
         _max_hp = 15;
         _hp = _max_hp;
         _code = (int)BUILT.CASTLE;
+        _anim.SetTrigger("isSpawn");
+
         if (NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))
             _activity.Add(ACTIVITY.WORKER_UNIT_CREATE);
     }

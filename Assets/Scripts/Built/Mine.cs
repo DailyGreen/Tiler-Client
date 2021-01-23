@@ -15,8 +15,8 @@ public class Mine : Built
         _code = (int)BUILT.MINE;
         making = 5;
         maxCreateCount = 3;
-        SaveX = GameMng.I.selectedTile.PosX;
-        SaveY = GameMng.I.selectedTile.PosZ;
+        //SaveX = GameMng.I.selectedTile.PosX;
+        //SaveY = GameMng.I.selectedTile.PosZ;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
         GameMng.I.AddDelegate(this.waitingCreate);
     }
@@ -35,7 +35,6 @@ public class Mine : Built
         // 2턴 후에 생성됨
         if (createCount > maxCreateCount - 1)
         {
-            GameMng.I._hextile.GetCell(SaveX, SaveY)._unitObj.GetComponent<Worker>()._bActAccess = false;
 
             _desc = "골드를 캘 수 있다";
 
@@ -43,6 +42,7 @@ public class Mine : Built
 
             GameMng.I.RemoveDelegate(this.waitingCreate);
 
+            GameMng.I._hextile.GetCell(SaveX, SaveY)._unitObj.GetComponent<Worker>()._bActAccess = true;
             // 내꺼라면
             if (NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))
             {

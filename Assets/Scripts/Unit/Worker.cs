@@ -17,18 +17,18 @@ public class Worker : Unit
         //StartCoroutine("creating");
     }
 
-    IEnumerator creating()
-    {
-        yield return new WaitForSeconds(1);
-        GameMng.I._BuiltGM.act = ACTIVITY.NONE;
-    }
+    //IEnumerator creating()
+    //{
+    //    yield return new WaitForSeconds(1);
+    //    GameMng.I._BuiltGM.act = ACTIVITY.NONE;
+    //}
 
-    public void walking()
-    {
-        _anim.SetTrigger("isRunning");
-    }
-    public void working()
-    {
-        _anim.SetBool("isWorking", true);
-    }
+    //public void walking()
+    //{
+    //    _anim.SetTrigger("isRunning");
+    //}
+    //public void working()
+    //{
+    //    _anim.SetBool("isWorking", true);
+    //}
 }

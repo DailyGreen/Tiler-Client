@@ -22,9 +22,9 @@ public class DynamicObject : Object
     public int _basedistance = 0;           // 이동 거리 또는 생성 거리
     public int _attackdistance = 0;         // 공격 거리
 
-    public int SaveX, SaveY;
+    public int SaveX, SaveY;                // 명령을 내린 오브젝트의 위치를 저장할 변수
 
-    public bool _bActAccess = false;
+    public bool _bActAccess = true;         // 오브젝트들의 행동 제어
   
     public void DestroyMyself()
     {

@@ -16,8 +16,8 @@ public class Turret : Built
         attack = 2;
         _attackdistance = 2;
         maxCreateCount = 3;
-        SaveX = GameMng.I.selectedTile.PosX;
-        SaveY = GameMng.I.selectedTile.PosZ;
+        //SaveX = GameMng.I.selectedTile.PosX;
+        //SaveY = GameMng.I.selectedTile.PosZ;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
 
         GameMng.I.AddDelegate(this.waitingCreate);
@@ -37,14 +37,15 @@ public class Turret : Built
         // 2턴 후에 생성됨
         if (createCount > maxCreateCount - 1)
         {
-            GameMng.I._hextile.GetCell(SaveX, SaveY)._unitObj.GetComponent<Worker>()._bActAccess = false;
 
             _desc = "턴이 끝날 때 사정거리 안의 적을 공격한다";
 
+            GameMng.I._hextile.GetCell(SaveX, SaveY)._unitObj.GetComponent<Worker>()._bActAccess = true;
             _anim.SetTrigger("isSpawn");
-
-            init();
-
+            if (NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))
+            {
+                init();
+            }
             GameMng.I.RemoveDelegate(this.waitingCreate);
         }
     }

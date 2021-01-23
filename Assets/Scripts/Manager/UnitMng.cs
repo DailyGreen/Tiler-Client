@@ -182,21 +182,23 @@ public class UnitMng : MonoBehaviour
      */
     public void Building(int cost, int index)
     {
-        GameMng.I.minGold(3);       // TODO : 코스트로 변경
+        //GameMng.I.minGold(3);       // TODO : 코스트로 변경
         GameMng.I.mouseRaycast(true);                       //캐릭터 정보와 타일 정보를 알아와야해서 false에서 true로 변경
         if (GameMng.I.targetTile._builtObj == null && GameMng.I.targetTile._code < (int)TILE.CAN_MOVE && GameMng.I.targetTile._unitObj == null && Vector2.Distance(GameMng.I.selectedTile.transform.localPosition, GameMng.I.targetTile.transform.localPosition) <= 1.5f)
         {
             if (GameMng.I._gold >= cost)
             {
-                GameMng.I.selectedTile._unitObj._bActAccess = true;
+                GameMng.I.selectedTile._unitObj._bActAccess = false;
                 GameObject Child = Instantiate(builtObj[index - 200], GameMng.I.targetTile.transform) as GameObject;
                 GameMng.I.targetTile._builtObj = Child.GetComponent<Built>();
+                GameMng.I.targetTile._builtObj.gameObject.GetComponent<Built>().SaveX = GameMng.I.selectedTile.PosX;                // 생성하는 건물에게 있는 위치 저장 변수에 해당 유닛 위치값을 저장해줌
+                GameMng.I.targetTile._builtObj.gameObject.GetComponent<Built>().SaveY = GameMng.I.selectedTile.PosZ;
                 GameMng.I.targetTile._code = index;
                 GameMng.I.minGold(cost);
                 GameMng.I._range.rangeTileReset();
                 GameMng.I._range.SelectTileSetting(true);
                 GameMng.I.targetTile._builtObj._uniqueNumber = NetworkMng.getInstance.uniqueNumber;
-                NetworkMng.getInstance.SendMsg(string.Format("CREATE_BUILT:{0}:{1}:{2}:{3}", GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosZ, index, NetworkMng.getInstance.uniqueNumber));
+                NetworkMng.getInstance.SendMsg(string.Format("CREATE_BUILT:{0}:{1}:{2}:{3}:{4}:{5}", GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosZ, index, NetworkMng.getInstance.uniqueNumber, GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosZ));
                 GameMng.I.selectedTile = null;
                 GameMng.I.targetTile = null;
                 act = ACTIVITY.NONE;
@@ -212,12 +214,15 @@ public class UnitMng : MonoBehaviour
      * @param index 유닛 코드
      * @param uniqueNumber 생성자
      */
-    public void CreateBuilt(int posX, int posY, int index, int uniqueNumber)
+    public void CreateBuilt(int posX, int posY, int index, int uniqueNumber, int byX, int byY)
     {
         GameObject Child = Instantiate(builtObj[index - 200], GameMng.I._hextile.GetCell(posX, posY).transform) as GameObject;
         GameMng.I._hextile.GetCell(posX, posY)._builtObj = Child.GetComponent<Built>();
         GameMng.I._hextile.GetCell(posX, posY)._code = index;
         GameMng.I._hextile.GetCell(posX, posY)._builtObj._uniqueNumber = uniqueNumber;
+        GameMng.I._hextile.GetCell(byX, byY)._unitObj._bActAccess = false;
+        GameMng.I._hextile.GetCell(posX, posY)._builtObj.SaveX = byX;
+        GameMng.I._hextile.GetCell(posX, posY)._builtObj.SaveY = byY;
     }
 
     /**

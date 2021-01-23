@@ -425,7 +425,6 @@ public class GameMng : MonoBehaviour
      */
     public void checkActivity(ACTIVITY activity, UnityEngine.UI.Button actButton, UnityEngine.UI.Text actName, UnityEngine.UI.Text actDesc, UnityEngine.UI.Image Frame)
     {
-        Debug.Log(activity);
         switch (activity)
         {
             case ACTIVITY.MOVE:
@@ -476,11 +475,13 @@ public class GameMng : MonoBehaviour
             case ACTIVITY.DESTROY_BUILT:
                 actName.text = "건물 파괴";
                 actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; _BuiltGM.DestroyBuilt(); });
+                canUseActivity(actButton, Frame, 0);
                 break;
             case ACTIVITY.ATTACK:
                 actName.text = "공격";
                 actDesc.text = "두 턴 소요";
                 actButton.onClick.AddListener(delegate { _UnitGM.act = activity; _range.rangeTileReset(); _UnitGM.unitAttacking(); });
+                canUseActivity(actButton, Frame, 0);
                 break;
             case ACTIVITY.SOLDIER_0_UNIT_CREATE:
                 actName.text = "전사1 생성";
@@ -519,7 +520,7 @@ public class GameMng : MonoBehaviour
         }
         if (selectedTile._unitObj != null)
         {
-            if (selectedTile._unitObj._bActAccess)
+            if (!selectedTile._unitObj._bActAccess)
             {
                 actButton.interactable = false;
                 Frame.enabled = true;
@@ -532,7 +533,7 @@ public class GameMng : MonoBehaviour
         }
         else if (selectedTile._builtObj != null)
         {
-            if (selectedTile._builtObj._bActAccess)
+            if (!selectedTile._builtObj._bActAccess)
             {
                 actButton.interactable = false;
                 Frame.enabled = true;

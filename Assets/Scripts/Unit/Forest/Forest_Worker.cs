@@ -8,6 +8,7 @@ public class Forest_Worker : Worker
 
     void Awake()
     {
+        Debug.Log("»ý¼º ¿Ï·á");
         _name = "½£ Á¾Á· ÀÏ²Û";
         _code = (int)UNIT.FOREST_WORKER;
         _max_hp = 10;

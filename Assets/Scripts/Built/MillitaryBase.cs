@@ -13,8 +13,10 @@ public class MillitaryBase : Built
         _hp = _max_hp;
         _code = (int)BUILT.MILLITARY_BASE;
         maxCreateCount = 3;
-        SaveX = GameMng.I.selectedTile.PosX;
-        SaveY = GameMng.I.selectedTile.PosZ;
+
+        //SaveX = GameMng.I.selectedTile.PosX;
+        //SaveY = GameMng.I.selectedTile.PosZ;
+
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
         GameMng.I.AddDelegate(this.waitingCreate);
     }
@@ -28,16 +30,17 @@ public class MillitaryBase : Built
 
     public void waitingCreate()
     {
+
         createCount++;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
         // 2턴 후에 생성됨
         if (createCount > maxCreateCount - 1)
         {
-            GameMng.I._hextile.GetCell(SaveX, SaveY)._unitObj.GetComponent<Worker>()._bActAccess = false;
 
             _desc = "병력들을 생성한다";
 
             _anim.SetTrigger("isSpawn");
+            GameMng.I._hextile.GetCell(SaveX, SaveY)._unitObj.GetComponent<Worker>()._bActAccess = true;
 
             GameMng.I.RemoveDelegate(this.waitingCreate);
             if (NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))

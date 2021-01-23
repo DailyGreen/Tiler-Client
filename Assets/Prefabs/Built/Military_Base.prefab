@@ -1304,6 +1304,11 @@ MonoBehaviour:
   dyingClip: {fileID: 7400000, guid: 6ed0ea17e1bb5034995da045e2981bbf, type: 2}
   createCount: 0
   maxCreateCount: 0
+  _basedistance: 0
+  _attackdistance: 0
+  SaveX: 0
+  SaveY: 0
+  _bActAccess: 1
   _turn: 0
   mine: {fileID: 0}
   farm: {fileID: 0}

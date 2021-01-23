@@ -322,10 +322,17 @@ MonoBehaviour:
   _desc: 
   _activity: 
   _hp: 0
+  _max_hp: 0
   _uniqueNumber: 0
   _anim: {fileID: 3025623002018408699}
   dyingClip: {fileID: 7400000, guid: 286f7bbfb033e8742a105e3a994b8dfd, type: 2}
   createCount: 0
+  maxCreateCount: 0
+  _basedistance: 0
+  _attackdistance: 0
+  SaveX: 0
+  SaveY: 0
+  _bActAccess: 1
   _damage: 0
 --- !u!1 &1432679811271415224
 GameObject:

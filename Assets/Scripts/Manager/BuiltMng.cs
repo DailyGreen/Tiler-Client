@@ -41,6 +41,7 @@ public class BuiltMng : MonoBehaviour
             GameMng.I._range.AttackrangeTileReset();                                                     //클릭시 터렛 공격 범위 초기화
             GameMng.I.mouseRaycast();
             if (GameMng.I.selectedTile)
+            {
                 if (GameMng.I.selectedTile._builtObj != null)
                 {
                     if (GameMng.I.selectedTile._code == (int)BUILT.ATTACK_BUILDING)
@@ -48,6 +49,7 @@ public class BuiltMng : MonoBehaviour
                         GameMng.I.selectedTile._builtObj.GetComponent<Turret>().Attack();
                     }
                 }
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.N))
@@ -64,7 +66,7 @@ public class BuiltMng : MonoBehaviour
     public void CreateUnit(int cost, int index)
     {
 
-        GameMng.I.minGold(3);       // TODO : 코스트로 변경
+        //GameMng.I.minGold(3);       // TODO : 코스트로 변경
         GameMng.I.mouseRaycast(true);                       //캐릭터 정보와 타일 정보를 알아와야해서 false에서 true로 변경
         if (GameMng.I.targetTile._builtObj == null && GameMng.I.targetTile._code < (int)TILE.CAN_MOVE && GameMng.I.targetTile._unitObj == null && Vector2.Distance(GameMng.I.selectedTile.transform.localPosition, GameMng.I.targetTile.transform.localPosition) <= 1.5f)
         {
@@ -72,18 +74,21 @@ public class BuiltMng : MonoBehaviour
             {
                 if (index > (int)UNIT.FOREST_WORKER && (int)UNIT.SEA_WORKER > index)
                 {
-                    GameMng.I.selectedTile._builtObj._bActAccess = true;
+                    GameMng.I.selectedTile._builtObj._bActAccess = false;
                 }
                 GameObject Child = Instantiate(unitobj[index - 300], GameMng.I.targetTile.transform) as GameObject;                 // enum 값 - 300
                 Child.transform.parent = transform.parent;
                 GameMng.I.targetTile._unitObj = Child.GetComponent<Unit>();
+                GameMng.I.targetTile._unitObj.gameObject.GetComponent<Unit>().SaveX = GameMng.I.selectedTile.PosX;              // 생성하는 유닛에게 있는 위치 저장 변수에 해당 건물 위치값을 저장해줌
+                GameMng.I.targetTile._unitObj.gameObject.GetComponent<Unit>().SaveY = GameMng.I.selectedTile.PosZ;
                 GameMng.I.targetTile._code = index;       // 문제는 Awake다
+                GameMng.I.minGold(cost);
                 GameMng.I.targetTile._unitObj._uniqueNumber = NetworkMng.getInstance.uniqueNumber;
                 GameMng.I._range.rangeTileReset();
                 //act = ACTIVITY.ACTING;
                 act = ACTIVITY.NONE;
 
-                NetworkMng.getInstance.SendMsg(string.Format("CREATE_UNIT:{0}:{1}:{2}:{3}", GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosZ, index, NetworkMng.getInstance.uniqueNumber));
+                NetworkMng.getInstance.SendMsg(string.Format("CREATE_UNIT:{0}:{1}:{2}:{3}:{4}:{5}", GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosZ, index, NetworkMng.getInstance.uniqueNumber, GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosZ));
 
                 GameMng.I.cleanActList();
                 GameMng.I.cleanSelected();
@@ -107,13 +112,16 @@ public class BuiltMng : MonoBehaviour
      * @param index 유닛 코드
      * @param uniqueNumber 생성자
      */
-    public void CreateUnit(int posX, int posY, int index, int uniqueNumber)
+    public void CreateUnit(int posX, int posY, int index, int uniqueNumber, int byX, int byY)
     {
         GameObject Child = Instantiate(unitobj[index - 300], GameMng.I._hextile.GetCell(posX, posY).transform) as GameObject;
         Child.transform.parent = transform.parent;
         GameMng.I._hextile.GetCell(posX, posY)._unitObj = Child.GetComponent<Unit>();
         GameMng.I._hextile.GetCell(posX, posY)._code = GameMng.I._hextile.GetCell(posX, posY)._unitObj._code;
         GameMng.I._hextile.GetCell(posX, posY)._unitObj._uniqueNumber = uniqueNumber;
+        GameMng.I._hextile.GetCell(byX, byY)._builtObj._bActAccess = false;
+        GameMng.I._hextile.GetCell(posX, posY)._unitObj.SaveX = byX;
+        GameMng.I._hextile.GetCell(posX, posY)._unitObj.SaveY = byY;
     }
 
     /**
@@ -121,7 +129,6 @@ public class BuiltMng : MonoBehaviour
      */
     public void CreateAirDrop()
     {
-        Debug.Log(nAirDropCount);
         int nPosX, nPosY;
         nPosX = Random.Range(0, GameMng.I.GetMapWidth);
         nPosY = Random.Range(0, GameMng.I.GetMapHeight);
@@ -153,18 +160,17 @@ public class BuiltMng : MonoBehaviour
     {
         NetworkMng.getInstance.SendMsg(string.Format("DESTROY_BUILT:{0}:{1}", GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosZ));
         GameMng.I.selectedTile._builtObj.DestroyMyself();
-        //Destroy(GameMng.I.selectedTile._builtObj.gameObject);
         if (GameMng.I.selectedTile._builtObj._code == (int)BUILT.ATTACK_BUILDING)
         {
             GameMng.I._range.AttackrangeTileReset();
         }
         act = ACTIVITY.NONE;
         GameMng.I.selectedTile._builtObj = null;
-        Debug.Log("여기 수정해야함!!!!!");
         GameMng.I.selectedTile._code = (int)TILE.GRASS;                                                             // 나중에 원래 타일 알아오는법 가져오기
         GameMng.I._range.SelectTileSetting(true);
         GameMng.I.cleanActList();
         GameMng.I.cleanSelected();
+        NetworkMng.getInstance.SendMsg("TURN");
     }
 
     /**

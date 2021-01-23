@@ -35,7 +35,7 @@ public class Mine : Built
         // 2ÅÏ ÈÄ¿¡ »ý¼ºµÊ
         if (createCount > maxCreateCount - 1)
         {
-            GameMng.I._hextile.GetCell(SaveX, SaveY)._unitObj.GetComponent<Worker>()._bActAccess = false;
+            //GameMng.I._hextile.GetCell(SaveX, SaveY)._unitObj.GetComponent<Worker>()._bActAccess = false;
 
             _desc = "°ñµå¸¦ Ä¶ ¼ö ÀÖ´Ù";
 

@@ -33,7 +33,7 @@ public class MillitaryBase : Built
         // 2턴 후에 생성됨
         if (createCount > maxCreateCount - 1)
         {
-            GameMng.I._hextile.GetCell(SaveX, SaveY)._unitObj.GetComponent<Worker>()._bActAccess = false;
+            //GameMng.I._hextile.GetCell(SaveX, SaveY)._unitObj.GetComponent<Worker>()._bActAccess = false;
 
             _desc = "병력들을 생성한다";
 

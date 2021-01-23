@@ -22,6 +22,7 @@ public class GameMng : MonoBehaviour
     public float unitSpeed = 3.0f;
     public float distanceOfTiles = 0.0f;
     public Vector3 CastlePos;
+    public int CastlePosX, CastlePosZ;
 
     public int myTurnCount = 0;                     // 내 차례
     public int myMaxTurnCount = 10;                 // 최대 차례

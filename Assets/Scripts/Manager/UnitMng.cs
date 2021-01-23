@@ -184,6 +184,7 @@ public class UnitMng : MonoBehaviour
     {
         GameMng.I.minGold(3);       // TODO : 코스트로 변경
         GameMng.I.mouseRaycast(true);                       //캐릭터 정보와 타일 정보를 알아와야해서 false에서 true로 변경
+        reversalUnit(GameMng.I.selectedTile._unitObj.transform, GameMng.I.targetTile.transform);
         if (GameMng.I.targetTile._builtObj == null && GameMng.I.targetTile._code < (int)TILE.CAN_MOVE && GameMng.I.targetTile._unitObj == null && Vector2.Distance(GameMng.I.selectedTile.transform.localPosition, GameMng.I.targetTile.transform.localPosition) <= 1.5f)
         {
             if (GameMng.I._gold >= cost)

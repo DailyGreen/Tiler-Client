@@ -657,6 +657,11 @@ MonoBehaviour:
   dyingClip: {fileID: 7400000, guid: 61b46fa3dfa68ae46b55c80304529db3, type: 2}
   createCount: 0
   maxCreateCount: 0
+  _basedistance: 0
+  _attackdistance: 0
+  SaveX: 0
+  SaveY: 0
+  _bActAccess: 1
   _damage: 0
 --- !u!1 &5243901520795453053
 GameObject:

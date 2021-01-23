@@ -21,7 +21,8 @@ public class GameMng : MonoBehaviour
     //public Tile[,] mapTile = new Tile[mapWidth, mapHeight];      // 타일의 2차원 배열 값
     public float unitSpeed = 3.0f;
     public float distanceOfTiles = 0.0f;
-    public Vector3 CastlePos;
+    public Vector3 CastlePos;                                   // 내 성의 Transform 위치값
+    public int CastlePosX, CastlePosZ;                          // 내 성의 X, Z 값
 
     public int myTurnCount = 0;                     // 내 차례
     public int myMaxTurnCount = 10;                 // 최대 차례
@@ -82,6 +83,10 @@ public class GameMng : MonoBehaviour
     UnityEngine.UI.Image[] frameImg;            // 버튼별 클릭 불가 이미지
     [SerializeField]
     ActMessage[] actMessages;                   // 행동 도우미 메세지들
+    [SerializeField]
+    UnityEngine.UI.Image[] playerListImg;       // 유저 목록들 이미지   (tab키 UI)
+    [SerializeField]
+    UnityEngine.UI.Text[] playerListName;       // 유저 목록들 이름   (tab키 UI)
 
 
     // ---- 맵의 가로 세로 크기 읽기
@@ -127,10 +132,17 @@ public class GameMng : MonoBehaviour
         _gold = 100;
         _nowMem = 0;
         _maxMem = 0;
+        
         setMainInterface(false, false, false);
+        
         if (NetworkMng.getInstance.uniqueNumber == NetworkMng.getInstance.firstPlayerUniqueNumber)
             myTurn = true;
+
+        // 턴제 함수에 빈 함수 넣어줌 (안 넣어주면 초기 실행시 에러나기 때문)
         AddDelegate(SampleTurnFunc);
+
+        // 같이 플레이 중인 유저 목록들 보여주기
+        UserListRefresh(NetworkMng.getInstance.firstPlayerUniqueNumber);
     }
 
     void SampleTurnFunc()
@@ -247,6 +259,7 @@ public class GameMng : MonoBehaviour
     {
         countDel();
         refreshMainUI();
+        UserListRefresh(uniqueNumber);
 
         // 누구 차례인지 뿌려주기
         if (NetworkMng.getInstance.uniqueNumber == uniqueNumber)
@@ -425,7 +438,6 @@ public class GameMng : MonoBehaviour
      */
     public void checkActivity(ACTIVITY activity, UnityEngine.UI.Button actButton, UnityEngine.UI.Text actName, UnityEngine.UI.Text actDesc, UnityEngine.UI.Image Frame)
     {
-        Debug.Log(activity);
         switch (activity)
         {
             case ACTIVITY.MOVE:
@@ -476,11 +488,13 @@ public class GameMng : MonoBehaviour
             case ACTIVITY.DESTROY_BUILT:
                 actName.text = "건물 파괴";
                 actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; _BuiltGM.DestroyBuilt(); });
+                canUseActivity(actButton, Frame, 0);
                 break;
             case ACTIVITY.ATTACK:
                 actName.text = "공격";
                 actDesc.text = "두 턴 소요";
                 actButton.onClick.AddListener(delegate { _UnitGM.act = activity; _range.rangeTileReset(); _UnitGM.unitAttacking(); });
+                canUseActivity(actButton, Frame, 0);
                 break;
             case ACTIVITY.SOLDIER_0_UNIT_CREATE:
                 actName.text = "전사1 생성";
@@ -519,7 +533,7 @@ public class GameMng : MonoBehaviour
         }
         if (selectedTile._unitObj != null)
         {
-            if (selectedTile._unitObj._bActAccess)
+            if (!selectedTile._unitObj._bActAccess)
             {
                 actButton.interactable = false;
                 Frame.enabled = true;
@@ -532,7 +546,7 @@ public class GameMng : MonoBehaviour
         }
         else if (selectedTile._builtObj != null)
         {
-            if (selectedTile._builtObj._bActAccess)
+            if (!selectedTile._builtObj._bActAccess)
             {
                 actButton.interactable = false;
                 Frame.enabled = true;
@@ -563,7 +577,8 @@ public class GameMng : MonoBehaviour
             else
             {
                 selectedTile = hit.collider.gameObject.GetComponent<Tile>();
-                _hextile.FindDistancesTo(selectedTile);
+                if (myTurn)
+                    _hextile.FindDistancesTo(selectedTile);
                 _range.SelectTileSetting(false);
             }
         }
@@ -624,6 +639,25 @@ public class GameMng : MonoBehaviour
         objImage.enabled = showObj;
         objectNameTxt.enabled = showObj;
         objectDescTxt.enabled = showObj;
+    }
+
+    /**
+     * @brief 같이 플레이 중인 유저 목록들 보여주기
+     */
+    public void UserListRefresh(int uniqueNumber)
+    {
+        Color color;
+        for (int i = 0; i < NetworkMng.getInstance.v_user.Count; i++)
+        {
+            ColorUtility.TryParseHtmlString(CustomColor.TransColor((COLOR)NetworkMng.getInstance.v_user[i].color), out color);
+            playerListImg[i].gameObject.SetActive(true);
+            playerListImg[i].color = color;
+            playerListName[i].text = NetworkMng.getInstance.v_user[i].nickName;
+            if (NetworkMng.getInstance.v_user[i].uniqueNumber.Equals(uniqueNumber))
+                playerListImg[i].transform.localScale = new Vector3(1.3f, 1.3f, 1);
+            else
+                playerListImg[i].transform.localScale = new Vector3(1, 1, 1);
+        }
     }
 
     /**

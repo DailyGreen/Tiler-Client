@@ -159,6 +159,8 @@ public class HexTileCreate : MonoBehaviour
                 tempVec.z = -20;
 
                 GameMng.I.CastlePos = new Vector3(starttile[NetworkMng.getInstance.v_user[i].startPos].transform.position.x, starttile[NetworkMng.getInstance.v_user[i].startPos].transform.position.y, -20f);
+                GameMng.I.CastlePosX = starttile[NetworkMng.getInstance.v_user[i].startPos].PosX;
+                GameMng.I.CastlePosZ = starttile[NetworkMng.getInstance.v_user[i].startPos].PosZ;
 
                 mainCamera.transform.position = tempVec;
                 Debug.Log("POS2 " + mainCamera.transform.position);

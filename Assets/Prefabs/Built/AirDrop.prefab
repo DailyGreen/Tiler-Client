@@ -56,7 +56,11 @@ MonoBehaviour:
   dyingClip: {fileID: 0}
   createCount: 0
   maxCreateCount: 0
-  _turn: 0
+  _basedistance: 0
+  _attackdistance: 0
+  SaveX: 0
+  SaveY: 0
+  _bActAccess: 0
   mine: {fileID: 0}
   farm: {fileID: 0}
   turret: {fileID: 0}

@@ -24,6 +24,8 @@ public class MainCamera : MonoBehaviour
     private Vector3 limitPos;
     public float fMoveSpeed = 10f;
     private const float borderThickness = 10f;      // 마우스가 스크린 밖에 닿는 범위( 두께 )
+    [SerializeField]
+    private GameObject UserListPanel;
 
     void Start()
     {
@@ -42,9 +44,17 @@ public class MainCamera : MonoBehaviour
             if (GameMng.I.selectedTile)
                 GameMng.I.clickTile(GameMng.I.selectedTile);
         }
-        if (Input.GetKeyDown(KeyCode.Space))
+        else if (Input.GetKeyDown(KeyCode.Space))
         {
             Camera.main.transform.position = GameMng.I.CastlePos;
+        }
+        else if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            UserListPanel.SetActive(true);
+        }
+        else if (Input.GetKeyUp(KeyCode.Tab))
+        {
+            UserListPanel.SetActive(false);
         }
     }
 

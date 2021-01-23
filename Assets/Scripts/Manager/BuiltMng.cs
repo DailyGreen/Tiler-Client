@@ -42,13 +42,15 @@ public class BuiltMng : MonoBehaviour
             GameMng.I._range.AttackrangeTileReset();                                                     //클릭시 터렛 공격 범위 초기화
             GameMng.I.mouseRaycast();
             if (GameMng.I.selectedTile)
+            { 
                 if (GameMng.I.selectedTile._builtObj != null)
                 {
-                    if (GameMng.I.selectedTile._code == (int)BUILT.ATTACK_BUILDING)
+                    if (GameMng.I.selectedTile._code == (int)BUILT.ATTACK_BUILDING && NetworkMng.getInstance.uniqueNumber.Equals(GameMng.I.selectedTile._builtObj._uniqueNumber))
                     {
-                        GameMng.I.selectedTile._builtObj.GetComponent<Turret>().Attack();
+                        GameMng.I._range.attackRange(GameMng.I.selectedTile._builtObj.GetComponent<Turret>()._attackdistance);
                     }
                 }
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.N))

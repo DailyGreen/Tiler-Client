@@ -564,7 +564,10 @@ public class GameMng : MonoBehaviour
             else
             {
                 selectedTile = hit.collider.gameObject.GetComponent<Tile>();
-                _hextile.FindDistancesTo(selectedTile);
+                if (myTurn)
+                {
+                    _hextile.FindDistancesTo(selectedTile);
+                }
                 _range.SelectTileSetting(false);
             }
         }

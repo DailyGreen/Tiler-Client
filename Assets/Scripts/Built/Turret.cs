@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Turret : Built
 {
-    public int attack;   // 공격력
-    public static int cost = 5;   // 건설 비용
+    public int attack;              // 공격력
+    public static int cost = 5;     // 건설 비용
+
+    public Tile tilestate;          // 터렛이 올라가 있는 타일 정보
 
     void Awake()
     {
@@ -24,6 +26,7 @@ public class Turret : Built
     void init()
     {
         _activity.Add(ACTIVITY.DESTROY_BUILT);
+        GameMng.I.AddDelegate(this.Attack);
     }
 
     public void waitingCreate()
@@ -35,11 +38,14 @@ public class Turret : Built
         // 2턴 후에 생성됨
         if (createCount > maxCreateCount - 1)
         {
-            GameMng.I._hextile.GetCell(SaveX, SaveY)._unitObj.GetComponent<Worker>()._bActAccess = true;
-
             _desc = "턴이 끝날 때 사정거리 안의 적을 공격한다";
 
             _anim.SetTrigger("isSpawn");
+
+            GameMng.I.RemoveDelegate(this.waitingCreate);
+
+            GameMng.I._hextile.GetCell(SaveX, SaveY)._unitObj.GetComponent<Worker>()._bActAccess = true;
+            GameMng.I._hextile.GetCell(SaveX, SaveY)._unitObj.GetComponent<Worker>()._anim.SetBool("isWorking", false);
 
             if (NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))
             {
@@ -47,52 +53,54 @@ public class Turret : Built
 
                 //GameMng.I.AddDelegate(this.Attack);
             }
-
-            GameMng.I.RemoveDelegate(this.waitingCreate);
         }
     }
 
     /**
     * @brief 사거리 내에 있는 적을 공격
     */
-    /*public void Attack()
+    public void Attack()
     {
-        if (GameMng.I.selectedTile._code == (int)BUILT.ATTACK_BUILDING)
+        if (GameMng.I.myTurn)
         {
-            tile = gameObject.transform.parent.GetComponent<Tile>();
-            GameMng.I._range.attackRange(_attackdistance);
-            GameMng.I._hextile.FindDistancesTo(tile);
+            tilestate = gameObject.transform.parent.GetComponent<Tile>();
+            GameMng.I._hextile.FindDistancesTo(tilestate);
+            DynamicObject obj = null;
             for (int i = 0; i < GameMng.I._hextile.cells.Length; i++)
             {
                 if (GameMng.I._hextile.cells[i].Distance <= _attackdistance && GameMng.I._hextile.cells[i]._unitObj != null)
                 {
                     if (!GameMng.I._hextile.cells[i]._unitObj._uniqueNumber.Equals(NetworkMng.getInstance.uniqueNumber))
                     {
-                        GameMng.I._hextile.cells[i]._unitObj._hp -= attack;
-                        _anim.SetTrigger("isAttacking");
-                        Debug.Log(string.Format("ATTACK:{0}:{1}:{2}:{3}:{4}",
-            tile.PosX,
-            tile.PosZ,
-            GameMng.I._hextile.cells[i].PosX,
-            GameMng.I._hextile.cells[i].PosZ,
-            attack));
                         NetworkMng.getInstance.SendMsg(string.Format("ATTACK:{0}:{1}:{2}:{3}:{4}",
-            tile.PosX,
-            tile.PosZ,
-            GameMng.I._hextile.cells[i].PosX,
-            GameMng.I._hextile.cells[i].PosZ,
-            attack));
+                        tilestate.PosX,
+                        tilestate.PosZ,
+                        GameMng.I._hextile.cells[i].PosX,
+                        GameMng.I._hextile.cells[i].PosZ, attack));
+                        if (GameMng.I._hextile.cells[i]._unitObj != null) { obj = GameMng.I._hextile.cells[i]._unitObj; }
+                        _anim.SetTrigger("isAttacking");
+
+                        obj._hp -= attack;
+                        if (obj._hp <= 0)
+                        {
+                            // 파괴
+                            obj.DestroyMyself();
+                            GameMng.I._hextile.GetCell(GameMng.I._hextile.cells[i].PosX, GameMng.I._hextile.cells[i].PosZ)._unitObj = null;
+                            GameMng.I._hextile.GetCell(GameMng.I._hextile.cells[i].PosX, GameMng.I._hextile.cells[i].PosZ)._builtObj = null;
+                            GameMng.I._hextile.GetCell(GameMng.I._hextile.cells[i].PosX, GameMng.I._hextile.cells[i].PosZ)._code = 0;            // TODO : 코드 값 원래 값으로
+                        }
+                        obj = null;
                     }
                 }
             }
         }
-    }*/
+    }
 
     void OnDestroy()
     {
         if (createCount < maxCreateCount - 1)
             GameMng.I.RemoveDelegate(waitingCreate);
-        //else
-        //GameMng.I.RemoveDelegate(Attack);
+        else
+            GameMng.I.RemoveDelegate(Attack);
     }
 }

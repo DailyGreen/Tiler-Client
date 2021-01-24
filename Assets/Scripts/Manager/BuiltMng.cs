@@ -73,7 +73,7 @@ public class BuiltMng : MonoBehaviour
         {
             if (GameMng.I._gold >= cost)
             {
-                if (index > (int)UNIT.FOREST_WORKER && (int)UNIT.SEA_WORKER > index)
+                if (index > (int)UNIT.FOREST_WORKER && (int)UNIT.SEA_WORKER > index && index > (int)UNIT.DESERT_WORKER)
                 {
                     GameMng.I.selectedTile._builtObj._bActAccess = false;
                 }

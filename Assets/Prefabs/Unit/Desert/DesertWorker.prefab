@@ -338,6 +338,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1146737661219704635}
   - component: {fileID: 1266514482532402827}
+  - component: {fileID: 6087219957671358603}
   m_Layer: 0
   m_Name: DesertWorker
   m_TagString: Untagged
@@ -385,6 +386,35 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &6087219957671358603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1144248440870661523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba98fb411ba060f4c9364718f9843fb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _code: 0
+  _name: 
+  _desc: 
+  _activity: 
+  _hp: 0
+  _max_hp: 0
+  _uniqueNumber: 0
+  _anim: {fileID: 1266514482532402827}
+  dyingClip: {fileID: 7400000, guid: 367661fcd543c1c48b8a8e9b40a22faa, type: 2}
+  createCount: 0
+  maxCreateCount: 0
+  _basedistance: 0
+  _attackdistance: 0
+  SaveX: 0
+  SaveY: 0
+  _bActAccess: 1
+  _damage: 0
 --- !u!1 &1144310197745201947
 GameObject:
   m_ObjectHideFlags: 0

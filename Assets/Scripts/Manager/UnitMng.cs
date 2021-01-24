@@ -204,7 +204,22 @@ public class UnitMng : MonoBehaviour
                 GameMng.I.targetTile._builtObj._uniqueNumber = NetworkMng.getInstance.uniqueNumber;
 
                 NetworkMng.getInstance.SendMsg(string.Format("CREATE_BUILT:{0}:{1}:{2}:{3}:{4}:{5}", GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosZ, index, NetworkMng.getInstance.uniqueNumber, GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosZ));
-                
+
+                switch (unitindex)
+                {
+                    case (int)UNIT.FOREST_WORKER:
+                        reversalUnit(GameMng.I.selectedTile._unitObj.transform, GameMng.I.targetTile.transform);
+                        GameMng.I.selectedTile._unitObj.GetComponent<Forest_Worker>()._anim.SetBool("isWorking", true);
+                        break;
+                    case (int)UNIT.DESERT_WORKER:
+                        //GameMng.I.selectedTile._unitObj.GetComponent<>();
+                        break;
+                    case (int)UNIT.SEA_WORKER:
+                        reversalUnit(GameMng.I.selectedTile._unitObj.transform, GameMng.I.targetTile.transform);
+                        GameMng.I.selectedTile._unitObj.GetComponent<Sea_Worker>()._anim.SetBool("isWorking", true);
+                        break;
+                }
+
                 GameMng.I.selectedTile = null;
                 GameMng.I.targetTile = null;
 
@@ -213,7 +228,14 @@ public class UnitMng : MonoBehaviour
                 NetworkMng.getInstance.SendMsg("TURN");
             }
         }
-        
+        else if (GameMng.I.targetTile._builtObj != null || GameMng.I.targetTile._unitObj != null)
+        {
+            GameMng.I.cleanActList();
+            GameMng.I.cleanSelected();
+            GameMng.I._range.rangeTileReset();
+            act = ACTIVITY.NONE;
+        }
+
         switch (unitindex)
         {
             case (int)UNIT.FOREST_WORKER:
@@ -248,6 +270,21 @@ public class UnitMng : MonoBehaviour
         GameMng.I._hextile.GetCell(byX, byY)._unitObj._bActAccess = false;
         GameMng.I._hextile.GetCell(posX, posY)._builtObj.SaveX = byX;
         GameMng.I._hextile.GetCell(posX, posY)._builtObj.SaveY = byY;
+
+        switch (GameMng.I._hextile.GetCell(byX, byY)._code)
+        {
+            case (int)UNIT.FOREST_WORKER:
+                reversalUnit(GameMng.I._hextile.GetCell(byX, byY)._unitObj.transform, GameMng.I._hextile.GetCell(posX, posY).transform);
+                GameMng.I._hextile.GetCell(byX, byY)._unitObj.GetComponent<Forest_Worker>()._anim.SetBool("isWorking", true);
+                break;
+            case (int)UNIT.DESERT_WORKER:
+                //GameMng.I.selectedTile._unitObj.GetComponent<>();
+                break;
+            case (int)UNIT.SEA_WORKER:
+                reversalUnit(GameMng.I._hextile.GetCell(byX, byY)._unitObj.transform, GameMng.I._hextile.GetCell(posX, posY).transform);
+                GameMng.I._hextile.GetCell(byX, byY)._unitObj.GetComponent<Sea_Worker>()._anim.SetBool("isWorking", true);
+                break;
+        }
     }
 
     /**

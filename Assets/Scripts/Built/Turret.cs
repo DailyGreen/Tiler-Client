@@ -24,6 +24,7 @@ public class Turret : Built
     void init()
     {
         _activity.Add(ACTIVITY.DESTROY_BUILT);
+        //GameMng.I.AddDelegate(this.Attack);
     }
 
     public void waitingCreate()
@@ -44,8 +45,6 @@ public class Turret : Built
             if (NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))
             {
                 init();
-
-                //GameMng.I.AddDelegate(this.Attack);
             }
 
             GameMng.I.RemoveDelegate(this.waitingCreate);

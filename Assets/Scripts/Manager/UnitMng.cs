@@ -205,6 +205,21 @@ public class UnitMng : MonoBehaviour
 
                 NetworkMng.getInstance.SendMsg(string.Format("CREATE_BUILT:{0}:{1}:{2}:{3}:{4}:{5}", GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosZ, index, NetworkMng.getInstance.uniqueNumber, GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosZ));
                 
+                switch (unitindex)
+                {
+                    case (int)UNIT.FOREST_WORKER:
+                        reversalUnit(GameMng.I.selectedTile._unitObj.transform, GameMng.I.targetTile.transform);
+                        GameMng.I.selectedTile._unitObj.GetComponent<Forest_Worker>()._anim.SetBool("isWorking", true);
+                        break;
+                    case (int)UNIT.DESERT_WORKER:
+                        //GameMng.I.selectedTile._unitObj.GetComponent<>();
+                        break;
+                    case (int)UNIT.SEA_WORKER:
+                        reversalUnit(GameMng.I.selectedTile._unitObj.transform, GameMng.I.targetTile.transform);
+                        GameMng.I.selectedTile._unitObj.GetComponent<Sea_Worker>()._anim.SetBool("isWorking", true);
+                        break;
+                }
+
                 GameMng.I.selectedTile = null;
                 GameMng.I.targetTile = null;
 
@@ -213,18 +228,12 @@ public class UnitMng : MonoBehaviour
                 NetworkMng.getInstance.SendMsg("TURN");
             }
         }
-        
-        switch (unitindex)
+        else if (GameMng.I.targetTile._builtObj != null || GameMng.I.targetTile._unitObj != null)
         {
-            case (int)UNIT.FOREST_WORKER:
-                //GameMng.I.selectedTile._unitObj.GetComponent<Forest_Worker>();
-                break;
-            case (int)UNIT.DESERT_WORKER:
-                //GameMng.I.selectedTile._unitObj.GetComponent<>();
-                break;
-            case (int)UNIT.SEA_WORKER:
-                //GameMng.I.selectedTile._unitObj.GetComponent<Sea_Worker>();
-                break;
+            GameMng.I.cleanActList();
+            GameMng.I.cleanSelected();
+            GameMng.I._range.rangeTileReset();
+            act = ACTIVITY.NONE;
         }
     }
 

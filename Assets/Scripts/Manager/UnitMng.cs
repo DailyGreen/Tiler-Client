@@ -257,6 +257,21 @@ public class UnitMng : MonoBehaviour
         GameMng.I._hextile.GetCell(byX, byY)._unitObj._bActAccess = false;
         GameMng.I._hextile.GetCell(posX, posY)._builtObj.SaveX = byX;
         GameMng.I._hextile.GetCell(posX, posY)._builtObj.SaveY = byY;
+
+        switch (GameMng.I._hextile.GetCell(byX, byY)._code)
+        {
+            case (int)UNIT.FOREST_WORKER:
+                reversalUnit(GameMng.I._hextile.GetCell(byX, byY)._unitObj.transform, GameMng.I._hextile.GetCell(posX, posY).transform);
+                GameMng.I._hextile.GetCell(byX, byY)._unitObj.GetComponent<Forest_Worker>()._anim.SetBool("isWorking", true);
+                break;
+            case (int)UNIT.DESERT_WORKER:
+                //GameMng.I.selectedTile._unitObj.GetComponent<>();
+                break;
+            case (int)UNIT.SEA_WORKER:
+                reversalUnit(GameMng.I._hextile.GetCell(byX, byY)._unitObj.transform, GameMng.I._hextile.GetCell(posX, posY).transform);
+                GameMng.I._hextile.GetCell(byX, byY)._unitObj.GetComponent<Sea_Worker>()._anim.SetBool("isWorking", true);
+                break;
+        }
     }
 
     /**

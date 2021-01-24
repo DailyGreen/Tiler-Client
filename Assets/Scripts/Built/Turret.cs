@@ -37,6 +37,7 @@ public class Turret : Built
         if (createCount > maxCreateCount - 1)
         {
             GameMng.I._hextile.GetCell(SaveX, SaveY)._unitObj.GetComponent<Worker>()._bActAccess = true;
+            GameMng.I._hextile.GetCell(SaveX, SaveY)._unitObj.GetComponent<Worker>()._anim.SetBool("isWorking", false);
 
             _desc = "턴이 끝날 때 사정거리 안의 적을 공격한다";
 

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Forest_Witch_1 : Unit
+public class Desert_Witch_1 : Unit
 {
     public static int cost = 4;
     void Awake()
@@ -36,7 +36,7 @@ public class Forest_Witch_1 : Unit
         {
             GameMng.I._hextile.GetCell(SaveX, SaveY)._builtObj.GetComponent<Built>()._bActAccess = true;
 
-            _desc = "せせせせせせせせせせせせせせせせ";
+            _desc = "けけけけけけけけけ";
 
             _anim.SetTrigger("isSpawn");
 

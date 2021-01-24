@@ -1076,6 +1076,7 @@ GameObject:
   m_Component:
   - component: {fileID: 903538647005540010}
   - component: {fileID: 2865788225152365020}
+  - component: {fileID: 4351074962764484284}
   m_Layer: 0
   m_Name: DesertSoldier_1
   m_TagString: Untagged
@@ -1132,6 +1133,35 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &4351074962764484284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 909262492129461728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f15efbf896b30f4eab0ef9ae1df92f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _code: 0
+  _name: 
+  _desc: 
+  _activity: 
+  _hp: 0
+  _max_hp: 0
+  _uniqueNumber: 0
+  _anim: {fileID: 2865788225152365020}
+  dyingClip: {fileID: 7400000, guid: 6378aad88cad0414d8f040f0e588d885, type: 2}
+  createCount: 0
+  maxCreateCount: 0
+  _basedistance: 0
+  _attackdistance: 0
+  SaveX: 0
+  SaveY: 0
+  _bActAccess: 1
+  _damage: 0
 --- !u!1 &909342475586831096
 GameObject:
   m_ObjectHideFlags: 0

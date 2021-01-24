@@ -584,6 +584,7 @@ GameObject:
   m_Component:
   - component: {fileID: 39700448483162916}
   - component: {fileID: 37013025158612694}
+  - component: {fileID: 7901164170002617267}
   m_Layer: 0
   m_Name: DersertWitch_0
   m_TagString: Untagged
@@ -634,6 +635,35 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &7901164170002617267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 37703456005151016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5513e135c05eaa46909f6c99c76a7a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _code: 0
+  _name: 
+  _desc: 
+  _activity: 
+  _hp: 0
+  _max_hp: 0
+  _uniqueNumber: 0
+  _anim: {fileID: 37013025158612694}
+  dyingClip: {fileID: 7400000, guid: dc1f38718b798f845a5ee0d6dbf68ab4, type: 2}
+  createCount: 0
+  maxCreateCount: 0
+  _basedistance: 0
+  _attackdistance: 0
+  SaveX: 0
+  SaveY: 0
+  _bActAccess: 1
+  _damage: 0
 --- !u!1 &37810653707961814
 GameObject:
   m_ObjectHideFlags: 0

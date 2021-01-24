@@ -932,6 +932,7 @@ MonoBehaviour:
   address: 127.0.0.1
   myRoom: 0
   uniqueNumber: 0
+  myTribe: 0
   mainPanel: {fileID: 1170754498625171}
   loadingPanel: {fileID: 1754629225}
   loginPanel: {fileID: 2114617591}
@@ -2290,6 +2291,7 @@ MonoBehaviour:
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0
+  m_ShouldActivateOnSelect: 1
 --- !u!114 &281932475
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8324,6 +8326,7 @@ MonoBehaviour:
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0
+  m_ShouldActivateOnSelect: 1
 --- !u!114 &1015799337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15186,6 +15189,7 @@ MonoBehaviour:
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0
+  m_ShouldActivateOnSelect: 1
 --- !u!114 &1962123778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15462,6 +15466,7 @@ MonoBehaviour:
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0
+  m_ShouldActivateOnSelect: 1
 --- !u!114 &1995023331
 MonoBehaviour:
   m_ObjectHideFlags: 0

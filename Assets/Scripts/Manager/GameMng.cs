@@ -377,6 +377,7 @@ public class GameMng : MonoBehaviour
         {
             obj = tile._unitObj;
             objImage.sprite = getObjSprite(tile._unitObj._code);
+            objImage.SetNativeSize();
             setMainInterface();
         }
         else
@@ -727,6 +728,7 @@ public class GameMng : MonoBehaviour
     */
     public Sprite getObjSprite(int code)
     {
+
         switch (code)
         {
             case (int)TILE.GRASS:
@@ -751,6 +753,22 @@ public class GameMng : MonoBehaviour
                 return objSprite[13];
             case (int)UNIT.FOREST_SOLDIER_1:
                 return objSprite[14];
+            case (int)UNIT.SEA_WORKER:
+                return objSprite[18];
+            case (int)UNIT.SEA_SOLDIER_0:
+                return objSprite[19];
+            case (int)UNIT.DESERT_WORKER:
+                return objSprite[24];
+            case (int)UNIT.DESERT_SOLDIER_0:
+                return objSprite[25];
+            case (int)UNIT.DESERT_SOLDIER_1:
+                return objSprite[26];
+            case (int)UNIT.DESERT_SOLDIER_2:
+                return objSprite[27];
+            case (int)UNIT.DESERT_WITCH_0:
+                return objSprite[28];
+            case (int)UNIT.DESERT_WITCH_1:
+                return objSprite[29];
             case (int)BUILT.MINE:
                 setMainInterface(true, false);
                 return objSprite[0];

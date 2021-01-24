@@ -9,7 +9,7 @@ public class Sea_Worker : Worker
     void Awake()
     {
         _name = "π∞ ¡æ¡∑ ¿œ≤€";
-        _code = (int)UNIT.FOREST_WORKER;
+        _code = (int)UNIT.SEA_WORKER;
         _max_hp = 10;
         _hp = _max_hp;
         maxCreateCount = 2;

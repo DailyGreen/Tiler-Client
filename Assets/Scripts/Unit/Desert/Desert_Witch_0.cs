@@ -2,15 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Forest_Witch_1 : Unit
+public class Desert_Witch_0 : Unit
 {
     public static int cost = 4;
     void Awake()
     {
-        _name = "狛紫 1";
+        _name = "狛紫 0";
         _max_hp = 20;
         _hp = _max_hp;
-        _code = (int)UNIT.FOREST_SOLDIER_1;
+        _code = (int)UNIT.DESERT_WITCH_0;
         _damage = 10;
         _basedistance = 1;
         _attackdistance = 2;
@@ -36,7 +36,7 @@ public class Forest_Witch_1 : Unit
         {
             GameMng.I._hextile.GetCell(SaveX, SaveY)._builtObj.GetComponent<Built>()._bActAccess = true;
 
-            _desc = "せせせせせせせせせせせせせせせせ";
+            _desc = "けけけけけけけけけ";
 
             _anim.SetTrigger("isSpawn");
 

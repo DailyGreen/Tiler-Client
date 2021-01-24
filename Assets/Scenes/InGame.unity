@@ -3167,7 +3167,6 @@ MonoBehaviour:
   SaveX: 0
   SaveY: 0
   _bActAccess: 0
-  _turn: 0
   mine: {fileID: 297502588}
   farm: {fileID: 1097345920049463511}
   turret: {fileID: 2141912703}
@@ -3423,6 +3422,7 @@ MonoBehaviour:
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0
+  m_ShouldActivateOnSelect: 1
 --- !u!114 &410569276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6040,6 +6040,8 @@ MonoBehaviour:
   unitSpeed: 3
   distanceOfTiles: 0
   CastlePos: {x: 0, y: 0, z: 0}
+  CastlePosX: 0
+  CastlePosZ: 0
   myTurnCount: 0
   myMaxTurnCount: 10
   myTurn: 0
@@ -6066,6 +6068,21 @@ MonoBehaviour:
   - {fileID: 21300000, guid: b08e570699f1c8a4f9cc388204aef3bc, type: 3}
   - {fileID: 21300012, guid: b08e570699f1c8a4f9cc388204aef3bc, type: 3}
   - {fileID: 21300014, guid: b08e570699f1c8a4f9cc388204aef3bc, type: 3}
+  - {fileID: 21300014, guid: b08e570699f1c8a4f9cc388204aef3bc, type: 3}
+  - {fileID: 21300014, guid: b08e570699f1c8a4f9cc388204aef3bc, type: 3}
+  - {fileID: 21300014, guid: b08e570699f1c8a4f9cc388204aef3bc, type: 3}
+  - {fileID: 21300114, guid: 5cf1b4629c7cb104e98d369448084abd, type: 3}
+  - {fileID: 21300176, guid: 5cf1b4629c7cb104e98d369448084abd, type: 3}
+  - {fileID: 21300014, guid: b08e570699f1c8a4f9cc388204aef3bc, type: 3}
+  - {fileID: 21300014, guid: b08e570699f1c8a4f9cc388204aef3bc, type: 3}
+  - {fileID: 21300014, guid: b08e570699f1c8a4f9cc388204aef3bc, type: 3}
+  - {fileID: 21300014, guid: b08e570699f1c8a4f9cc388204aef3bc, type: 3}
+  - {fileID: 21300002, guid: e48ddf4fb7304ce4ab48711eb6617a57, type: 3}
+  - {fileID: 21300106, guid: e48ddf4fb7304ce4ab48711eb6617a57, type: 3}
+  - {fileID: 21300100, guid: e48ddf4fb7304ce4ab48711eb6617a57, type: 3}
+  - {fileID: 21300014, guid: e48ddf4fb7304ce4ab48711eb6617a57, type: 3}
+  - {fileID: 21300102, guid: e48ddf4fb7304ce4ab48711eb6617a57, type: 3}
+  - {fileID: 21300104, guid: e48ddf4fb7304ce4ab48711eb6617a57, type: 3}
   objectNameTxt: {fileID: 1183078787967441958}
   objectDescTxt: {fileID: 1183078787327756445}
   hpText: {fileID: 1183078788406832961}
@@ -13571,7 +13588,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 5b0c2a85106d71d4eafb13127200eaa0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.5882353}
   m_FlipX: 0
@@ -14924,11 +14941,11 @@ MonoBehaviour:
   - {fileID: 5243883629224959465, guid: 96d08809f9fb5a645b2666ddeedbfe98, type: 3}
   - {fileID: 5243883629224959465, guid: 96d08809f9fb5a645b2666ddeedbfe98, type: 3}
   - {fileID: 5243883629224959465, guid: 96d08809f9fb5a645b2666ddeedbfe98, type: 3}
-  - {fileID: 5243883629224959465, guid: 96d08809f9fb5a645b2666ddeedbfe98, type: 3}
-  - {fileID: 5243883629224959465, guid: 96d08809f9fb5a645b2666ddeedbfe98, type: 3}
-  - {fileID: 5243883629224959465, guid: 96d08809f9fb5a645b2666ddeedbfe98, type: 3}
+  - {fileID: 1144248440870661523, guid: a91ad51c3c370b843bd7582691a300e2, type: 3}
+  - {fileID: 5527615407251490104, guid: 84afb1947636d254c81880ef45477479, type: 3}
+  - {fileID: 909262492129461728, guid: 60a1176d019a9554b99153884ecb6f11, type: 3}
   - {fileID: 5141796532514620583, guid: 4f63ab3206308fc42910a3c6e0ce4bf9, type: 3}
-  - {fileID: 3549142336674770887, guid: 23e88a0b24dfd4f4084b79af577f85b2, type: 3}
+  - {fileID: 37703456005151016, guid: 98ae0d3274badec4482f23c6136f2df3, type: 3}
   - {fileID: 3549142336674770887, guid: 23e88a0b24dfd4f4084b79af577f85b2, type: 3}
   AirDropobj: {fileID: 6037629846481577511, guid: 25eba5b7256c874468747a19e105d280, type: 3}
 --- !u!4 &1923391221
@@ -17117,7 +17134,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 9a6b37fd12d17494f9332faeb421565c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.39215687}
   m_FlipX: 0

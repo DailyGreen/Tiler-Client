@@ -28,6 +28,7 @@ public class NetworkMng : MonoBehaviour
     public int myRoom = 0;
     public int uniqueNumber = 0;        // 나 자신을 가리키는 고유 숫자
     public TRIBE myTribe = TRIBE.FOREST;
+    public COLOR myColor = COLOR.COLOR_0;
 
     public GameObject mainPanel;
     public GameObject loadingPanel;
@@ -255,6 +256,30 @@ public class NetworkMng : MonoBehaviour
                     break;
                 }
             }
+            v_user.RemoveAt(i);
+
+            _roomGM.roomRefresh();
+        }
+        // 게임 도중 방에 있던 사람 중 누군가 나감 SOMEONE_EXIT 와는 상황이 조금 다름
+        else if (txt[0].Equals("LOGOUT"))
+        {
+            Debug.Log("COME IN LOGOUT");
+
+            if (v_user.Count == 0)
+                return;
+
+            int i;
+            for (i = 0; i < v_user.Count; i++)
+            {
+                if (v_user[i].uniqueNumber.Equals(int.Parse(txt[1])))
+                {
+                    break;
+                }
+            }
+
+            Debug.Log("LOGOUT " + i);
+            Debug.Log("USER MAX " + v_user.Count);
+
             v_user.RemoveAt(i);
 
             _roomGM.roomRefresh();

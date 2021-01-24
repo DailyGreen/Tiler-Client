@@ -58,8 +58,12 @@ public class RangeControl : MonoBehaviour
         {
             if (GameMng.I._hextile.cells[i].Distance <= distance && !GameMng.I._hextile.cells[i].Distance.Equals(0))
             {
-
                 if (GameMng.I._hextile.cells[i]._code < (int)TILE.CAN_MOVE && GameMng.I._hextile.cells[i]._builtObj == null && GameMng.I._hextile.cells[i]._unitObj == null)
+                {
+                    attackRangeTr[count].transform.position = GameMng.I._hextile.cells[i].transform.position;
+                    count++;
+                }
+                else if (GameMng.I._hextile.cells[i]._code < (int)TILE.CAN_MOVE && GameMng.I._hextile.cells[i]._builtObj == null && GameMng.I._hextile.cells[i]._unitObj == null)
                 {
                     attackRangeTr[count].transform.position = GameMng.I._hextile.cells[i].transform.position;
                     count++;

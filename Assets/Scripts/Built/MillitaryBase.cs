@@ -38,6 +38,7 @@ public class MillitaryBase : Built
             GameMng.I.RemoveDelegate(this.waitingCreate);
 
             GameMng.I._hextile.GetCell(SaveX, SaveY)._unitObj.GetComponent<Worker>()._bActAccess = true;
+            GameMng.I._hextile.GetCell(SaveX, SaveY)._unitObj.GetComponent<Worker>()._anim.SetBool("isWorking", false);
 
             if (NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))
             {

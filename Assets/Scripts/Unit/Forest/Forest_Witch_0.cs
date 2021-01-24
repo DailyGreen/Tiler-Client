@@ -15,8 +15,6 @@ public class Forest_Witch_0 : Unit
         _basedistance = 1;
         _attackdistance = 2;
         maxCreateCount = 3;
-        SaveX = GameMng.I.selectedTile.PosX;
-        SaveY = GameMng.I.selectedTile.PosZ;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
 
         GameMng.I._BuiltGM.act = ACTIVITY.NONE;

@@ -282,6 +282,7 @@ public class RoomMng : MonoBehaviour
     }
     public void wantChangeColor (int colorNum)
     {
+        NetworkMng.getInstance.myColor = (COLOR)colorNum;
         NetworkMng.getInstance.SendMsg(string.Format("COLOR:{0}", colorNum));
     }
 

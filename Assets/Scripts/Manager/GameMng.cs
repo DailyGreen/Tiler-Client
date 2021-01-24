@@ -78,6 +78,8 @@ public class GameMng : MonoBehaviour
     [SerializeField]
     UnityEngine.UI.Text turnCountText;          // 턴 수
     [SerializeField]
+    UnityEngine.UI.Image turnDescImage;         // 누구 턴인지 이미지 (색 입혀서)
+    [SerializeField]
     UnityEngine.UI.Text turnDescText;           // 누구 턴인지 설명
     [SerializeField]
     UnityEngine.UI.Image[] frameImg;            // 버튼별 클릭 불가 이미지
@@ -257,6 +259,8 @@ public class GameMng : MonoBehaviour
     */
     public void turnManage(int uniqueNumber)
     {
+        Color color;
+
         countDel();
         refreshMainUI();
         UserListRefresh(uniqueNumber);
@@ -266,6 +270,8 @@ public class GameMng : MonoBehaviour
         {
             this.myTurn = true;
             this.turnDescText.text = "내 차례";
+            ColorUtility.TryParseHtmlString(CustomColor.TransColor(NetworkMng.getInstance.myColor), out color);
+            turnDescImage.color = color;
 
             return;
         }
@@ -275,6 +281,8 @@ public class GameMng : MonoBehaviour
             if (NetworkMng.getInstance.v_user[i].uniqueNumber.Equals(uniqueNumber))
             {
                 this.turnDescText.text = NetworkMng.getInstance.v_user[i].nickName + " 차례";
+                ColorUtility.TryParseHtmlString(CustomColor.TransColor((COLOR)NetworkMng.getInstance.v_user[i].color), out color);
+                turnDescImage.color = color;
                 break;
             }
         }
@@ -377,6 +385,7 @@ public class GameMng : MonoBehaviour
         {
             obj = tile._unitObj;
             objImage.sprite = getObjSprite(tile._unitObj._code);
+            objImage.SetNativeSize();
             setMainInterface();
         }
         else
@@ -577,8 +586,7 @@ public class GameMng : MonoBehaviour
             else
             {
                 selectedTile = hit.collider.gameObject.GetComponent<Tile>();
-                if (myTurn)
-                    _hextile.FindDistancesTo(selectedTile);
+                _hextile.FindDistancesTo(selectedTile);
                 _range.SelectTileSetting(false);
             }
         }
@@ -751,6 +759,22 @@ public class GameMng : MonoBehaviour
                 return objSprite[13];
             case (int)UNIT.FOREST_SOLDIER_1:
                 return objSprite[14];
+            case (int)UNIT.SEA_WORKER:
+                return objSprite[18];
+            case (int)UNIT.SEA_SOLDIER_0:
+                return objSprite[19];
+            case (int)UNIT.DESERT_WORKER:
+                return objSprite[24];
+            case (int)UNIT.DESERT_SOLDIER_0:
+                return objSprite[25];
+            case (int)UNIT.DESERT_SOLDIER_1:
+                return objSprite[26];
+            case (int)UNIT.DESERT_SOLDIER_2:
+                return objSprite[27];
+            case (int)UNIT.DESERT_WITCH_0:
+                return objSprite[28];
+            case (int)UNIT.DESERT_WITCH_1:
+                return objSprite[29];
             case (int)BUILT.MINE:
                 setMainInterface(true, false);
                 return objSprite[0];

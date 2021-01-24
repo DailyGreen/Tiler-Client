@@ -78,6 +78,8 @@ public class GameMng : MonoBehaviour
     [SerializeField]
     UnityEngine.UI.Text turnCountText;          // 턴 수
     [SerializeField]
+    UnityEngine.UI.Image turnDescImage;         // 누구 턴인지 이미지 (색 입혀서)
+    [SerializeField]
     UnityEngine.UI.Text turnDescText;           // 누구 턴인지 설명
     [SerializeField]
     UnityEngine.UI.Image[] frameImg;            // 버튼별 클릭 불가 이미지
@@ -257,6 +259,8 @@ public class GameMng : MonoBehaviour
     */
     public void turnManage(int uniqueNumber)
     {
+        Color color;
+
         countDel();
         refreshMainUI();
         UserListRefresh(uniqueNumber);
@@ -266,6 +270,8 @@ public class GameMng : MonoBehaviour
         {
             this.myTurn = true;
             this.turnDescText.text = "내 차례";
+            ColorUtility.TryParseHtmlString(CustomColor.TransColor(NetworkMng.getInstance.myColor), out color);
+            turnDescImage.color = color;
 
             return;
         }
@@ -275,6 +281,8 @@ public class GameMng : MonoBehaviour
             if (NetworkMng.getInstance.v_user[i].uniqueNumber.Equals(uniqueNumber))
             {
                 this.turnDescText.text = NetworkMng.getInstance.v_user[i].nickName + " 차례";
+                ColorUtility.TryParseHtmlString(CustomColor.TransColor((COLOR)NetworkMng.getInstance.v_user[i].color), out color);
+                turnDescImage.color = color;
                 break;
             }
         }

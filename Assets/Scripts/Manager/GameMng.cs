@@ -145,6 +145,18 @@ public class GameMng : MonoBehaviour
 
         // 같이 플레이 중인 유저 목록들 보여주기
         UserListRefresh(NetworkMng.getInstance.firstPlayerUniqueNumber);
+
+        // 누구 턴인지 색 변경
+        for (int i = 0; i < NetworkMng.getInstance.v_user.Count; i++)
+        {
+            if (NetworkMng.getInstance.v_user[i].uniqueNumber.Equals(NetworkMng.getInstance.firstPlayerUniqueNumber))
+            {
+                Color color;
+                ColorUtility.TryParseHtmlString(CustomColor.TransColor((COLOR)NetworkMng.getInstance.v_user[i].color), out color);
+                turnDescImage.color = color;
+                break;
+            }
+        }
     }
 
     void SampleTurnFunc()
@@ -409,7 +421,6 @@ public class GameMng : MonoBehaviour
             {
                 if (obj._uniqueNumber.Equals(NetworkMng.getInstance.v_user[i].uniqueNumber))
                 {
-                    Debug.Log("in");
                     ColorUtility.TryParseHtmlString(CustomColor.TransColor((COLOR)NetworkMng.getInstance.v_user[i].color), out color);
                     maskImage.color = color;
                 }
@@ -651,6 +662,7 @@ public class GameMng : MonoBehaviour
 
     /**
      * @brief 같이 플레이 중인 유저 목록들 보여주기
+     * @param uniqueNumber 현재 턴의 유저
      */
     public void UserListRefresh(int uniqueNumber)
     {
@@ -688,7 +700,8 @@ public class GameMng : MonoBehaviour
         if (_hextile.GetCell(posX, posY)._unitObj != null) obj = _hextile.GetCell(posX, posY)._unitObj;
         else if (_hextile.GetCell(posX, posY)._builtObj != null) obj = _hextile.GetCell(posX, posY)._builtObj;
         else return;
-        _UnitGM.reversalUnit(obj.transform, _hextile.GetCell(toX, toY).transform);
+        if(_hextile.GetCell(posX,posY)._builtObj == null)
+            _UnitGM.reversalUnit(obj.transform, _hextile.GetCell(toX, toY).transform);
         obj._anim.SetTrigger("isAttacking");
 
         // 공격받는 대상의 HP 가 줄어들게 해줌
@@ -719,7 +732,7 @@ public class GameMng : MonoBehaviour
             //Destroy(obj.gameObject);
             _hextile.GetCell(toX, toY)._unitObj = null;
             _hextile.GetCell(toX, toY)._builtObj = null;
-            _hextile.GetCell(toX, toY)._code = 0;            // TODO : 코드 값 원래 값으로
+            _hextile.TilecodeClear(toX,toY);            // TODO : 코드 값 원래 값으로
         }
 
     }

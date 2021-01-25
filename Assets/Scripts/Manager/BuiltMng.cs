@@ -14,10 +14,8 @@ public class BuiltMng : MonoBehaviour
 
     private int nAirDropCount = 0;
 
-
     void Update()
     {
-
         if (Input.GetMouseButtonDown(0) && act != ACTIVITY.ACTING && GameMng.I._UnitGM.act == ACTIVITY.NONE && !EventSystem.current.IsPointerOverGameObject())
         {
             switch (act)
@@ -36,13 +34,12 @@ public class BuiltMng : MonoBehaviour
             GameMng.I._range.SelectTileSetting(true);
         }
 
-
         if (Input.GetMouseButtonDown(0) && GameMng.I._UnitGM.act == ACTIVITY.NONE && act == ACTIVITY.NONE && !EventSystem.current.IsPointerOverGameObject())
         {
             GameMng.I._range.AttackrangeTileReset();                                                     //클릭시 터렛 공격 범위 초기화
             GameMng.I.mouseRaycast();
             if (GameMng.I.selectedTile)
-            { 
+            {
                 if (GameMng.I.selectedTile._builtObj != null)
                 {
                     if (GameMng.I.selectedTile._code == (int)BUILT.ATTACK_BUILDING && NetworkMng.getInstance.uniqueNumber.Equals(GameMng.I.selectedTile._builtObj._uniqueNumber))
@@ -84,8 +81,6 @@ public class BuiltMng : MonoBehaviour
                 GameMng.I.targetTile._unitObj.gameObject.GetComponent<Unit>().SaveY = GameMng.I.selectedTile.PosZ;
                 GameMng.I.targetTile._code = index;       // 문제는 Awake다
                 GameMng.I.targetTile._unitObj._uniqueNumber = NetworkMng.getInstance.uniqueNumber;
-                GameMng.I._range.rangeTileReset();
-                //act = ACTIVITY.ACTING;
                 act = ACTIVITY.NONE;
 
                 NetworkMng.getInstance.SendMsg(string.Format("CREATE_UNIT:{0}:{1}:{2}:{3}:{4}:{5}", GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosZ, index, NetworkMng.getInstance.uniqueNumber, GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosZ));
@@ -153,34 +148,38 @@ public class BuiltMng : MonoBehaviour
     }
 
     /**
-     * @brief 건물 파괴될때 호출됨
+     * @brief 건물 파괴될때 호출됨 로컬
      */
     public void DestroyBuilt()
     {
+        if (GameMng.I.selectedTile == null) { act = ACTIVITY.NONE; return; }
+
+        Debug.Log(GameMng.I.selectedTile);
         NetworkMng.getInstance.SendMsg(string.Format("DESTROY_BUILT:{0}:{1}", GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosZ));
-        GameMng.I.selectedTile._builtObj.DestroyMyself();
-        //Destroy(GameMng.I.selectedTile._builtObj.gameObject);
         if (GameMng.I.selectedTile._builtObj._code == (int)BUILT.ATTACK_BUILDING)
         {
             GameMng.I._range.AttackrangeTileReset();
+            GameMng.I.RemoveDelegate(GameMng.I.selectedTile._builtObj.GetComponent<Turret>().Attack);
         }
+        GameMng.I.selectedTile._builtObj.DestroyMyself();
+        //Destroy(GameMng.I.selectedTile._builtObj.gameObject);
         act = ACTIVITY.NONE;
         GameMng.I.selectedTile._builtObj = null;
         Debug.Log("여기 수정해야함!!!!!");
-        GameMng.I.selectedTile._code = (int)TILE.GRASS;                                                             // 나중에 원래 타일 알아오는법 가져오기
+        GameMng.I._hextile.TilecodeClear(GameMng.I.selectedTile);
         GameMng.I._range.SelectTileSetting(true);
+        GameMng.I.setMainInterface();
         GameMng.I.cleanActList();
         GameMng.I.cleanSelected();
         NetworkMng.getInstance.SendMsg("TURN");
     }
 
     /**
-     * @brief 건물 파괴될때 호출됨
+     * @brief 건물 파괴될때 호출됨 서버 받아옴
      */
     public void DestroyBuilt(int posX, int posY)
     {
         GameMng.I._hextile.GetCell(posX, posY)._builtObj.DestroyMyself();
-        //Destroy(GameMng.I._hextile.GetCell(posX, posY)._builtObj.gameObject);
         GameMng.I._hextile.GetCell(posX, posY)._builtObj = null;
         GameMng.I._hextile.GetCell(posX, posY)._code = (int)TILE.GRASS;
     }

@@ -15,7 +15,7 @@ public class Turret : Built
         _max_hp = 7;
         _hp = _max_hp;
         _code = (int)BUILT.ATTACK_BUILDING;
-        attack = 2;
+        attack = 5;
         _attackdistance = 2;
         maxCreateCount = 3;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
@@ -50,8 +50,6 @@ public class Turret : Built
             if (NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))
             {
                 init();
-
-                //GameMng.I.AddDelegate(this.Attack);
             }
         }
     }
@@ -61,6 +59,7 @@ public class Turret : Built
     */
     public void Attack()
     {
+        int around = 0;
         if (GameMng.I.myTurn)
         {
             tilestate = gameObject.transform.parent.GetComponent<Tile>();
@@ -72,6 +71,8 @@ public class Turret : Built
                 {
                     if (!GameMng.I._hextile.cells[i]._unitObj._uniqueNumber.Equals(NetworkMng.getInstance.uniqueNumber))
                     {
+                        Debug.Log("around unit: " + around);
+                        around++;
                         NetworkMng.getInstance.SendMsg(string.Format("ATTACK:{0}:{1}:{2}:{3}:{4}",
                         tilestate.PosX,
                         tilestate.PosZ,
@@ -87,7 +88,7 @@ public class Turret : Built
                             obj.DestroyMyself();
                             GameMng.I._hextile.GetCell(GameMng.I._hextile.cells[i].PosX, GameMng.I._hextile.cells[i].PosZ)._unitObj = null;
                             GameMng.I._hextile.GetCell(GameMng.I._hextile.cells[i].PosX, GameMng.I._hextile.cells[i].PosZ)._builtObj = null;
-                            GameMng.I._hextile.GetCell(GameMng.I._hextile.cells[i].PosX, GameMng.I._hextile.cells[i].PosZ)._code = 0;            // TODO : 코드 값 원래 값으로
+                            GameMng.I._hextile.TilecodeClear(GameMng.I._hextile.cells[i]);        // TODO : 코드 값 원래 값으로
                         }
                         obj = null;
                     }
@@ -100,7 +101,7 @@ public class Turret : Built
     {
         if (createCount < maxCreateCount - 1)
             GameMng.I.RemoveDelegate(waitingCreate);
-        else
-            GameMng.I.RemoveDelegate(Attack);
+        //else
+        //    GameMng.I.RemoveDelegate(Attack);
     }
 }

@@ -17,7 +17,6 @@ public class MainCamera : MonoBehaviour
     private float maxZoom = 4.5f;
     private float scrollData;
 
-
     // ----
     // 카메라 움직임 쓰임
     [SerializeField]
@@ -37,7 +36,7 @@ public class MainCamera : MonoBehaviour
     {
         //CameraMove();
         MouseScrollzoom();
-        // 클릭시 타일 이름 내용 가져오는곳 (임시)\
+        // 클릭시 타일 이름 내용 가져오는곳 (임시)
         if (Input.GetMouseButtonDown(0) && GameMng.I._UnitGM.act == ACTIVITY.NONE && GameMng.I._BuiltGM.act == ACTIVITY.NONE && !EventSystem.current.IsPointerOverGameObject())
         {
             GameMng.I.mouseRaycast();

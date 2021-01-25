@@ -52,6 +52,10 @@ public class NetworkMng : MonoBehaviour
     {
         get
         {
+            if (_instance.Equals(null))
+            {
+                Debug.Log("instance is null");
+            }
             return _instance;
         }
     }
@@ -350,6 +354,9 @@ public class NetworkMng : MonoBehaviour
                         color = int.Parse(txt[6 + k * 4])
                     };
                     v_user.Add(userInfo);
+
+                    if (uniqueNumber.Equals(int.Parse(txt[4 + k * 4])))
+                        myColor = (COLOR)(int.Parse(txt[6 + k * 4]));
                 }
                 _roomGM.intoRoom(txt[2]);
                 _roomGM.roomRefresh();
@@ -471,6 +478,14 @@ public class NetworkMng : MonoBehaviour
     }
 
     /**
+     * @brief 서버 주소 변경
+     */
+    public void setServer(string address)
+    {
+        this.address = address;
+    }
+
+    /**
      * @brief 인터넷 연결되어 있는지 확인
      */
     public bool checkNetwork()
@@ -528,14 +543,6 @@ public class NetworkMng : MonoBehaviour
             return "";
         }
         return html;
-    }
-
-    /**
-     * @brief 서버 주소 변경
-     */
-    public void setServer(string address)
-    {
-        this.address = address;
     }
 
     /**

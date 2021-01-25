@@ -216,6 +216,18 @@ public class HexTileCreate : MonoBehaviour
     }
 
     /**
+    * @brief 타일 코드 초기화(유닛이 이동했을 때, 건물이 부셔졌을 떄) 메모장에 code 를 가져와서 바꿔줌
+    * @param target GameMng.I.seleteTile 역활
+    */
+    public void TilecodeClear(Tile target)
+    {
+        if (GameMng.I._hextile.GetCell(target.PosX, target.PosY).tileuniquecode >= (int)TILE.GRASS_START)
+            GameMng.I._hextile.GetCell(target.PosX, target.PosY)._code = GameMng.I._hextile.GetCell(target.PosX, target.PosY).tileuniquecode - (int)TILE.GRASS_START;
+        else
+            GameMng.I._hextile.GetCell(target.PosX, target.PosY)._code = GameMng.I._hextile.GetCell(target.PosX, target.PosY).tileuniquecode;
+    }
+
+    /**
      * @brief 타일간 거리 찾기
      * @param cell 선택한 타일
      */

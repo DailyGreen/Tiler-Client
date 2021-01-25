@@ -11,17 +11,9 @@ public class RangeControl : MonoBehaviour
     [SerializeField]
     private Transform selectRangeTr;
 
-    private float nHeight = 0.0f;                                                                                   //맵 세로 최대 크기
-    private float nwidth = 0.0f;                                                                                    //맵 가로 최대 크기
-
-    void Start()
-    {
-        nHeight = GameMng.I.GetMapHeight - 1;
-        nwidth = GameMng.I.GetMapWidth - 1;
-    }
-
-    /**
+   /**
    * @brief 이동 범위 계산
+   * @param distance 이동 범위
    */
     public void moveRange(int distance)
     {
@@ -49,6 +41,7 @@ public class RangeControl : MonoBehaviour
 
     /**
     * @brief 공격 범위 계산
+    * @param distance 공격 범위
     */
 
     public void attackRange(int distance)
@@ -58,7 +51,7 @@ public class RangeControl : MonoBehaviour
         {
             if (GameMng.I._hextile.cells[i].Distance <= distance && !GameMng.I._hextile.cells[i].Distance.Equals(0))
             {
-                if (GameMng.I._hextile.cells[i]._code < (int)TILE.CAN_MOVE && GameMng.I._hextile.cells[i]._builtObj == null && GameMng.I._hextile.cells[i]._unitObj == null)
+                if (GameMng.I.selectedTile._code.Equals((int)BUILT.ATTACK_BUILDING))
                 {
                     attackRangeTr[count].transform.position = GameMng.I._hextile.cells[i].transform.position;
                     count++;

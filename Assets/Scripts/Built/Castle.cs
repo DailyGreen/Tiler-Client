@@ -24,5 +24,6 @@ public class Castle : Built
     public static void CreateUnitBtn()
     {
         GameMng.I._range.moveRange((int)UNIQEDISTANCE.DISTANCE);
+        GameMng.I.cleanActList();
     }
 }

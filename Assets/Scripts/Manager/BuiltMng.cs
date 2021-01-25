@@ -63,13 +63,12 @@ public class BuiltMng : MonoBehaviour
      */
     public void CreateUnit(int cost, int index)
     {
-
-        GameMng.I.minGold(3);       // TODO : 코스트로 변경
         GameMng.I.mouseRaycast(true);                       //캐릭터 정보와 타일 정보를 알아와야해서 false에서 true로 변경
         if (GameMng.I.targetTile._builtObj == null && GameMng.I.targetTile._code < (int)TILE.CAN_MOVE && GameMng.I.targetTile._unitObj == null && Vector2.Distance(GameMng.I.selectedTile.transform.localPosition, GameMng.I.targetTile.transform.localPosition) <= 1.5f)
         {
             if (GameMng.I._gold >= cost)
             {
+                GameMng.I.minGold(cost);
                 if (index > (int)UNIT.FOREST_WORKER && (int)UNIT.SEA_WORKER > index && index > (int)UNIT.DESERT_WORKER)
                 {
                     GameMng.I.selectedTile._builtObj._bActAccess = false;
@@ -77,15 +76,16 @@ public class BuiltMng : MonoBehaviour
                 GameObject Child = Instantiate(unitobj[index - 300], GameMng.I.targetTile.transform) as GameObject;                 // enum 값 - 300
                 Child.transform.parent = transform.parent;
                 GameMng.I.targetTile._unitObj = Child.GetComponent<Unit>();
-                GameMng.I.targetTile._unitObj.gameObject.GetComponent<Unit>().SaveX = GameMng.I.selectedTile.PosX;              // 생성하는 유닛에게 있는 위치 저장 변수에 해당 건물 위치값을 저장해줌
-                GameMng.I.targetTile._unitObj.gameObject.GetComponent<Unit>().SaveY = GameMng.I.selectedTile.PosZ;
-                GameMng.I.targetTile._code = index;       // 문제는 Awake다
+                GameMng.I.targetTile._unitObj.SaveX = GameMng.I.selectedTile.PosX;              // 생성하는 유닛에게 있는 위치 저장 변수에 해당 건물 위치값을 저장해줌
+                GameMng.I.targetTile._unitObj.SaveY = GameMng.I.selectedTile.PosZ;
+                GameMng.I.targetTile._code = index;
                 GameMng.I.targetTile._unitObj._uniqueNumber = NetworkMng.getInstance.uniqueNumber;
                 act = ACTIVITY.NONE;
 
                 NetworkMng.getInstance.SendMsg(string.Format("CREATE_UNIT:{0}:{1}:{2}:{3}:{4}:{5}", GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosZ, index, NetworkMng.getInstance.uniqueNumber, GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosZ));
 
                 GameMng.I.cleanActList();
+                GameMng.I._range.rangeTileReset();
                 GameMng.I.cleanSelected();
 
                 NetworkMng.getInstance.SendMsg("TURN");
@@ -162,7 +162,7 @@ public class BuiltMng : MonoBehaviour
             GameMng.I.RemoveDelegate(GameMng.I.selectedTile._builtObj.GetComponent<Turret>().Attack);
         }
         GameMng.I.selectedTile._builtObj.DestroyMyself();
-        //Destroy(GameMng.I.selectedTile._builtObj.gameObject);
+
         act = ACTIVITY.NONE;
         GameMng.I.selectedTile._builtObj = null;
         Debug.Log("여기 수정해야함!!!!!");

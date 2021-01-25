@@ -190,8 +190,8 @@ public class UnitMng : MonoBehaviour
 
                 GameObject Child = Instantiate(builtObj[index - 200], GameMng.I.targetTile.transform) as GameObject;
                 GameMng.I.targetTile._builtObj = Child.GetComponent<Built>();
-                GameMng.I.targetTile._builtObj.gameObject.GetComponent<Built>().SaveX = GameMng.I.selectedTile.PosX;                // 생성하는 건물에게 있는 위치 저장 변수에 해당 유닛 위치값을 저장해줌
-                GameMng.I.targetTile._builtObj.gameObject.GetComponent<Built>().SaveY = GameMng.I.selectedTile.PosZ;
+                GameMng.I.targetTile._builtObj.SaveX = GameMng.I.selectedTile.PosX;                // 생성하는 건물에게 있는 위치 저장 변수에 해당 유닛 위치값을 저장해줌
+                GameMng.I.targetTile._builtObj.SaveY = GameMng.I.selectedTile.PosZ;
                 GameMng.I.targetTile._code = index;
 
                 GameMng.I.minGold(cost);
@@ -296,7 +296,6 @@ public class UnitMng : MonoBehaviour
                 GameMng.I.targetTile._unitObj._hp -= GameMng.I.selectedTile._unitObj._damage;
                 if (GameMng.I.targetTile._unitObj._hp <= 0)
                 {
-                    //Destroy(GameMng.I.targetTile._unitObj.gameObject);
                     GameMng.I.targetTile._unitObj.DestroyMyself();
                     GameMng.I.targetTile._unitObj = null;
                     GameMng.I.targetTile._code = 0;

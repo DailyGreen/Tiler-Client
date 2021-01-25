@@ -221,10 +221,10 @@ public class HexTileCreate : MonoBehaviour
     */
     public void TilecodeClear(Tile target)
     {
-        if (GameMng.I._hextile.GetCell(target.PosX, target.PosY).tileuniquecode >= (int)TILE.GRASS_START)
-            GameMng.I._hextile.GetCell(target.PosX, target.PosY)._code = GameMng.I._hextile.GetCell(target.PosX, target.PosY).tileuniquecode - (int)TILE.GRASS_START;
+        if (GameMng.I._hextile.GetCell(target.PosX, target.PosZ).tileuniquecode >= (int)TILE.GRASS_START)
+            GameMng.I._hextile.GetCell(target.PosX, target.PosZ)._code = GameMng.I._hextile.GetCell(target.PosX, target.PosZ).tileuniquecode - (int)TILE.GRASS_START;
         else
-            GameMng.I._hextile.GetCell(target.PosX, target.PosY)._code = GameMng.I._hextile.GetCell(target.PosX, target.PosY).tileuniquecode;
+            GameMng.I._hextile.GetCell(target.PosX, target.PosZ)._code = GameMng.I._hextile.GetCell(target.PosX, target.PosZ).tileuniquecode;
     }
 
     /**

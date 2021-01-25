@@ -350,6 +350,9 @@ public class NetworkMng : MonoBehaviour
                         color = int.Parse(txt[6 + k * 4])
                     };
                     v_user.Add(userInfo);
+
+                    if (uniqueNumber.Equals(int.Parse(txt[4 + k * 4])))
+                        myColor = (COLOR)(int.Parse(txt[6 + k * 4]));
                 }
                 _roomGM.intoRoom(txt[2]);
                 _roomGM.roomRefresh();

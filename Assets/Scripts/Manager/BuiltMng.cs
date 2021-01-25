@@ -66,7 +66,6 @@ public class BuiltMng : MonoBehaviour
      */
     public void CreateUnit(int cost, int index)
     {
-
         GameMng.I.minGold(3);       // TODO : 코스트로 변경
         GameMng.I.mouseRaycast(true);                       //캐릭터 정보와 타일 정보를 알아와야해서 false에서 true로 변경
         if (GameMng.I.targetTile._builtObj == null && GameMng.I.targetTile._code < (int)TILE.CAN_MOVE && GameMng.I.targetTile._unitObj == null && Vector2.Distance(GameMng.I.selectedTile.transform.localPosition, GameMng.I.targetTile.transform.localPosition) <= 1.5f)
@@ -157,21 +156,28 @@ public class BuiltMng : MonoBehaviour
      */
     public void DestroyBuilt()
     {
-        NetworkMng.getInstance.SendMsg(string.Format("DESTROY_BUILT:{0}:{1}", GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosZ));
-        GameMng.I.selectedTile._builtObj.DestroyMyself();
-        //Destroy(GameMng.I.selectedTile._builtObj.gameObject);
-        if (GameMng.I.selectedTile._builtObj._code == (int)BUILT.ATTACK_BUILDING)
+        try
         {
-            GameMng.I._range.AttackrangeTileReset();
+            NetworkMng.getInstance.SendMsg(string.Format("DESTROY_BUILT:{0}:{1}", GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosZ));
+            GameMng.I.selectedTile._builtObj.DestroyMyself();
+            //Destroy(GameMng.I.selectedTile._builtObj.gameObject);
+            if (GameMng.I.selectedTile._builtObj._code == (int)BUILT.ATTACK_BUILDING)
+            {
+                GameMng.I._range.AttackrangeTileReset();
+            }
+            act = ACTIVITY.NONE;
+            GameMng.I.selectedTile._builtObj = null;
+            Debug.Log("여기 수정해야함!!!!!");
+            GameMng.I.selectedTile._code = (int)TILE.GRASS;                                                             // 나중에 원래 타일 알아오는법 가져오기
+            GameMng.I._range.SelectTileSetting(true);
+            GameMng.I.cleanActList();
+            GameMng.I.cleanSelected();
+            NetworkMng.getInstance.SendMsg("TURN");
         }
-        act = ACTIVITY.NONE;
-        GameMng.I.selectedTile._builtObj = null;
-        Debug.Log("여기 수정해야함!!!!!");
-        GameMng.I.selectedTile._code = (int)TILE.GRASS;                                                             // 나중에 원래 타일 알아오는법 가져오기
-        GameMng.I._range.SelectTileSetting(true);
-        GameMng.I.cleanActList();
-        GameMng.I.cleanSelected();
-        NetworkMng.getInstance.SendMsg("TURN");
+        catch
+        {
+            Debug.Log("임시 넘김");
+        }
     }
 
     /**

@@ -145,6 +145,19 @@ public class GameMng : MonoBehaviour
 
         // 같이 플레이 중인 유저 목록들 보여주기
         UserListRefresh(NetworkMng.getInstance.firstPlayerUniqueNumber);
+
+        // 누구 턴인지 색 변경
+        for (int i = 0; i < NetworkMng.getInstance.v_user.Count; i++)
+        {
+            if (NetworkMng.getInstance.v_user[i].uniqueNumber.Equals(NetworkMng.getInstance.firstPlayerUniqueNumber))
+            {
+                Color color;
+                ColorUtility.TryParseHtmlString(CustomColor.TransColor((COLOR)NetworkMng.getInstance.v_user[i].color), out color);
+                turnDescImage.color = color;
+                break;
+            }
+        }
+
     }
 
     void SampleTurnFunc()
@@ -651,6 +664,7 @@ public class GameMng : MonoBehaviour
 
     /**
      * @brief 같이 플레이 중인 유저 목록들 보여주기
+    * @param uniqueNumber 현재 턴의 유저
      */
     public void UserListRefresh(int uniqueNumber)
     {

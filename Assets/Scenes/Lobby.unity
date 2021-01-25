@@ -932,6 +932,8 @@ MonoBehaviour:
   address: 127.0.0.1
   myRoom: 0
   uniqueNumber: 0
+  myTribe: 0
+  myColor: 0
   mainPanel: {fileID: 1170754498625171}
   loadingPanel: {fileID: 1754629225}
   loginPanel: {fileID: 2114617591}
@@ -2290,6 +2292,7 @@ MonoBehaviour:
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0
+  m_ShouldActivateOnSelect: 1
 --- !u!114 &281932475
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8324,6 +8327,7 @@ MonoBehaviour:
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0
+  m_ShouldActivateOnSelect: 1
 --- !u!114 &1015799337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14636,6 +14640,67 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1901412850}
   m_CullTransparentMesh: 0
+--- !u!1001 &1909857100
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 360871434872623254, guid: e9bff9dfe6e2459479484288d8e22d9b, type: 3}
+      propertyPath: m_Name
+      value: SeaSoldier_0
+      objectReference: {fileID: 0}
+    - target: {fileID: 360871434872623254, guid: e9bff9dfe6e2459479484288d8e22d9b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 363596886229683378, guid: e9bff9dfe6e2459479484288d8e22d9b, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 363596886229683378, guid: e9bff9dfe6e2459479484288d8e22d9b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 363596886229683378, guid: e9bff9dfe6e2459479484288d8e22d9b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 363596886229683378, guid: e9bff9dfe6e2459479484288d8e22d9b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 363596886229683378, guid: e9bff9dfe6e2459479484288d8e22d9b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 363596886229683378, guid: e9bff9dfe6e2459479484288d8e22d9b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 363596886229683378, guid: e9bff9dfe6e2459479484288d8e22d9b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 363596886229683378, guid: e9bff9dfe6e2459479484288d8e22d9b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 363596886229683378, guid: e9bff9dfe6e2459479484288d8e22d9b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 363596886229683378, guid: e9bff9dfe6e2459479484288d8e22d9b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 363596886229683378, guid: e9bff9dfe6e2459479484288d8e22d9b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e9bff9dfe6e2459479484288d8e22d9b, type: 3}
 --- !u!1 &1920409159
 GameObject:
   m_ObjectHideFlags: 0
@@ -15186,6 +15251,7 @@ MonoBehaviour:
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0
+  m_ShouldActivateOnSelect: 1
 --- !u!114 &1962123778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15462,6 +15528,7 @@ MonoBehaviour:
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0
+  m_ShouldActivateOnSelect: 1
 --- !u!114 &1995023331
 MonoBehaviour:
   m_ObjectHideFlags: 0

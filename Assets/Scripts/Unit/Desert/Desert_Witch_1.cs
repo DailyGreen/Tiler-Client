@@ -16,36 +16,16 @@ public class Desert_Witch_1 : Unit
         _attackdistance = 2;
         maxCreateCount = 3;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
+        _unitDesc = "사막에선 무슨 마법 써?";
 
         GameMng.I._BuiltGM.act = ACTIVITY.NONE;
         GameMng.I.AddDelegate(this.waitingCreate);
     }
 
-    void init()
+    public override void init()
     {
         _activity.Add(ACTIVITY.MOVE);
         _activity.Add(ACTIVITY.ATTACK);
-    }
-
-    public void waitingCreate()
-    {
-        createCount++;
-        _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
-
-        if (createCount > maxCreateCount - 1)        // 2턴 후에 생성됨
-        {
-            GameMng.I._hextile.GetCell(SaveX, SaveY)._builtObj.GetComponent<Built>()._bActAccess = true;
-
-            _desc = "ㅁㅁㅁㅁㅁㅁㅁㅁㅁ";
-
-            _anim.SetTrigger("isSpawn");
-
-            if (NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))
-                init();
-
-
-            GameMng.I.RemoveDelegate(this.waitingCreate);
-        }
     }
 
     void OnDestroy()

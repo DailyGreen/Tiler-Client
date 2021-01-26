@@ -15,27 +15,10 @@ public class Desert_Worker : Worker
         _basedistance = 1;
         maxCreateCount = 2;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
+        _unitDesc = "듬직해 보인다.";
 
         GameMng.I._BuiltGM.act = ACTIVITY.NONE;
         GameMng.I.AddDelegate(this.waitingCreate);
-    }
-
-    public void waitingCreate()
-    {
-        createCount++;
-        _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
-        // 2턴 후에 생성됨
-        if (createCount > maxCreateCount - 1)
-        {
-            _anim.SetTrigger("isSpawn");
-
-            if (NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))
-                init();
-
-            _desc = "듬직해 보인다.";
-
-            GameMng.I.RemoveDelegate(this.waitingCreate);
-        }
     }
 
     void OnDestroy()

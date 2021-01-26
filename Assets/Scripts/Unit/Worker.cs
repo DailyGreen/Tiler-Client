@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Worker : Unit
 {
-    public void init()
+    public override void init()
     {
         _activity.Add(ACTIVITY.MOVE);
         _activity.Add(ACTIVITY.BUILD_MINE);

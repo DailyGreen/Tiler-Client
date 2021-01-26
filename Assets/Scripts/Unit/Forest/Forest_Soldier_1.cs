@@ -16,42 +16,21 @@ public class Forest_Soldier_1 : Unit
         _attackdistance = 2;
         maxCreateCount = 3;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
+        _unitDesc = "뼈와 살을 분리시켜주지!";
 
         GameMng.I._BuiltGM.act = ACTIVITY.NONE;
         GameMng.I.AddDelegate(this.waitingCreate);
     }
 
-    void init()
+    public override void init()
     {
         _activity.Add(ACTIVITY.MOVE);
         _activity.Add(ACTIVITY.ATTACK);
     }
 
-    public void waitingCreate()
-    {
-        createCount++;
-        _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
-
-        if (createCount > maxCreateCount - 1)        // 2턴 후에 생성됨
-        {
-            GameMng.I._hextile.GetCell(SaveX, SaveY)._builtObj.GetComponent<Built>()._bActAccess = true;
-            GameMng.I._hextile.GetCell(SaveX, SaveY)._builtObj._anim.SetTrigger("isComplete");
-
-            _desc = "뼈와 살을 분리시켜주지!";
-
-            _anim.SetTrigger("isSpawn");
-
-            if (NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))
-                init();
-
-
-            GameMng.I.RemoveDelegate(this.waitingCreate);
-        }
-    }
-
     void OnDestroy()
     {
         if (!(createCount > maxCreateCount - 1))
-            GameMng.I.RemoveDelegate(waitingCreate);
+            GameMng.I.RemoveDelegate(this.waitingCreate);
     }
 }

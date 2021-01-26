@@ -288,7 +288,7 @@ public class GameMng : MonoBehaviour
             this.turnDescText.text = "내 차례";
             ColorUtility.TryParseHtmlString(CustomColor.TransColor(NetworkMng.getInstance.myColor), out color);
             turnDescImage.color = color;
-            enemySelectedTile.transform.position = new Vector3(-100, -100, 0);
+            enemySelectedTile.gameObject.transform.position = new Vector3(-100, -100, 0);
 
             return;
         }

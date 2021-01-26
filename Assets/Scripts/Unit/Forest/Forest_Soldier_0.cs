@@ -35,6 +35,7 @@ public class Forest_Soldier_0 : Unit
         if (createCount > maxCreateCount - 1)        // 2턴 후에 생성됨
         {
             GameMng.I._hextile.GetCell(SaveX, SaveY)._builtObj.GetComponent<Built>()._bActAccess = true;
+            GameMng.I._hextile.GetCell(SaveX, SaveY)._builtObj._anim.SetTrigger("isComplete");
 
             _desc = "모조리 죽여주마!";
 

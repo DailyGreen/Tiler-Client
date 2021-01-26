@@ -17,13 +17,9 @@ public class Worker : Unit
         //StartCoroutine("creating");
     }
 
-    public void walking()
-    {
-        _anim.SetTrigger("isRunning");
-    }
-
     public void working()
     {
+        GameMng.I._UnitGM.reversalUnit(GameMng.I.selectedTile._unitObj.transform, GameMng.I.targetTile.transform);
         _anim.SetBool("isWorking", true);
     }
 }

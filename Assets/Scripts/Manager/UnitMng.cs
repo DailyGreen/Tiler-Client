@@ -7,8 +7,6 @@ public class UnitMng : MonoBehaviour
 {
     public ACTIVITY act = ACTIVITY.NONE;
 
-    public Worker worker = null;
-
     public GameObject[] builtObj = null;
 
     private void Start()
@@ -206,15 +204,13 @@ public class UnitMng : MonoBehaviour
                 switch (unitindex)
                 {
                     case (int)UNIT.FOREST_WORKER:
-                        reversalUnit(GameMng.I.selectedTile._unitObj.transform, GameMng.I.targetTile.transform);
-                        GameMng.I.selectedTile._unitObj.GetComponent<Forest_Worker>()._anim.SetBool("isWorking", true);
+                        GameMng.I.selectedTile._unitObj.GetComponent<Forest_Worker>().working();
                         break;
                     case (int)UNIT.DESERT_WORKER:
                         //GameMng.I.selectedTile._unitObj.GetComponent<>();
                         break;
                     case (int)UNIT.SEA_WORKER:
-                        reversalUnit(GameMng.I.selectedTile._unitObj.transform, GameMng.I.targetTile.transform);
-                        GameMng.I.selectedTile._unitObj.GetComponent<Sea_Worker>()._anim.SetBool("isWorking", true);
+                        GameMng.I.selectedTile._unitObj.GetComponent<Sea_Worker>().working();
                         break;
                 }
 

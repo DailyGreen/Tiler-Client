@@ -279,6 +279,8 @@ public class UnitMng : MonoBehaviour
                 GameMng.I._hextile.GetCell(byX, byY)._unitObj.GetComponent<Sea_Worker>()._anim.SetBool("isWorking", true);
                 break;
         }
+
+        GameMng.I.addActMessage(string.Format("{0}님의 건물이 지어지고 있습니다.", GameMng.I._hextile.GetCell(posX, posY)._unitObj._uniqueNumber), posX, posY);
     }
 
     /**

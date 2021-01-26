@@ -391,6 +391,11 @@ public class NetworkMng : MonoBehaviour
             // 현재 오브젝트를 찾아서 공격력 찾은 다음 대상 위치의 hp 를 깎음
             GameMng.I.attack(int.Parse(txt[1]), int.Parse(txt[2]), int.Parse(txt[3]), int.Parse(txt[4]), int.Parse(txt[5]));
         }
+        else if (txt[0].Equals("LOSE"))
+        {
+            // Tab UI 에서 죽은 유저로 표시하기
+            GameMng.I.UserExit(int.Parse(txt[1]));
+        }
         else if (txt[0].Equals("PLUNDER"))
         {
             Debug.Log(txt[1] + "," + txt[2] + "," + txt[3] + "," + txt[4]);
@@ -432,6 +437,10 @@ public class NetworkMng : MonoBehaviour
         else if (txt[0].Equals("UNIQUE"))
         {
             uniqueNumber = int.Parse(txt[1]);
+        }
+        else if (txt[0].Equals("SELECTING"))
+        {
+            GameMng.I.enemyClickTile(int.Parse(txt[1]), int.Parse(txt[2]));
         }
         else if (txt[0].Equals("CHAT"))
         {

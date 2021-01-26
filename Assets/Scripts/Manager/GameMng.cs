@@ -89,6 +89,10 @@ public class GameMng : MonoBehaviour
     UnityEngine.UI.Image[] playerListImg;       // 유저 목록들 이미지   (tab키 UI)
     [SerializeField]
     UnityEngine.UI.Text[] playerListName;       // 유저 목록들 이름   (tab키 UI)
+    [SerializeField]
+    GameObject[] playerListExit;                // 유저 목록들 사망 이미지    (tab키 UI)
+    [SerializeField]
+    GameObject enemySelectedTile;               // 적이 선택한 타일을 보여주는 오브젝트
 
 
     // ---- 맵의 가로 세로 크기 읽기
@@ -276,6 +280,7 @@ public class GameMng : MonoBehaviour
         countDel();
         refreshMainUI();
         UserListRefresh(uniqueNumber);
+        enemySelectedTile.transform.position = new Vector3(-100, -100, 0);
 
         // 누구 차례인지 뿌려주기
         if (NetworkMng.getInstance.uniqueNumber == uniqueNumber)
@@ -599,6 +604,8 @@ public class GameMng : MonoBehaviour
                 selectedTile = hit.collider.gameObject.GetComponent<Tile>();
                 _hextile.FindDistancesTo(selectedTile);
                 _range.SelectTileSetting(false);
+                if (myTurn)
+                    NetworkMng.getInstance.SendMsg(string.Format("SELECTING:{0}:{1}", selectedTile.PosX, selectedTile.PosZ));
             }
         }
     }
@@ -681,6 +688,22 @@ public class GameMng : MonoBehaviour
     }
 
     /**
+     * @brief 같이 플레이 중이던 유저가 나가거나 죽었을때
+     * @param uniqueNumber 대상 유저 번호
+     */
+    public void UserExit(int uniqueNumber)
+    {
+        for (int i = 0; i < NetworkMng.getInstance.v_user.Count; i++)
+        {
+            if (NetworkMng.getInstance.v_user[i].Equals(uniqueNumber))
+            {
+                playerListExit[i].SetActive(true);
+                break;
+            }
+        }
+    }
+
+    /**
      * @brief 선택한것들을 지울때
      */
     public void cleanSelected()
@@ -703,6 +726,8 @@ public class GameMng : MonoBehaviour
         if(_hextile.GetCell(posX,posY)._builtObj == null)
             _UnitGM.reversalUnit(obj.transform, _hextile.GetCell(toX, toY).transform);
         obj._anim.SetTrigger("isAttacking");
+
+        addActMessage(string.Format("{0}님이 공격했습니다.", obj._uniqueNumber), posX, posY);
 
         // 공격받는 대상의 HP 가 줄어들게 해줌
         obj = null;
@@ -734,11 +759,15 @@ public class GameMng : MonoBehaviour
             _hextile.GetCell(toX, toY)._builtObj = null;
             _hextile.TilecodeClear(toX,toY);            // TODO : 코드 값 원래 값으로
         }
-
     }
     public void uiClickBT()
     {
         NetworkMng.getInstance._soundGM.uiBTClick();
+    }
+
+    public void enemyClickTile(int posX, int posZ)
+    {
+        GameMng.I.enemySelectedTile.transform.position = _hextile.GetCell(posX, posZ).transform.position;
     }
 
     /**

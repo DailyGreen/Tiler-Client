@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class MillitaryBase : Built
 {
+    public GameObject CreatingUnitobj = null;
+
     public static int cost = 10;   // 건설 비용
+
+    public int CreatingUnitX = 0;
+    public int CreatingUnitY = 0;
 
     void Awake()
     {
@@ -21,6 +26,9 @@ public class MillitaryBase : Built
     {
         _activity.Add(ACTIVITY.SOLDIER_0_UNIT_CREATE);
         _activity.Add(ACTIVITY.SOLDIER_1_UNIT_CREATE);
+        _activity.Add(ACTIVITY.SOLDIER_2_UNIT_CREATE);
+        _activity.Add(ACTIVITY.WITCH_0_UNIT_CREATE);
+        _activity.Add(ACTIVITY.WITCH_1_UNIT_CREATE);
         _activity.Add(ACTIVITY.DESTROY_BUILT);
     }
 
@@ -66,9 +74,42 @@ public class MillitaryBase : Built
         }
     }
 
+    public static void CreateAttackThirdUnitBtn()
+    {
+        if (GameMng.I.selectedTile._code == (int)BUILT.MILLITARY_BASE)
+        {
+            GameMng.I._BuiltGM.act = ACTIVITY.SOLDIER_2_UNIT_CREATE;
+            GameMng.I._range.moveRange((int)UNIQEDISTANCE.DISTANCE);
+        }
+    }
+
+    public static void CreateAttackFourthUnitBtn()
+    {
+        if (GameMng.I.selectedTile._code == (int)BUILT.MILLITARY_BASE)
+        {
+            GameMng.I._BuiltGM.act = ACTIVITY.WITCH_0_UNIT_CREATE;
+            GameMng.I._range.moveRange((int)UNIQEDISTANCE.DISTANCE);
+        }
+    }
+
+    public static void CreateAttackFifthUnitBtn()
+    {
+        if (GameMng.I.selectedTile._code == (int)BUILT.MILLITARY_BASE)
+        {
+            GameMng.I._BuiltGM.act = ACTIVITY.WITCH_1_UNIT_CREATE;
+            GameMng.I._range.moveRange((int)UNIQEDISTANCE.DISTANCE);
+        }
+    }
+
     void OnDestroy()
     {
         if (createCount < maxCreateCount - 1)
             GameMng.I.RemoveDelegate(waitingCreate);
+
+        if (CreatingUnitobj != null)
+        {
+            Destroy(CreatingUnitobj);
+            GameMng.I._hextile.TilecodeClear(CreatingUnitX, CreatingUnitY);
+        }
     }
 }

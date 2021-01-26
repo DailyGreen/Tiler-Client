@@ -21,7 +21,7 @@ public class BuiltMng : MonoBehaviour
             switch (act)
             {
                 case ACTIVITY.WORKER_UNIT_CREATE:
-                    GameMng.I._hextile.GetCell(GameMng.I.CastlePosX, GameMng.I.CastlePosZ)._builtObj._anim.SetTrigger("isMaking");
+                    //GameMng.I._hextile.GetCell(GameMng.I.CastlePosX, GameMng.I.CastlePosZ)._builtObj._anim.SetTrigger("isMaking");
                     CreateUnit(Forest_Worker.cost, (int)UNIT.FOREST_WORKER + (int)(NetworkMng.getInstance.myTribe) * 6);
                     break;
                 case ACTIVITY.SOLDIER_0_UNIT_CREATE:
@@ -29,6 +29,15 @@ public class BuiltMng : MonoBehaviour
                     break;
                 case ACTIVITY.SOLDIER_1_UNIT_CREATE:
                     CreateUnit(Forest_Soldier_1.cost, (int)UNIT.FOREST_SOLDIER_1 + (int)(NetworkMng.getInstance.myTribe) * 6);
+                    break;
+                case ACTIVITY.SOLDIER_2_UNIT_CREATE:
+                    CreateUnit(Forest_Soldier_2.cost, (int)UNIT.FOREST_SOLDIER_2 + (int)(NetworkMng.getInstance.myTribe) * 6);
+                    break;
+                case ACTIVITY.WITCH_0_UNIT_CREATE:
+                    CreateUnit(Forest_Witch_0.cost, (int)UNIT.FOREST_WITCH_0 + (int)(NetworkMng.getInstance.myTribe) * 6);
+                    break;
+                case ACTIVITY.WITCH_1_UNIT_CREATE:
+                    CreateUnit(Forest_Witch_1.cost, (int)UNIT.FOREST_WITCH_1 + (int)(NetworkMng.getInstance.myTribe) * 6);
                     break;
             }
             GameMng.I._range.SelectTileSetting(true);
@@ -69,9 +78,10 @@ public class BuiltMng : MonoBehaviour
             if (GameMng.I._gold >= cost)
             {
                 GameMng.I.minGold(cost);
-                if (index > (int)UNIT.FOREST_WORKER && (int)UNIT.SEA_WORKER > index && index > (int)UNIT.DESERT_WORKER)
+                if (index != (int)UNIT.FOREST_WORKER && index != (int)UNIT.SEA_WORKER && index != (int)UNIT.DESERT_WORKER)      // 일꾼 유닛들을 제외하고 유닛 생성중일때 해당 건물 행동 불가 상태 적용
                 {
                     GameMng.I.selectedTile._builtObj._bActAccess = false;
+                    GameMng.I.selectedTile._builtObj._anim.SetTrigger("isMaking");
                 }
                 GameObject Child = Instantiate(unitobj[index - 300], GameMng.I.targetTile.transform) as GameObject;                 // enum 값 - 300
                 Child.transform.parent = transform.parent;
@@ -80,6 +90,16 @@ public class BuiltMng : MonoBehaviour
                 GameMng.I.targetTile._unitObj.SaveY = GameMng.I.selectedTile.PosZ;
                 GameMng.I.targetTile._code = index;
                 GameMng.I.targetTile._unitObj._uniqueNumber = NetworkMng.getInstance.uniqueNumber;
+
+
+                if (GameMng.I.selectedTile._code == (int)BUILT.MILLITARY_BASE)                  // 군사기지에서 유닛 생성 시
+                {
+                    MillitaryBase SaveUnitData = GameMng.I.selectedTile._builtObj.GetComponent<MillitaryBase>();
+                    SaveUnitData.CreatingUnitobj = GameMng.I.targetTile._unitObj.gameObject;
+                    SaveUnitData.CreatingUnitX = GameMng.I.targetTile.PosX;
+                    SaveUnitData.CreatingUnitY = GameMng.I.targetTile.PosZ;
+                }
+
                 act = ACTIVITY.NONE;
 
                 NetworkMng.getInstance.SendMsg(string.Format("CREATE_UNIT:{0}:{1}:{2}:{3}:{4}:{5}", GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosZ, index, NetworkMng.getInstance.uniqueNumber, GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosZ));
@@ -119,6 +139,13 @@ public class BuiltMng : MonoBehaviour
         GameMng.I._hextile.GetCell(byX, byY)._builtObj._bActAccess = false;
         GameMng.I._hextile.GetCell(posX, posY)._unitObj.SaveX = byX;
         GameMng.I._hextile.GetCell(posX, posY)._unitObj.SaveY = byY;
+        if (GameMng.I._hextile.GetCell(byX, byY)._builtObj._code == (int)BUILT.MILLITARY_BASE)
+        {
+            MillitaryBase SaveData = GameMng.I._hextile.GetCell(byX, byY)._builtObj.GetComponent<MillitaryBase>();
+            SaveData.CreatingUnitobj = GameMng.I._hextile.GetCell(posX, posY)._unitObj.gameObject;
+            SaveData.GetComponent<MillitaryBase>().CreatingUnitX = posX;
+            SaveData.GetComponent<MillitaryBase>().CreatingUnitY = posY;
+        }
     }
 
     /**

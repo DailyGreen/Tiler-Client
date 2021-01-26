@@ -12,11 +12,11 @@ public class Built : DynamicObject
         Debug.Log("Built START");
     }
 
-    public Mine mine = null;
+    //public Mine mine = null;
 
-    public Farm farm = null;
+    //public Farm farm = null;
 
-    public Turret turret = null;
+    //public Turret turret = null;
 
-    public MillitaryBase millitarybase = null;
+    //public MillitaryBase millitarybase = null;
 }

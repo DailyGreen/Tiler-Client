@@ -7,8 +7,6 @@ public class UnitMng : MonoBehaviour
 {
     public ACTIVITY act = ACTIVITY.NONE;
 
-    public Worker worker = null;
-
     public GameObject[] builtObj = null;
 
     private void Start()
@@ -59,24 +57,35 @@ public class UnitMng : MonoBehaviour
     }
 
     /**
-     * @brief 유닛 이동 검사 (대상이 올바른지)
-     */
+    * @brief 유닛 이동 검사 (대상이 올바른지)
+    */
     public void CheckMove()
     {
+        float movedis;
         GameMng.I.mouseRaycast(true);
 
         if (GameMng.I.hit.collider != null)
         {
             GameMng.I.cleanActList();
             GameMng.I._range.rangeTileReset();  // 범위 타일 위치 초기화
+            if (GameMng.I.selectedTile._code == (int)UNIT.FOREST_WITCH_1)
+            {
+                movedis = 3.0f;
+                GameMng.I.unitSpeed = 6.0f;
+            }
+            else
+            {
+                movedis = 1.5f;
+                GameMng.I.unitSpeed = 3.0f;
+            }
             GameMng.I.distanceOfTiles = Vector2.Distance(GameMng.I.selectedTile._unitObj.transform.position, GameMng.I.targetTile.transform.position);
-            if (GameMng.I.hit.collider.tag.Equals("Tile") && GameMng.I.distanceOfTiles <= 1.5f && Tile.isEmptyTile(GameMng.I.targetTile))
+            if (GameMng.I.hit.collider.tag.Equals("Tile") && GameMng.I.distanceOfTiles <= movedis && Tile.isEmptyTile(GameMng.I.targetTile))
             {
                 act = ACTIVITY.ACTING;
                 reversalUnit(GameMng.I.selectedTile._unitObj.transform, GameMng.I.targetTile.transform);
                 GameMng.I.selectedTile._unitObj._anim.SetTrigger("isRunning");
                 NetworkMng.getInstance.SendMsg(string.Format("MOVE_UNIT:{0}:{1}:{2}:{3}", GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosZ, GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosZ));
-                StartCoroutine("Moving");
+                StartCoroutine("Moving", movedis);
             }
             else                                     // 범위가 아닌 다른 곳을 누름
             {
@@ -91,14 +100,14 @@ public class UnitMng : MonoBehaviour
     /**
      * @brief 유닛 이동 (클라 전용)
      */
-    IEnumerator Moving()
+    IEnumerator Moving(float movedis)
     {
         if (Vector2.Distance(GameMng.I.selectedTile._unitObj.transform.localPosition, GameMng.I.targetTile.transform.localPosition) >= 0.01f
-            && GameMng.I.distanceOfTiles <= 1.5f) // 캐릭터와 타일간 거리가 1.5 * a 이하일시 움직일수 있음 (거리 한칸당 1.24?정도 되드라)
+            && GameMng.I.distanceOfTiles <= movedis) // 캐릭터와 타일간 거리가 1.5 * a 이하일시 움직일수 있음 (거리 한칸당 1.24?정도 되드라)
         {
             GameMng.I.selectedTile._unitObj.transform.localPosition = Vector2.Lerp(GameMng.I.selectedTile._unitObj.transform.localPosition, GameMng.I.targetTile.transform.localPosition, GameMng.I.unitSpeed * Time.deltaTime);        //타일 간 부드러운 이동
             yield return null;
-            StartCoroutine("Moving");
+            StartCoroutine("Moving", movedis);
         }
         else if (GameMng.I.distanceOfTiles >= 0.1f)     // 남은 거리가 좁아지면 타일 위치로 자동 이동
         {
@@ -206,15 +215,13 @@ public class UnitMng : MonoBehaviour
                 switch (unitindex)
                 {
                     case (int)UNIT.FOREST_WORKER:
-                        reversalUnit(GameMng.I.selectedTile._unitObj.transform, GameMng.I.targetTile.transform);
-                        GameMng.I.selectedTile._unitObj.GetComponent<Forest_Worker>()._anim.SetBool("isWorking", true);
+                        GameMng.I.selectedTile._unitObj.GetComponent<Forest_Worker>().working();
                         break;
                     case (int)UNIT.DESERT_WORKER:
-                        //GameMng.I.selectedTile._unitObj.GetComponent<>();
+                        //GameMng.I.selectedTile._unitObj.GetComponent<Desert_Worker>().working();
                         break;
                     case (int)UNIT.SEA_WORKER:
-                        reversalUnit(GameMng.I.selectedTile._unitObj.transform, GameMng.I.targetTile.transform);
-                        GameMng.I.selectedTile._unitObj.GetComponent<Sea_Worker>()._anim.SetBool("isWorking", true);
+                        GameMng.I.selectedTile._unitObj.GetComponent<Sea_Worker>().working();
                         break;
                 }
 
@@ -279,6 +286,8 @@ public class UnitMng : MonoBehaviour
                 GameMng.I._hextile.GetCell(byX, byY)._unitObj.GetComponent<Sea_Worker>()._anim.SetBool("isWorking", true);
                 break;
         }
+
+        GameMng.I.addActMessage(string.Format("{0}님의 건물이 지어지고 있습니다.", GameMng.I._hextile.GetCell(posX, posY)._builtObj._uniqueNumber), posX, posY);
     }
 
     /**
@@ -298,7 +307,7 @@ public class UnitMng : MonoBehaviour
                 {
                     GameMng.I.targetTile._unitObj.DestroyMyself();
                     GameMng.I.targetTile._unitObj = null;
-                    GameMng.I.targetTile._code = 0;
+                    GameMng.I._hextile.TilecodeClear(GameMng.I.targetTile);
                 }
                 EnforceAttack();
             }

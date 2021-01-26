@@ -8,6 +8,7 @@ public class Sea_Soldier_1 : Unit
     void Awake()
     {
         _name = "물 전사 1";
+        _unitDesc = "모조리";
         _max_hp = 15;
         _hp = _max_hp;
         _code = (int)UNIT.SEA_SOLDIER_1;
@@ -25,26 +26,6 @@ public class Sea_Soldier_1 : Unit
     {
         _activity.Add(ACTIVITY.MOVE);
         _activity.Add(ACTIVITY.ATTACK);
-    }
-
-    public void waitingCreate()
-    {
-        createCount++;
-        _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
-
-        if (createCount > maxCreateCount - 1)        // 2턴 후에 생성됨
-        {
-            GameMng.I._hextile.GetCell(SaveX, SaveY)._builtObj.GetComponent<Built>()._bActAccess = true;
-
-            _desc = "모조리 !";
-
-            _anim.SetTrigger("isSpawn");
-
-            if (NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))
-                init();
-
-            GameMng.I.RemoveDelegate(this.waitingCreate);
-        }
     }
 
     void OnDestroy()

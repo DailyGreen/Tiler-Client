@@ -8,9 +8,10 @@ public class Forest_Witch_1 : Unit
     void Awake()
     {
         _name = "법사 1";
+        _unitDesc = "얘도 마법 잘한대";
         _max_hp = 20;
         _hp = _max_hp;
-        _code = (int)UNIT.FOREST_SOLDIER_1;
+        _code = (int)UNIT.FOREST_WITCH_1;
         _damage = 10;
         _basedistance = 1;
         _attackdistance = 2;
@@ -21,31 +22,10 @@ public class Forest_Witch_1 : Unit
         GameMng.I.AddDelegate(this.waitingCreate);
     }
 
-    void init()
+    public override void init()
     {
         _activity.Add(ACTIVITY.MOVE);
         _activity.Add(ACTIVITY.ATTACK);
-    }
-
-    public void waitingCreate()
-    {
-        createCount++;
-        _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
-
-        if (createCount > maxCreateCount - 1)        // 2턴 후에 생성됨
-        {
-            GameMng.I._hextile.GetCell(SaveX, SaveY)._builtObj.GetComponent<Built>()._bActAccess = true;
-
-            _desc = "ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ";
-
-            _anim.SetTrigger("isSpawn");
-
-            if (NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))
-                init();
-
-
-            GameMng.I.RemoveDelegate(this.waitingCreate);
-        }
     }
 
     void OnDestroy()

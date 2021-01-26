@@ -10,4 +10,36 @@ public class Unit : DynamicObject
      */
     public int _damage = 0;
 
+    public string _unitDesc;            // 유닛 생성 시 나오는 설명
+
+    /**
+     * @brief 유닛 생성 대기 및 생성 함수
+     */
+    public void waitingCreate()
+    {
+        createCount++;
+        _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
+
+        if (createCount > maxCreateCount - 1)
+        {
+            GameMng.I._hextile.GetCell(SaveX, SaveY)._builtObj.GetComponent<Built>()._bActAccess = true;
+            GameMng.I._hextile.GetCell(SaveX, SaveY)._builtObj._anim.SetTrigger("isComplete");
+
+            // GameMng.I._hextile.GetCell(SaveX, SaveY)._builtObj.GetComponent<MillitaryBase>().CreatingUnitobj = null;     // 심민석 다시 짜
+            _desc = _unitDesc;
+
+            _anim.SetTrigger("isSpawn");
+
+            if (NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))
+                init();
+
+            GameMng.I.RemoveDelegate(waitingCreate);
+        }
+    }
+
+    public virtual void init()
+    {
+
+    }
+
 }

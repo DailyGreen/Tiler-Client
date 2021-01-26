@@ -89,6 +89,10 @@ public class GameMng : MonoBehaviour
     UnityEngine.UI.Image[] playerListImg;       // 유저 목록들 이미지   (tab키 UI)
     [SerializeField]
     UnityEngine.UI.Text[] playerListName;       // 유저 목록들 이름   (tab키 UI)
+    [SerializeField]
+    GameObject[] playerListExit;                // 유저 목록들 사망 이미지    (tab키 UI)
+    [SerializeField]
+    GameObject enemySelectedTile;               // 적이 선택한 타일을 보여주는 오브젝트
 
 
     // ---- 맵의 가로 세로 크기 읽기
@@ -134,9 +138,9 @@ public class GameMng : MonoBehaviour
         _gold = 100;
         _nowMem = 0;
         _maxMem = 0;
-        
+
         setMainInterface(false, false, false);
-        
+
         if (NetworkMng.getInstance.uniqueNumber == NetworkMng.getInstance.firstPlayerUniqueNumber)
             myTurn = true;
 
@@ -284,6 +288,7 @@ public class GameMng : MonoBehaviour
             this.turnDescText.text = "내 차례";
             ColorUtility.TryParseHtmlString(CustomColor.TransColor(NetworkMng.getInstance.myColor), out color);
             turnDescImage.color = color;
+            enemySelectedTile.transform.position = new Vector3(-100, -100, 0);
 
             return;
         }
@@ -528,6 +533,24 @@ public class GameMng : MonoBehaviour
                 actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; MillitaryBase.CreateAttackSecondUnitBtn(); });
                 canUseActivity(actButton, Frame, Forest_Soldier_1.cost);
                 break;
+            case ACTIVITY.SOLDIER_2_UNIT_CREATE:
+                actName.text = "전사3 생성";
+                actDesc.text = "두 턴 소요";
+                actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; MillitaryBase.CreateAttackThirdUnitBtn(); });
+                canUseActivity(actButton, Frame, Forest_Soldier_2.cost);
+                break;
+            case ACTIVITY.WITCH_0_UNIT_CREATE:
+                actName.text = "마법사1 생성";
+                actDesc.text = "두 턴 소요";
+                actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; MillitaryBase.CreateAttackFourthUnitBtn(); });
+                canUseActivity(actButton, Frame, Forest_Witch_0.cost);
+                break;
+            case ACTIVITY.WITCH_1_UNIT_CREATE:
+                actName.text = "마법사2 생성";
+                actDesc.text = "두 턴 소요";
+                actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; MillitaryBase.CreateAttackFifthUnitBtn(); });
+                canUseActivity(actButton, Frame, Forest_Witch_1.cost);
+                break;
             default:
                 break;
         }
@@ -599,6 +622,8 @@ public class GameMng : MonoBehaviour
                 selectedTile = hit.collider.gameObject.GetComponent<Tile>();
                 _hextile.FindDistancesTo(selectedTile);
                 _range.SelectTileSetting(false);
+                if (myTurn)
+                    NetworkMng.getInstance.SendMsg(string.Format("SELECTING:{0}:{1}", selectedTile.PosX, selectedTile.PosZ));
             }
         }
     }
@@ -681,6 +706,22 @@ public class GameMng : MonoBehaviour
     }
 
     /**
+     * @brief 같이 플레이 중이던 유저가 나가거나 죽었을때
+     * @param uniqueNumber 대상 유저 번호
+     */
+    public void UserExit(int uniqueNumber)
+    {
+        for (int i = 0; i < NetworkMng.getInstance.v_user.Count; i++)
+        {
+            if (NetworkMng.getInstance.v_user[i].Equals(uniqueNumber))
+            {
+                playerListExit[i].SetActive(true);
+                break;
+            }
+        }
+    }
+
+    /**
      * @brief 선택한것들을 지울때
      */
     public void cleanSelected()
@@ -700,9 +741,11 @@ public class GameMng : MonoBehaviour
         if (_hextile.GetCell(posX, posY)._unitObj != null) obj = _hextile.GetCell(posX, posY)._unitObj;
         else if (_hextile.GetCell(posX, posY)._builtObj != null) obj = _hextile.GetCell(posX, posY)._builtObj;
         else return;
-        if(_hextile.GetCell(posX,posY)._builtObj == null)
+        if (_hextile.GetCell(posX, posY)._builtObj == null)
             _UnitGM.reversalUnit(obj.transform, _hextile.GetCell(toX, toY).transform);
         obj._anim.SetTrigger("isAttacking");
+
+        addActMessage(string.Format("{0}님이 공격했습니다.", obj._uniqueNumber), posX, posY);
 
         // 공격받는 대상의 HP 가 줄어들게 해줌
         obj = null;
@@ -732,13 +775,22 @@ public class GameMng : MonoBehaviour
             //Destroy(obj.gameObject);
             _hextile.GetCell(toX, toY)._unitObj = null;
             _hextile.GetCell(toX, toY)._builtObj = null;
-            _hextile.TilecodeClear(toX,toY);            // TODO : 코드 값 원래 값으로
+            _hextile.TilecodeClear(toX, toY);            // TODO : 코드 값 원래 값으로
         }
 
     }
     public void uiClickBT()
     {
         NetworkMng.getInstance._soundGM.uiBTClick();
+    }
+    /**
+    * @brief 상대방이 클릭한 타일 세팅
+    * @param posX 상대방이 클릭한 타일 X
+    * @param posZ 상대방이 클릭한 타일 Y
+    */
+    public void enemyClickTile(int posX, int posZ)
+    {
+        GameMng.I.enemySelectedTile.transform.position = _hextile.GetCell(posX, posZ).transform.position;
     }
 
     /**
@@ -772,10 +824,22 @@ public class GameMng : MonoBehaviour
                 return objSprite[13];
             case (int)UNIT.FOREST_SOLDIER_1:
                 return objSprite[14];
+            case (int)UNIT.FOREST_SOLDIER_2:
+                return objSprite[15];
+            case (int)UNIT.FOREST_WITCH_0:
+                return objSprite[16];
+            case (int)UNIT.FOREST_WITCH_1:
+                return objSprite[17];
             case (int)UNIT.SEA_WORKER:
                 return objSprite[18];
             case (int)UNIT.SEA_SOLDIER_0:
                 return objSprite[19];
+            case (int)UNIT.SEA_SOLDIER_1:
+                return objSprite[20];
+            case (int)UNIT.SEA_SOLDIER_2:
+                return objSprite[21];
+            case (int)UNIT.SEA_WITCH_0:
+                return objSprite[22];
             case (int)UNIT.DESERT_WORKER:
                 return objSprite[24];
             case (int)UNIT.DESERT_SOLDIER_0:

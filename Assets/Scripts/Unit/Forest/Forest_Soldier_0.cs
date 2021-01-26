@@ -8,6 +8,7 @@ public class Forest_Soldier_0 : Unit
     void Awake()
     {
         _name = "전사 0";
+        _unitDesc = "모조리 죽여주마!";
         _max_hp = 15;
         _hp = _max_hp;
         _code = (int)UNIT.FOREST_SOLDIER_0;
@@ -21,30 +22,10 @@ public class Forest_Soldier_0 : Unit
         GameMng.I.AddDelegate(this.waitingCreate);
     }
 
-    void init()
+    public override void init()
     {
         _activity.Add(ACTIVITY.MOVE);
         _activity.Add(ACTIVITY.ATTACK);
-    }
-
-    public void waitingCreate()
-    {
-        createCount++;
-        _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
-
-        if (createCount > maxCreateCount - 1)        // 2턴 후에 생성됨
-        {
-            GameMng.I._hextile.GetCell(SaveX, SaveY)._builtObj.GetComponent<Built>()._bActAccess = true;
-
-            _desc = "모조리 죽여주마!";
-
-            _anim.SetTrigger("isSpawn");
-
-            if (NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))
-                init();
-
-            GameMng.I.RemoveDelegate(this.waitingCreate);
-        }
     }
 
     void OnDestroy()

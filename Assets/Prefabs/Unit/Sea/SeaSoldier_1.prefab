@@ -821,8 +821,8 @@ MonoBehaviour:
   _hp: 0
   _max_hp: 0
   _uniqueNumber: 0
-  _anim: {fileID: 0}
-  dyingClip: {fileID: 0}
+  _anim: {fileID: 4723501171608597417}
+  dyingClip: {fileID: 7400000, guid: b3de7481312a30b43b19a029d7b0d856, type: 2}
   createCount: 0
   maxCreateCount: 0
   _basedistance: 0

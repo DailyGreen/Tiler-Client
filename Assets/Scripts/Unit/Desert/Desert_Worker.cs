@@ -9,6 +9,7 @@ public class Desert_Worker : Worker
     void Awake()
     {
         _name = "사막 종족 일꾼";
+        _unitDesc = "듬직해 보인다.";
         _code = (int)UNIT.DESERT_WORKER;
         _max_hp = 10;
         _hp = _max_hp;
@@ -20,23 +21,6 @@ public class Desert_Worker : Worker
         GameMng.I.AddDelegate(this.waitingCreate);
     }
 
-    public void waitingCreate()
-    {
-        createCount++;
-        _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
-        // 2턴 후에 생성됨
-        if (createCount > maxCreateCount - 1)
-        {
-            _anim.SetTrigger("isSpawn");
-
-            if (NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))
-                init();
-
-            _desc = "듬직해 보인다.";
-
-            GameMng.I.RemoveDelegate(this.waitingCreate);
-        }
-    }
 
     void OnDestroy()
     {

@@ -13,6 +13,7 @@ public class Castle : Built
         _hp = _max_hp;
         _code = (int)BUILT.CASTLE;
         _anim.SetTrigger("isSpawn");
+        _emoteSide.color = GetUserColor();
 
         if (NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))
             _activity.Add(ACTIVITY.WORKER_UNIT_CREATE);
@@ -24,6 +25,6 @@ public class Castle : Built
     public static void CreateUnitBtn()
     {
         GameMng.I._range.moveRange((int)UNIQEDISTANCE.DISTANCE);
-        GameMng.I.cleanActList();
+        //GameMng.I.cleanActList();
     }
 }

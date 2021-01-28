@@ -281,6 +281,10 @@ public class GameMng : MonoBehaviour
         refreshMainUI();
         UserListRefresh(uniqueNumber);
 
+        /// 유지비가 - 가 되었다면 디버프 행동 추가
+        //
+        //
+
         // 누구 차례인지 뿌려주기
         if (NetworkMng.getInstance.uniqueNumber == uniqueNumber)
         {
@@ -289,9 +293,11 @@ public class GameMng : MonoBehaviour
             ColorUtility.TryParseHtmlString(CustomColor.TransColor(NetworkMng.getInstance.myColor), out color);
             turnDescImage.color = color;
             enemySelectedTile.gameObject.transform.position = new Vector3(-100, -100, 0);
-
+            if (selectedTile != null)
+                NetworkMng.getInstance.SendMsg(string.Format("SELECTING:{0}:{1}", selectedTile.PosX, selectedTile.PosZ));
             return;
         }
+        cleanActList();
         this.myTurn = false;
         for (int i = 0; i < NetworkMng.getInstance.v_user.Count; i++)
         {
@@ -306,9 +312,10 @@ public class GameMng : MonoBehaviour
     }
 
     /**
-     * @brief 메인 UI 새로고침
+     * @brief 메인 UI 
+     * @param onActList ActList 활성화를 수락할지
      */
-    public void refreshMainUI()
+    public void refreshMainUI(bool onActList = true)
     {
         if (selectedTile == null)
             return;
@@ -328,22 +335,25 @@ public class GameMng : MonoBehaviour
             hpText.text = obj._hp + " / " + obj._max_hp;
             setMainInterface();
 
-            for (int i = 0; i < obj._activity.Count; i++)
+            if (onActList)
             {
-                actList[i].gameObject.SetActive(true);
-                UnityEngine.UI.Text[] childsTxt = actList[i].GetComponentsInChildren<UnityEngine.UI.Text>();
-                try
+                for (int i = 0; i < obj._activity.Count; i++)
                 {
-                    checkActivity(obj._activity[i], actList[i], childsTxt[0], childsTxt[1], frameImg[i]);
-                }
-                catch
-                {
-                    Debug.LogError("childTxt 의 인덱스 값이 옳지 않음");
+                    actList[i].gameObject.SetActive(true);
+                    UnityEngine.UI.Text[] childsTxt = actList[i].GetComponentsInChildren<UnityEngine.UI.Text>();
+                    try
+                    {
+                        checkActivity(obj._activity[i], actList[i], childsTxt[0], childsTxt[1], frameImg[i]);
+                    }
+                    catch
+                    {
+                        Debug.LogError("childTxt 의 인덱스 값이 옳지 않음");
+                    }
                 }
             }
         }
         // 내 턴이 아닐때 타일에 어떤 반응이 있는지 새로고침
-        else if (!myTurn)
+        else
         {
             // 이동했거나 사망했음. 빈타일임 (내가 한 행동이였다면 바꿀 필요가 없음)
             objImage.sprite = getObjSprite(selectedTile._code);
@@ -624,6 +634,7 @@ public class GameMng : MonoBehaviour
                 _range.SelectTileSetting(false);
                 if (myTurn)
                     NetworkMng.getInstance.SendMsg(string.Format("SELECTING:{0}:{1}", selectedTile.PosX, selectedTile.PosZ));
+                Debug.Log("타일 선택");
             }
         }
     }
@@ -790,7 +801,7 @@ public class GameMng : MonoBehaviour
     */
     public void enemyClickTile(int posX, int posZ)
     {
-        GameMng.I.enemySelectedTile.transform.position = _hextile.GetCell(posX, posZ).transform.position;
+        enemySelectedTile.transform.position = _hextile.GetCell(posX, posZ).transform.position;
     }
 
     /**
@@ -840,6 +851,8 @@ public class GameMng : MonoBehaviour
                 return objSprite[21];
             case (int)UNIT.SEA_WITCH_0:
                 return objSprite[22];
+            case (int)UNIT.SEA_WITCH_1:
+                return objSprite[23];
             case (int)UNIT.DESERT_WORKER:
                 return objSprite[24];
             case (int)UNIT.DESERT_SOLDIER_0:

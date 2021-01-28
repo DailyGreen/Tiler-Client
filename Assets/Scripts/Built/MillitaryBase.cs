@@ -8,6 +8,8 @@ public class MillitaryBase : Built
 
     public static int cost = 10;   // 건설 비용
 
+    public int maintenanceCost = 0;   // 유지 비용
+
     public int CreatingUnitX = 0;
     public int CreatingUnitY = 0;
 
@@ -18,7 +20,10 @@ public class MillitaryBase : Built
         _hp = _max_hp;
         _code = (int)BUILT.MILLITARY_BASE;
         maxCreateCount = 3;
+        maintenanceCost = 3;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
+        _emoteSide.color = GetUserColor();
+
         GameMng.I.AddDelegate(this.waitingCreate);
     }
 
@@ -51,9 +56,16 @@ public class MillitaryBase : Built
             if (NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))
             {
                 init();
+                GameMng.I.AddDelegate(maintenance);
             }
         }
     }
+
+    public void maintenance()
+    {
+        GameMng.I.minGold(maintenanceCost);
+    }
+
 
     public static void CreateAttackFirstUnitBtn()
     {
@@ -105,6 +117,8 @@ public class MillitaryBase : Built
     {
         if (createCount < maxCreateCount - 1)
             GameMng.I.RemoveDelegate(waitingCreate);
+        else
+            GameMng.I.RemoveDelegate(maintenance);
 
         if (CreatingUnitobj != null)
         {

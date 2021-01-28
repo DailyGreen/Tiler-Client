@@ -10,6 +10,8 @@ public class Unit : DynamicObject
      */
     public int _damage = 0;
 
+    public int maintenanceCost = 0;
+
     public string _unitDesc;            // 유닛 생성 시 나오는 설명
 
     /**
@@ -33,11 +35,20 @@ public class Unit : DynamicObject
             _anim.SetTrigger("isSpawn");
 
             if (NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))
+            {
                 init();
+                GameMng.I.AddDelegate(maintenance);
+            }
 
             GameMng.I.RemoveDelegate(waitingCreate);
         }
     }
+
+    public void maintenance()
+    {
+        GameMng.I.minGold(maintenanceCost);
+    }
+
 
     public virtual void init()
     {

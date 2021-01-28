@@ -15,7 +15,9 @@ public class Desert_Worker : Worker
         _hp = _max_hp;
         _basedistance = 1;
         maxCreateCount = 2;
+        maintenanceCost = 1;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
+        _emoteSide.color = GetUserColor();
 
         GameMng.I._BuiltGM.act = ACTIVITY.NONE;
         GameMng.I.AddDelegate(this.waitingCreate);
@@ -26,5 +28,7 @@ public class Desert_Worker : Worker
     {
         if (!(createCount > maxCreateCount - 1))
             GameMng.I.RemoveDelegate(waitingCreate);
+        else
+            GameMng.I.RemoveDelegate(maintenance);
     }
 }

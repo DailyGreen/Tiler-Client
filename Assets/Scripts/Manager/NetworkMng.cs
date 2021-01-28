@@ -440,7 +440,8 @@ public class NetworkMng : MonoBehaviour
         }
         else if (txt[0].Equals("SELECTING"))
         {
-            GameMng.I.enemyClickTile(int.Parse(txt[1]), int.Parse(txt[2]));
+            if (!GameMng.I.myTurn)
+                GameMng.I.enemyClickTile(int.Parse(txt[1]), int.Parse(txt[2]));
         }
         else if (txt[0].Equals("CHAT"))
         {

@@ -8,7 +8,8 @@ public class DynamicObject : Object
     public int _max_hp;
     //public int _cost;
 
-    public int _uniqueNumber;      // 플레이어 구별 코드
+    public int _uniqueNumber;               // 플레이어 구별 코드
+    public SpriteRenderer _emoteSide;       // 말풍선 이모지 색
 
     /**
      * 유닛 애니메이션 관리
@@ -32,10 +33,18 @@ public class DynamicObject : Object
 
     public bool _bActAccess = true;         // 오브젝트들의 행동 제어
 
+    public Color GetUserColor()
+    {
+        Color color;
+        ColorUtility.TryParseHtmlString(CustomColor.TransColor(NetworkMng.getInstance.myColor), out color);
+        return color;
+    }
+
     public void DestroyMyself()
     {
         _anim.SetTrigger("isDying");
 
         Destroy(this.gameObject, dyingClip.length - .2f);
     }
+
 }

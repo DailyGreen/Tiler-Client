@@ -16,6 +16,7 @@ public class Desert_Witch_0 : Unit
         _basedistance = 1;
         _attackdistance = 2;
         maxCreateCount = 3;
+        maintenanceCost = 1;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
 
         GameMng.I._BuiltGM.act = ACTIVITY.NONE;
@@ -32,5 +33,7 @@ public class Desert_Witch_0 : Unit
     {
         if (!(createCount > maxCreateCount - 1))
             GameMng.I.RemoveDelegate(waitingCreate);
+        else
+            GameMng.I.RemoveDelegate(maintenance);
     }
 }

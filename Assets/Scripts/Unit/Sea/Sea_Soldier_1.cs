@@ -16,13 +16,14 @@ public class Sea_Soldier_1 : Unit
         _basedistance = 1;
         _attackdistance = 1;
         maxCreateCount = 3;
+        maintenanceCost = 1;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
 
         GameMng.I._BuiltGM.act = ACTIVITY.NONE;
         GameMng.I.AddDelegate(this.waitingCreate);
     }
 
-    void init()
+    public override void init()
     {
         _activity.Add(ACTIVITY.MOVE);
         _activity.Add(ACTIVITY.ATTACK);
@@ -32,5 +33,7 @@ public class Sea_Soldier_1 : Unit
     {
         if (!(createCount > maxCreateCount - 1))
             GameMng.I.RemoveDelegate(waitingCreate);
+        else
+            GameMng.I.RemoveDelegate(maintenance);
     }
 }

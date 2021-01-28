@@ -111,15 +111,23 @@ public class UnitMng : MonoBehaviour
         }
         else if (GameMng.I.distanceOfTiles >= 0.1f)     // 남은 거리가 좁아지면 타일 위치로 자동 이동
         {
-            act = ACTIVITY.NONE;
 
             GameMng.I.selectedTile._unitObj.transform.localPosition = GameMng.I.targetTile.transform.localPosition;
             GameMng.I.targetTile._unitObj = GameMng.I.selectedTile._unitObj;
             GameMng.I.targetTile._code = GameMng.I.selectedTile._unitObj._code;
             GameMng.I.selectedTile._unitObj = null;
             GameMng.I._hextile.TilecodeClear(GameMng.I.selectedTile);
-            GameMng.I.refreshMainUI();
+            
+
+            GameMng.I.selectedTile = GameMng.I.targetTile;
+            GameMng.I._range.SelectTileSetting(false);
+            GameMng.I._hextile.FindDistancesTo(GameMng.I.selectedTile);
+
+            GameMng.I.myTurn = false;
+            //GameMng.I.refreshMainUI(false);
+            //GameMng.I.cleanActList();
             NetworkMng.getInstance.SendMsg("TURN");
+            act = ACTIVITY.NONE;
         }
     }
 

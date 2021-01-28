@@ -40,8 +40,20 @@ public class MainCamera : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && GameMng.I._UnitGM.act == ACTIVITY.NONE && GameMng.I._BuiltGM.act == ACTIVITY.NONE && !EventSystem.current.IsPointerOverGameObject())
         {
             GameMng.I.mouseRaycast();
+
+            GameMng.I._range.AttackrangeTileReset();    // 클릭시 터렛 공격 범위 초기화
+
             if (GameMng.I.selectedTile)
+            {
                 GameMng.I.clickTile(GameMng.I.selectedTile);
+                if (GameMng.I.selectedTile._builtObj != null)
+                {
+                    if (GameMng.I.selectedTile._code == (int)BUILT.ATTACK_BUILDING && NetworkMng.getInstance.uniqueNumber.Equals(GameMng.I.selectedTile._builtObj._uniqueNumber))
+                    {
+                        GameMng.I._range.attackRange(GameMng.I.selectedTile._builtObj.GetComponent<Turret>()._attackdistance);
+                    }
+                }
+            }
         }
         else if (Input.GetKeyDown(KeyCode.Space))
         {

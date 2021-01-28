@@ -26,6 +26,9 @@ public class MainCamera : MonoBehaviour
     [SerializeField]
     private GameObject UserListPanel;
 
+    // 이모지 설정
+    bool onoffemote = false;
+
     void Start()
     {
         //MainCamera = Camera.main;
@@ -96,5 +99,17 @@ public class MainCamera : MonoBehaviour
         //pos.x = Mathf.Clamp(pos.x, -limitPos.x, limitPos.x);
         //pos.y = Mathf.Clamp(pos.y, -limitPos.y, limitPos.y);
         this.transform.position = pos;
+    }
+    
+    void EmoteControl()
+    {
+        if (onoffemote)
+        {
+            _camera.cullingMask = ~(1 << 3);
+        }
+        else
+        {
+            _camera.cullingMask = -1;
+        }
     }
 }

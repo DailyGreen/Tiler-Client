@@ -58,6 +58,7 @@ MonoBehaviour:
   _hp: 0
   _max_hp: 0
   _uniqueNumber: 0
+  _emoteSide: {fileID: 506212819839431888}
   _anim: {fileID: 297502587}
   dyingClip: {fileID: 7400000, guid: 88b2bce321c58fe4e837e32bc1e7c867, type: 2}
   createCount: 0
@@ -67,10 +68,6 @@ MonoBehaviour:
   SaveX: 0
   SaveY: 0
   _bActAccess: 1
-  mine: {fileID: 0}
-  farm: {fileID: 0}
-  turret: {fileID: 0}
-  millitarybase: {fileID: 0}
   making: 0
 --- !u!95 &297502587
 Animator:

@@ -9,6 +9,7 @@ public class DynamicObject : Object
     //public int _cost;
 
     public int _uniqueNumber;      // 플레이어 구별 코드
+    public SpriteRenderer _emoteSide;      // 말풍선 이모지 색
 
     /**
      * 유닛 애니메이션 관리
@@ -37,5 +38,12 @@ public class DynamicObject : Object
         _anim.SetTrigger("isDying");
 
         Destroy(this.gameObject, dyingClip.length - .2f);
+    }
+
+    public Color GetUserColor()
+    {
+        Color color;
+        ColorUtility.TryParseHtmlString(CustomColor.TransColor(NetworkMng.getInstance.myColor), out color);
+        return color;
     }
 }

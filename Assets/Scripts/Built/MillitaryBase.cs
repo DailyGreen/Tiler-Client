@@ -22,6 +22,8 @@ public class MillitaryBase : Built
         maxCreateCount = 3;
         maintenanceCost = 3;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
+        _emoteSide.color = GetUserColor();
+
         GameMng.I.AddDelegate(this.waitingCreate);
     }
 

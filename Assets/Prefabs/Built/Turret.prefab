@@ -220,6 +220,7 @@ MonoBehaviour:
   _hp: 0
   _max_hp: 0
   _uniqueNumber: 0
+  _emoteSide: {fileID: 5116539692099784345}
   _anim: {fileID: 4552202300365697578}
   dyingClip: {fileID: 7400000, guid: fa2ee53c3a632b5449053abafc49f793, type: 2}
   createCount: 0
@@ -229,10 +230,6 @@ MonoBehaviour:
   SaveX: 0
   SaveY: 0
   _bActAccess: 1
-  mine: {fileID: 0}
-  farm: {fileID: 0}
-  turret: {fileID: 0}
-  millitarybase: {fileID: 0}
   attack: 0
   tilestate: {fileID: 0}
 --- !u!95 &4552202300365697578

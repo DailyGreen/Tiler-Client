@@ -47,10 +47,13 @@ public class UnitMng : MonoBehaviour
         else if (Input.GetMouseButtonUp(1) && act != ACTIVITY.ACTING)
         {
             act = ACTIVITY.NONE;
+
             GameMng.I._BuiltGM.act = ACTIVITY.NONE;
+
             GameMng.I._range.rangeTileReset();
             GameMng.I._range.AttackrangeTileReset();                                                     //추가
             GameMng.I._range.SelectTileSetting(true);
+
             GameMng.I.cleanActList();
             GameMng.I.cleanSelected();
         }
@@ -68,7 +71,8 @@ public class UnitMng : MonoBehaviour
         {
             GameMng.I.cleanActList();
             GameMng.I._range.rangeTileReset();  // 범위 타일 위치 초기화
-            if (GameMng.I.selectedTile._code == (int)UNIT.FOREST_WITCH_1)
+
+            if (GameMng.I.selectedTile._code == (int)UNIT.FOREST_WITCH_1 || GameMng.I.selectedTile._code == (int)UNIT.SEA_WITCH_1)
             {
                 movedis = 3.0f;
                 GameMng.I.unitSpeed = 6.0f;
@@ -78,18 +82,23 @@ public class UnitMng : MonoBehaviour
                 movedis = 1.5f;
                 GameMng.I.unitSpeed = 3.0f;
             }
+
             GameMng.I.distanceOfTiles = Vector2.Distance(GameMng.I.selectedTile._unitObj.transform.position, GameMng.I.targetTile.transform.position);
+
             if (GameMng.I.hit.collider.tag.Equals("Tile") && GameMng.I.distanceOfTiles <= movedis && Tile.isEmptyTile(GameMng.I.targetTile))
             {
                 act = ACTIVITY.ACTING;
+
                 reversalUnit(GameMng.I.selectedTile._unitObj.transform, GameMng.I.targetTile.transform);
+
                 GameMng.I.selectedTile._unitObj._anim.SetTrigger("isRunning");
+
                 NetworkMng.getInstance.SendMsg(string.Format("MOVE_UNIT:{0}:{1}:{2}:{3}", GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosZ, GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosZ));
+                
                 StartCoroutine("Moving", movedis);
             }
             else                                     // 범위가 아닌 다른 곳을 누름
             {
-                Debug.Log("else로 빠짐");
                 act = ACTIVITY.NONE;
                 //GameMng.I.selectedTile = GameMng.I.targetTile;
                 //GameMng.I.targetTile = null;
@@ -106,27 +115,30 @@ public class UnitMng : MonoBehaviour
             && GameMng.I.distanceOfTiles <= movedis) // 캐릭터와 타일간 거리가 1.5 * a 이하일시 움직일수 있음 (거리 한칸당 1.24?정도 되드라)
         {
             GameMng.I.selectedTile._unitObj.transform.localPosition = Vector2.Lerp(GameMng.I.selectedTile._unitObj.transform.localPosition, GameMng.I.targetTile.transform.localPosition, GameMng.I.unitSpeed * Time.deltaTime);        //타일 간 부드러운 이동
+            
             yield return null;
+
             StartCoroutine("Moving", movedis);
         }
         else if (GameMng.I.distanceOfTiles >= 0.1f)     // 남은 거리가 좁아지면 타일 위치로 자동 이동
         {
-
             GameMng.I.selectedTile._unitObj.transform.localPosition = GameMng.I.targetTile.transform.localPosition;
             GameMng.I.targetTile._unitObj = GameMng.I.selectedTile._unitObj;
             GameMng.I.targetTile._code = GameMng.I.selectedTile._unitObj._code;
             GameMng.I.selectedTile._unitObj = null;
+
             GameMng.I._hextile.TilecodeClear(GameMng.I.selectedTile);
             
-
             GameMng.I.selectedTile = GameMng.I.targetTile;
+
             GameMng.I._range.SelectTileSetting(false);
+
             GameMng.I._hextile.FindDistancesTo(GameMng.I.selectedTile);
 
             GameMng.I.myTurn = false;
-            //GameMng.I.refreshMainUI(false);
-            //GameMng.I.cleanActList();
+
             NetworkMng.getInstance.SendMsg("TURN");
+
             act = ACTIVITY.NONE;
         }
     }
@@ -141,10 +153,12 @@ public class UnitMng : MonoBehaviour
     public IEnumerator MovingUnit(int posX, int posY, int toX, int toY)
     {
         bool isRun = true;
-        Debug.Log(GameMng.I._hextile.GetCell(posX, posY)._code);
+
         reversalUnit(GameMng.I._hextile.GetCell(posX, posY)._unitObj.transform, GameMng.I._hextile.GetCell(toX, toY).transform);
+
         GameMng.I._hextile.GetCell(posX, posY)._unitObj._anim.SetTrigger("isRunning");
         GameMng.I._hextile.GetCell(toX, toY)._code = GameMng.I._hextile.GetCell(posX, posY)._code;
+
         GameMng.I._hextile.TilecodeClear(posX, posY);
 
         GameMng.I.addActMessage(string.Format("{0}님의 유닛이 이동했습니다.", GameMng.I._hextile.GetCell(posX, posY)._unitObj._uniqueNumber), toX, toY);
@@ -163,6 +177,7 @@ public class UnitMng : MonoBehaviour
                 GameMng.I._hextile.GetCell(posX, posY)._unitObj.transform.localPosition = GameMng.I._hextile.GetCell(toX, toY).transform.localPosition;
                 GameMng.I._hextile.GetCell(toX, toY)._unitObj = GameMng.I._hextile.GetCell(posX, posY)._unitObj;
                 GameMng.I._hextile.GetCell(posX, posY)._unitObj = null;
+
                 GameMng.I.refreshMainUI();
 
                 isRun = false;
@@ -234,27 +249,27 @@ public class UnitMng : MonoBehaviour
                 }
 
                 GameMng.I.cleanSelected();
+                GameMng.I.cleanActList();
 
                 act = ACTIVITY.NONE;
-                GameMng.I.cleanActList();
+
                 NetworkMng.getInstance.SendMsg("TURN");
             }
         }
         else if (Vector2.Distance(GameMng.I.selectedTile.transform.localPosition, GameMng.I.targetTile.transform.localPosition) >= 1.5f)
         {
             GameMng.I.cleanActList();
-
-            Debug.Log("ASdf");
             GameMng.I.cleanSelected();
             GameMng.I._range.rangeTileReset();
+
             act = ACTIVITY.NONE;
         }
         else if (GameMng.I.targetTile._builtObj != null || GameMng.I.targetTile._unitObj != null)
         {
             GameMng.I.cleanActList();
-
             GameMng.I.cleanSelected();
             GameMng.I._range.rangeTileReset();
+
             act = ACTIVITY.NONE;
         }
     }
@@ -307,26 +322,30 @@ public class UnitMng : MonoBehaviour
         GameMng.I.mouseRaycast(true);
         if (GameMng.I.targetTile._unitObj != null || GameMng.I.targetTile._builtObj != null)
         {
-
             if (GameMng.I.targetTile._unitObj != null && GameMng.I.targetTile._unitObj._uniqueNumber != NetworkMng.getInstance.uniqueNumber && GameMng.I.targetTile.Distance <= distance)
             {
                 GameMng.I.targetTile._unitObj._hp -= GameMng.I.selectedTile._unitObj._damage;
+
                 if (GameMng.I.targetTile._unitObj._hp <= 0)
                 {
                     GameMng.I.targetTile._unitObj.DestroyMyself();
                     GameMng.I.targetTile._unitObj = null;
                     GameMng.I._hextile.TilecodeClear(GameMng.I.targetTile);
                 }
+
                 EnforceAttack();
             }
             else if (GameMng.I.targetTile._builtObj != null && GameMng.I.targetTile._builtObj._uniqueNumber != NetworkMng.getInstance.uniqueNumber && GameMng.I.targetTile.Distance <= distance)
             {
                 GameMng.I.targetTile._builtObj._hp -= GameMng.I.selectedTile._unitObj._damage;
+
                 if (GameMng.I.targetTile._builtObj._code == (int)BUILT.AIRDROP)
                 {
                     int nKind = Random.Range(1, 3);            // 1: 골드,  2: 식량
                     int nResult = Random.Range(20, 60);
+
                     Debug.Log(nKind + ", " + nResult);
+
                     if (nKind == 1)
                     {
                         GameMng.I.addGold(nResult);
@@ -342,12 +361,15 @@ public class UnitMng : MonoBehaviour
                 {
                     GameMng.I.targetTile._builtObj.DestroyMyself();
                     GameMng.I.targetTile._builtObj = null;
+
                     GameMng.I._hextile.TilecodeClear(GameMng.I.targetTile);                 // TODO : 코드 값 원래 값으로
                 }
                 EnforceAttack();
             }
+
             GameMng.I.cleanActList();
             GameMng.I.cleanSelected();
+
             act = ACTIVITY.NONE;
         }
     }
@@ -392,24 +414,20 @@ public class UnitMng : MonoBehaviour
     public void buildMillitaryBaseBuilding()
     {
         GameMng.I._range.moveRange(GameMng.I.selectedTile._unitObj._basedistance);
-        Debug.Log("군사 기지 생성");
     }
 
     public void buildShieldBuilding()
     {
         GameMng.I._range.moveRange(GameMng.I.selectedTile._unitObj._basedistance);
-        Debug.Log("방어 건물 생성");
     }
 
     public void buildUpgradeBuilding()
     {
         GameMng.I._range.moveRange(GameMng.I.selectedTile._unitObj._basedistance);
-        Debug.Log("강화 건물 생성");
     }
 
     public void unitAttacking()
     {
         GameMng.I._range.attackRange(GameMng.I.selectedTile._unitObj._attackdistance);
-        Debug.Log("공격 준비 완료");
     }
 }

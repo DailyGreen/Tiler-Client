@@ -25,6 +25,9 @@ public class MainCamera : MonoBehaviour
     private const float borderThickness = 10f;      // 마우스가 스크린 밖에 닿는 범위( 두께 )
     [SerializeField]
     private GameObject UserListPanel;
+    
+    // 이모지 설정
+    bool onoffemote = false;
 
     void Start()
     {
@@ -70,8 +73,24 @@ public class MainCamera : MonoBehaviour
     }
 
     /**
-      * @brief 마우스 스크롤로 카메라 줌
-      */
+     * @brief 이모트 컨트롤
+     */
+
+    void EmoteControl()
+    {
+        if (onoffemote)
+        {
+            _camera.cullingMask = ~(1 << 3);
+        }
+        else
+        {
+            _camera.cullingMask = -1;
+        }
+    }
+
+    /**
+     * @brief 마우스 스크롤로 카메라 줌
+     */
     void MouseScrollzoom()
     {
         scrollData = Input.GetAxis("Mouse ScrollWheel");

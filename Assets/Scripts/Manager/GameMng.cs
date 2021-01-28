@@ -851,6 +851,8 @@ public class GameMng : MonoBehaviour
                 return objSprite[21];
             case (int)UNIT.SEA_WITCH_0:
                 return objSprite[22];
+            case (int)UNIT.SEA_WITCH_1:
+                return objSprite[23];
             case (int)UNIT.DESERT_WORKER:
                 return objSprite[24];
             case (int)UNIT.DESERT_SOLDIER_0:

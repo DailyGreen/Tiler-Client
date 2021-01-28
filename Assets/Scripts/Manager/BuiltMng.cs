@@ -21,7 +21,6 @@ public class BuiltMng : MonoBehaviour
             switch (act)
             {
                 case ACTIVITY.WORKER_UNIT_CREATE:
-                    //GameMng.I._hextile.GetCell(GameMng.I.CastlePosX, GameMng.I.CastlePosZ)._builtObj._anim.SetTrigger("isMaking");
                     CreateUnit(Forest_Worker.cost, (int)UNIT.FOREST_WORKER + (int)(NetworkMng.getInstance.myTribe) * 6);
                     break;
                 case ACTIVITY.SOLDIER_0_UNIT_CREATE:
@@ -81,8 +80,8 @@ public class BuiltMng : MonoBehaviour
                 if (index != (int)UNIT.FOREST_WORKER && index != (int)UNIT.SEA_WORKER && index != (int)UNIT.DESERT_WORKER)      // 일꾼 유닛들을 제외하고 유닛 생성중일때 해당 건물 행동 불가 상태 적용
                 {
                     GameMng.I.selectedTile._builtObj._bActAccess = false;
-                    GameMng.I.selectedTile._builtObj._anim.SetTrigger("isMaking");
                 }
+                GameMng.I.selectedTile._builtObj._anim.SetTrigger("isMaking");
                 GameObject Child = Instantiate(unitobj[index - 300], GameMng.I.targetTile.transform) as GameObject;                 // enum 값 - 300
                 Child.transform.parent = transform.parent;
                 GameMng.I.targetTile._unitObj = Child.GetComponent<Unit>();

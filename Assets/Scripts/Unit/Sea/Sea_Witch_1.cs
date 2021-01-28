@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Forest_Witch_1 : Unit
+public class Sea_Witch_1 : Unit
 {
     public static int cost = 4;
     void Awake()
     {
-        _name = "법사 1";
-        _unitDesc = "얘도 마법 잘한대";
-        _max_hp = 20;
+        _name = "물 종족 법사 2";
+        _unitDesc = "과연 물 마법의 힘은?";
+        _max_hp = 15;
         _hp = _max_hp;
-        _code = (int)UNIT.FOREST_WITCH_1;
-        _damage = 10;
+        _code = (int)UNIT.SEA_WITCH_1;
+        _damage = 5;
         _basedistance = 2;
         _attackdistance = 2;
         maxCreateCount = 3;

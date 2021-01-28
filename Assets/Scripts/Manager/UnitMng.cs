@@ -68,7 +68,7 @@ public class UnitMng : MonoBehaviour
         {
             GameMng.I.cleanActList();
             GameMng.I._range.rangeTileReset();  // 범위 타일 위치 초기화
-            if (GameMng.I.selectedTile._code == (int)UNIT.FOREST_WITCH_1)
+            if (GameMng.I.selectedTile._code == (int)UNIT.FOREST_WITCH_1 || GameMng.I.selectedTile._code == (int)UNIT.SEA_WITCH_1)
             {
                 movedis = 3.0f;
                 GameMng.I.unitSpeed = 6.0f;

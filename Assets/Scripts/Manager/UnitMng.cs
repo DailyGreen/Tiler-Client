@@ -163,7 +163,7 @@ public class UnitMng : MonoBehaviour
 
         GameMng.I._hextile.TilecodeClear(posX, posY);
 
-        GameMng.I.addActMessage(string.Format("{0}님의 유닛이 이동했습니다.", GameMng.I._hextile.GetCell(posX, posY)._unitObj._uniqueNumber), toX, toY);
+        GameMng.I.addActMessage(string.Format("{0}님의 유닛이 이동했습니다.", GameMng.I.getUserName(GameMng.I._hextile.GetCell(posX, posY)._unitObj._uniqueNumber)), toX, toY);
 
         while (isRun)
         {
@@ -226,6 +226,7 @@ public class UnitMng : MonoBehaviour
                 GameMng.I.targetTile._builtObj = Child.GetComponent<Built>();
                 GameMng.I.targetTile._builtObj.SaveX = GameMng.I.selectedTile.PosX;                // 생성하는 건물에게 있는 위치 저장 변수에 해당 유닛 위치값을 저장해줌
                 GameMng.I.targetTile._builtObj.SaveY = GameMng.I.selectedTile.PosZ;
+                GameMng.I.targetTile._builtObj._uniqueNumber = NetworkMng.getInstance.uniqueNumber;
                 GameMng.I.targetTile._code = index;
 
                 GameMng.I.minGold(cost);
@@ -233,7 +234,6 @@ public class UnitMng : MonoBehaviour
                 GameMng.I._range.rangeTileReset();
                 GameMng.I._range.SelectTileSetting(true);
 
-                GameMng.I.targetTile._builtObj._uniqueNumber = NetworkMng.getInstance.uniqueNumber;
 
                 NetworkMng.getInstance.SendMsg(string.Format("CREATE_BUILT:{0}:{1}:{2}:{3}:{4}:{5}", GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosZ, index, NetworkMng.getInstance.uniqueNumber, GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosZ));
 
@@ -312,7 +312,7 @@ public class UnitMng : MonoBehaviour
                 break;
         }
 
-        GameMng.I.addActMessage(string.Format("{0}님의 건물이 지어지고 있습니다.", GameMng.I._hextile.GetCell(posX, posY)._builtObj._uniqueNumber), posX, posY);
+        GameMng.I.addActMessage(string.Format("{0}님의 건물이 지어지고 있습니다.", GameMng.I.getUserName(uniqueNumber)), posX, posY);
     }
 
     /**

@@ -78,9 +78,9 @@ public class MainCamera : MonoBehaviour
         // 세이브 포인트로 이동하기
         else if (Input.GetKeyDown(KeyCode.Alpha1) && savePoints[0] != null) GoToSavePoint(0);
         else if (Input.GetKeyDown(KeyCode.Alpha2) && savePoints[1] != null) GoToSavePoint(1);
-        else if (Input.GetKeyDown(KeyCode.Alpha2) && savePoints[2] != null) GoToSavePoint(2);
-        else if (Input.GetKeyDown(KeyCode.Alpha2) && savePoints[3] != null) GoToSavePoint(3);
-        else if (Input.GetKeyDown(KeyCode.Alpha2) && savePoints[4] != null) GoToSavePoint(4);
+        else if (Input.GetKeyDown(KeyCode.Alpha3) && savePoints[2] != null) GoToSavePoint(2);
+        else if (Input.GetKeyDown(KeyCode.Alpha4) && savePoints[3] != null) GoToSavePoint(3);
+        else if (Input.GetKeyDown(KeyCode.Alpha5) && savePoints[4] != null) GoToSavePoint(4);
 
         // 세이브 포인트 저장하기
         if (Input.GetKey(KeyCode.LeftControl) && GameMng.I.selectedTile)

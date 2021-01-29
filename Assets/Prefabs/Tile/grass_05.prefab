@@ -110,11 +110,12 @@ PolygonCollider2D:
   m_Points:
     m_Paths:
     - - {x: 0, y: 0.68}
-      - {x: -0.6, y: 0.35}
-      - {x: -0.6, y: -0.35}
-      - {x: 0, y: -0.7}
-      - {x: 0.6, y: -0.35}
-      - {x: 0.6, y: 0.35}
+      - {x: -0.5899745, y: 0.33997446}
+      - {x: -0.5899745, y: -0.33796933}
+      - {x: 0.0020051003, y: -0.6879694}
+      - {x: 0.5919796, y: -0.3419796}
+      - {x: 0.58796954, y: 0.33796936}
+      - {x: 0.5939847, y: 0.33796936}
 --- !u!114 &1740379398
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,6 +135,8 @@ MonoBehaviour:
   posX: 0
   posY: 0
   posZ: 0
+  distance: 0
+  tileuniquecode: 0
   tileSprite:
   - {fileID: 21300000, guid: 3ef21efafde12d740babff416570ade2, type: 3}
   - {fileID: 21300000, guid: 94a80911aec957f4b8e56f8f1740842d, type: 3}
@@ -146,7 +149,7 @@ MonoBehaviour:
   tileSpriteRend: {fileID: 3044242763324709725}
   _unitObj: {fileID: 0}
   _builtObj: {fileID: 0}
-  tileneighbor:
+  neighbors:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}

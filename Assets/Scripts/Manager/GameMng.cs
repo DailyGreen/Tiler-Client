@@ -777,7 +777,7 @@ public class GameMng : MonoBehaviour
                     _hextile.GetCell(posX, posY)._unitObj._uniqueNumber, _hextile.GetCell(toX, toY)._builtObj._uniqueNumber, _food * (damage * 2) / 100, 1));
             }
         }
-
+        EffectSave(_hextile.GetCell(posX, posY)._unitObj._code, _hextile.GetCell(toX, toY).GetTileVec2.x, _hextile.GetCell(toX, toY).GetTileVec2.y);
         obj._hp -= damage;
         if (obj._hp <= 0)
         {
@@ -790,6 +790,53 @@ public class GameMng : MonoBehaviour
         }
 
     }
+    /**
+    * @brief 클릭한 타일의 코드에 따른 스프라이트값 조정
+    * @param unitcode 코드
+    * @param targetX, targetY targetTile의 트랜스폼 X,Y값
+    */
+    void EffectSave(int unitcode, float targetX, float targetY)
+    {
+        GameObject EffectParent = GameObject.Find("AttackEffect");
+        switch (unitcode)
+        {
+            case (int)UNIT.FOREST_WITCH_0:
+                _UnitGM.AttackEffect = EffectParent.transform.Find("Forest").transform.Find("ForestEffect_0").gameObject;
+                break;
+            case (int)UNIT.FOREST_WITCH_1:
+                _UnitGM.AttackEffect = EffectParent.transform.Find("Forest").transform.Find("ForestEffect_1").gameObject;
+                break;
+            case (int)UNIT.SEA_WITCH_0:
+                _UnitGM.AttackEffect = EffectParent.transform.Find("Sea").transform.Find("SeaEffect_0").gameObject;
+                break;
+            case (int)UNIT.SEA_WITCH_1:
+                _UnitGM.AttackEffect = EffectParent.transform.Find("Sea").transform.Find("SeaEffect_2").gameObject;
+                break;
+            case (int)UNIT.DESERT_WITCH_0:
+                _UnitGM.AttackEffect = EffectParent.transform.Find("Desert").transform.Find("DesertEffect_0").gameObject;
+                break;
+            case (int)UNIT.DESERT_WITCH_1:
+                _UnitGM.AttackEffect = EffectParent.transform.Find("Desert").transform.Find("DesertEffect_2").gameObject;
+                break;
+            default:
+                break;
+        }
+        _UnitGM.AttackEffect.SetActive(true);
+        _UnitGM.AttackEffect.transform.position = new Vector3(targetX, targetY, -10f);
+        StartCoroutine("SaveEffectReset");
+    }
+
+    /**
+    * @brief 파티클이 끝난 이펙트 위치 초기화
+    */
+    IEnumerator SaveEffectReset()
+    {
+        yield return new WaitForSeconds(2.3f);                      // 현재 있는 이펙트중 제일 오래 유지되는 이펙트가 2.3초임
+        _UnitGM.AttackEffect.transform.localPosition = new Vector3(0f, 0f, 10f);
+        _UnitGM.AttackEffect.SetActive(false);
+        _UnitGM.AttackEffect = null;
+    }
+
     public void uiClickBT()
     {
         NetworkMng.getInstance._soundGM.uiBTClick();

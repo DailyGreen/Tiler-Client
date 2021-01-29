@@ -340,7 +340,7 @@ GameObject:
   - component: {fileID: 3550524697920117306}
   - component: {fileID: 6156229776004796489}
   m_Layer: 0
-  m_Name: DersertWitch_1
+  m_Name: DesertWitch_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -410,6 +410,7 @@ MonoBehaviour:
   _hp: 0
   _max_hp: 0
   _uniqueNumber: 0
+  _emoteSide: {fileID: 0}
   _anim: {fileID: 3550524697920117306}
   dyingClip: {fileID: 7400000, guid: 37d0c1c67cc31b64cb3e4ab87a924f9c, type: 2}
   createCount: 0
@@ -420,6 +421,8 @@ MonoBehaviour:
   SaveY: 0
   _bActAccess: 1
   _damage: 0
+  maintenanceCost: 0
+  _unitDesc: 
 --- !u!1 &3549201111625825925
 GameObject:
   m_ObjectHideFlags: 0

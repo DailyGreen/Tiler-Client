@@ -17,7 +17,7 @@ public class Sea_Worker : Worker
         _basedistance = 1;
         maintenanceCost = 1;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
-        _emoteSide.color = GetUserColor();
+        //_emoteSide.color = GetUserColor();
 
         GameMng.I._BuiltGM.act = ACTIVITY.NONE;
         GameMng.I.AddDelegate(this.waitingCreate);

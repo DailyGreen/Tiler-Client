@@ -28,6 +28,8 @@ public class GameMng : MonoBehaviour
     public int myMaxTurnCount = 10;                 // 최대 차례
     public bool myTurn = false;                     // 내 차례인지
 
+    public string[] maparray = { "mapinfo" };
+
     /**********
      * 게임 서브 매니저
      */

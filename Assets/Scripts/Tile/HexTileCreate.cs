@@ -39,7 +39,7 @@ public class HexTileCreate : MonoBehaviour
 
     void Awake()
     {
-        LoadTilemapfromtxt("mapinfo");
+        LoadTilemapfromtxt(GameMng.I.maparray[0]);
         CreateHexTilePostion();
         CastleCreate();
         SetTileInfo();

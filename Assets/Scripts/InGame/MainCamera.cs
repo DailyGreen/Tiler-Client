@@ -42,7 +42,7 @@ public class MainCamera : MonoBehaviour
 
     void LateUpdate()
     {
-        //CameraMove();
+        CameraMove();
         MouseScrollzoom();
         // 클릭시 타일 이름 내용 가져오는곳 (임시)
         if (Input.GetMouseButtonDown(0) && GameMng.I._UnitGM.act == ACTIVITY.NONE && GameMng.I._BuiltGM.act == ACTIVITY.NONE && !EventSystem.current.IsPointerOverGameObject())
@@ -122,7 +122,9 @@ public class MainCamera : MonoBehaviour
      */
     public void GoToMyCastle()
     {
-        Camera.main.transform.position = GameMng.I.CastlePos;
+        Vector3 pos = GameMng.I.CastlePos;
+        pos.z = -10;
+        Camera.main.transform.position = pos;
     }
 
     /**
@@ -199,8 +201,8 @@ public class MainCamera : MonoBehaviour
         }
         pos.z = -20;
 
-        //pos.x = Mathf.Clamp(pos.x, -limitPos.x, limitPos.x);
-        //pos.y = Mathf.Clamp(pos.y, -limitPos.y, limitPos.y);
+        pos.x = Mathf.Clamp(pos.x, -limitPos.x, limitPos.x);
+        pos.y = Mathf.Clamp(pos.y, -limitPos.y, limitPos.y);
         this.transform.position = pos;
     }
 }

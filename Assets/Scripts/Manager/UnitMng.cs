@@ -18,8 +18,8 @@ public class UnitMng : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-            NetworkMng.getInstance.SendMsg("TURN");
+        /*if (Input.GetKeyDown(KeyCode.Space))
+            NetworkMng.getInstance.SendMsg("TURN");*/
 
         if (Input.GetMouseButtonDown(0) && act != ACTIVITY.ACTING && GameMng.I._BuiltGM.act == ACTIVITY.NONE && !EventSystem.current.IsPointerOverGameObject())
         {
@@ -29,16 +29,16 @@ public class UnitMng : MonoBehaviour
                     CheckMove();
                     break;
                 case ACTIVITY.BUILD_MINE:
-                    Building(Mine.cost, (int)BUILT.MINE, GameMng.I.selectedTile._code);
+                    Building(GameMng.I.MINE_COST, (int)BUILT.MINE, GameMng.I.selectedTile._code);
                     break;
                 case ACTIVITY.BUILD_FARM:
-                    Building(Farm.cost, (int)BUILT.FARM, GameMng.I.selectedTile._code);
+                    Building(GameMng.I.FARM_COST, (int)BUILT.FARM, GameMng.I.selectedTile._code);
                     break;
                 case ACTIVITY.BUILD_ATTACK_BUILDING:
-                    Building(Turret.cost, (int)BUILT.ATTACK_BUILDING, GameMng.I.selectedTile._code);
+                    Building(GameMng.I.TURRET_COST, (int)BUILT.ATTACK_BUILDING, GameMng.I.selectedTile._code);
                     break;
                 case ACTIVITY.BUILD_MILLITARY_BASE:
-                    Building(MillitaryBase.cost, (int)BUILT.MILLITARY_BASE, GameMng.I.selectedTile._code);
+                    Building(GameMng.I.MILITARYBASE_COST, (int)BUILT.MILLITARY_BASE, GameMng.I.selectedTile._code);
                     break;
                 case ACTIVITY.ATTACK:
                     UnitAttack(GameMng.I.selectedTile._unitObj._attackdistance);
@@ -243,7 +243,7 @@ public class UnitMng : MonoBehaviour
                         GameMng.I.selectedTile._unitObj.GetComponent<Forest_Worker>().working();
                         break;
                     case (int)UNIT.DESERT_WORKER:
-                        //GameMng.I.selectedTile._unitObj.GetComponent<Desert_Worker>().working();
+                        GameMng.I.selectedTile._unitObj.GetComponent<Desert_Worker>().working();
                         break;
                     case (int)UNIT.SEA_WORKER:
                         GameMng.I.selectedTile._unitObj.GetComponent<Sea_Worker>().working();
@@ -300,15 +300,13 @@ public class UnitMng : MonoBehaviour
         switch (GameMng.I._hextile.GetCell(byX, byY)._code)
         {
             case (int)UNIT.FOREST_WORKER:
-                reversalUnit(GameMng.I._hextile.GetCell(byX, byY)._unitObj.transform, GameMng.I._hextile.GetCell(posX, posY).transform);
-                GameMng.I._hextile.GetCell(byX, byY)._unitObj.GetComponent<Forest_Worker>()._anim.SetBool("isWorking", true);
+                GameMng.I._hextile.GetCell(byX, byY)._unitObj.GetComponent<Forest_Worker>().working();
                 break;
             case (int)UNIT.DESERT_WORKER:
-                //GameMng.I.selectedTile._unitObj.GetComponent<>();
+                GameMng.I._hextile.GetCell(byX, byY)._unitObj.GetComponent<Desert_Worker>().working();
                 break;
             case (int)UNIT.SEA_WORKER:
-                reversalUnit(GameMng.I._hextile.GetCell(byX, byY)._unitObj.transform, GameMng.I._hextile.GetCell(posX, posY).transform);
-                GameMng.I._hextile.GetCell(byX, byY)._unitObj.GetComponent<Sea_Worker>()._anim.SetBool("isWorking", true);
+                GameMng.I._hextile.GetCell(byX, byY)._unitObj.GetComponent<Sea_Worker>().working();
                 break;
         }
 

@@ -34,6 +34,11 @@ public class GameMng : MonoBehaviour
     public int WITCH_0_COST = 0;
     public int WITCH_1_COST = 0;
 
+    public int TURRET_COST = 0;
+    public int FARM_COST = 0;
+    public int MINE_COST = 0;
+    public int MILITARYBASE_COST = 0;
+
     public bool myTurn = false;                     // 내 차례인지
 
     /**********
@@ -190,7 +195,7 @@ public class GameMng : MonoBehaviour
         myFlagImage.color = color;
         myFlagTribe.sprite = tribeSprites[(int)NetworkMng.getInstance.myTribe];
 
-        // 내 종족 유닛 코스트를 설정
+        // 내 종족 오브젝트의 코스트를 설정
         switch ((int)NetworkMng.getInstance.myTribe)
         {
             case 0:    // 숲 종족
@@ -200,6 +205,10 @@ public class GameMng : MonoBehaviour
                 SOLDIER_2_COST = 3;
                 WITCH_0_COST = 6;
                 WITCH_1_COST = 7;
+                TURRET_COST = 3;
+                FARM_COST = 2;
+                MINE_COST = 2;
+                MILITARYBASE_COST = 4;
                 break;
             case 1:    // 물 종족
                 WORKER_COST = 4;
@@ -208,6 +217,10 @@ public class GameMng : MonoBehaviour
                 SOLDIER_2_COST = 6;
                 WITCH_0_COST = 6;
                 WITCH_1_COST = 8;
+                TURRET_COST = 3;
+                FARM_COST = 3;
+                MINE_COST = 2;
+                MILITARYBASE_COST = 5;
                 break;
             case 2:    // 사막 종족
                 WORKER_COST = 4;
@@ -216,6 +229,10 @@ public class GameMng : MonoBehaviour
                 SOLDIER_2_COST = 4;
                 WITCH_0_COST = 5;
                 WITCH_1_COST = 6;
+                TURRET_COST = 4;
+                FARM_COST = 2;
+                MINE_COST = 2;
+                MILITARYBASE_COST = 5;
                 break;
         }
 
@@ -545,25 +562,25 @@ public class GameMng : MonoBehaviour
                 actName.text = "광산";
                 actDesc.text = "한 턴 소요";
                 actButton.onClick.AddListener(delegate { _UnitGM.act = activity; _UnitGM.buildMine(); });
-                canUseActivity(actButton, Frame, Mine.cost);
+                canUseActivity(actButton, Frame, MINE_COST);
                 break;
             case ACTIVITY.BUILD_FARM:
                 actName.text = "농장";
                 actDesc.text = "한 턴 소요";
                 actButton.onClick.AddListener(delegate { _UnitGM.act = activity; _UnitGM.buildFarm(); });
-                canUseActivity(actButton, Frame, Farm.cost);
+                canUseActivity(actButton, Frame, FARM_COST);
                 break;
             case ACTIVITY.BUILD_ATTACK_BUILDING:
                 actName.text = "터렛";
                 actDesc.text = "두 턴 소요";
                 actButton.onClick.AddListener(delegate { _UnitGM.act = activity; _UnitGM.buildAttackBuilding(); });
-                canUseActivity(actButton, Frame, Turret.cost);
+                canUseActivity(actButton, Frame, TURRET_COST);
                 break;
             case ACTIVITY.BUILD_MILLITARY_BASE:
                 actName.text = "군사 기지";
                 actDesc.text = "두 턴 소요";
                 actButton.onClick.AddListener(delegate { _UnitGM.act = activity; _UnitGM.buildMillitaryBaseBuilding(); });
-                canUseActivity(actButton, Frame, MillitaryBase.cost);
+                canUseActivity(actButton, Frame, MILITARYBASE_COST);
                 break;
             case ACTIVITY.BUILD_SHIELD_BUILDING:
                 actName.text = "방어 건물";

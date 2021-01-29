@@ -21,7 +21,6 @@ public class BuiltMng : MonoBehaviour
             switch (act)
             {
                 case ACTIVITY.WORKER_UNIT_CREATE:
-                    //GameMng.I._hextile.GetCell(GameMng.I.CastlePosX, GameMng.I.CastlePosZ)._builtObj._anim.SetTrigger("isMaking");
                     CreateUnit(GameMng.I.WORKER_COST, (int)UNIT.FOREST_WORKER + (int)(NetworkMng.getInstance.myTribe) * 6);
                     break;
                 case ACTIVITY.SOLDIER_0_UNIT_CREATE:

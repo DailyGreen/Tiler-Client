@@ -6,8 +6,6 @@ public class MillitaryBase : Built
 {
     public GameObject CreatingUnitobj = null;
 
-    public static int cost = 10;   // 건설 비용
-
     public int maintenanceCost = 0;   // 유지 비용
 
     public int CreatingUnitX = 0;
@@ -16,11 +14,8 @@ public class MillitaryBase : Built
     void Awake()
     {
         _name = "군사 기지";
-        _max_hp = 10;
-        _hp = _max_hp;
         _code = (int)BUILT.MILLITARY_BASE;
         maxCreateCount = 3;
-        maintenanceCost = 3;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
 
         GameMng.I.AddDelegate(this.waitingCreate);
@@ -30,6 +25,25 @@ public class MillitaryBase : Built
     {
         _name = string.Format("{0} 종족 군사 기지  (소유자 : {1})", GameMng.I.getUserTribe(_uniqueNumber), GameMng.I.getUserName(_uniqueNumber));
         _emoteSide.color = GetUserColor(_uniqueNumber);
+
+        switch ((int)NetworkMng.getInstance.myTribe)
+        {
+            case 0:     // 숲 종족
+                _max_hp = 10;
+                _hp = _max_hp;
+                maintenanceCost = 3;
+                break;
+            case 1:     // 물 종족
+                _max_hp = 10;
+                _hp = _max_hp;
+                maintenanceCost = 3;
+                break;
+            case 2:     // 사막 종족
+                _max_hp = 10;
+                _hp = _max_hp;
+                maintenanceCost = 3;
+                break;
+        }
     }
 
     void init()

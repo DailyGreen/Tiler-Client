@@ -56,6 +56,9 @@ public class ChatMng : MonoBehaviour
     public void newMessage(string nickName, string msg)
     {
         chatLogs.text += string.Format("\n[{0}] : {1} ({2})", nickName, msg, System.DateTime.Now.Hour + ":" + System.DateTime.Now.Minute);
+
+        NetworkMng.getInstance._soundGM.newChatMsg();
+
         if (!isWriting)
             chatAnim.SetTrigger("MessageOpen");
     }

@@ -388,8 +388,8 @@ public class UnitMng : MonoBehaviour
             GameMng.I.selectedTile._unitObj._damage));
 
         NetworkMng.getInstance.SendMsg("TURN");
-
     }
+
     public void Move()
     {
         GameMng.I._range.moveRange(GameMng.I.selectedTile._unitObj._basedistance);

@@ -44,6 +44,8 @@ public class DynamicObject : Object
     {
         _anim.SetTrigger("isDying");
 
+        GameMng.I._mainCamera.removeMySavePoints(this);
+
         Destroy(this.gameObject, dyingClip.length - .2f);
     }
 

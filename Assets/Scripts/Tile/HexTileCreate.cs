@@ -27,8 +27,8 @@ public class HexTileCreate : MonoBehaviour
     /**********
      * 타일 간격
      */
-    public const float tileXOffset = 1.24f;
-    public const float tileYOffset = 1.08f;
+    public const float tileXOffset = 1.2f;
+    public const float tileYOffset = 1.03f;
 
     /**********
      * .txt 파일 가져오기, 코드 한개씩 가져오기

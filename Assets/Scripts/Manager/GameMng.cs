@@ -49,8 +49,10 @@ public class GameMng : MonoBehaviour
      * UI적용을 위한 변수
      */
     [SerializeField]
-    Sprite[] objSprite;                         //UI 이미지 적용을 위한 스프라이트 
+    Sprite[] objSprite;                         // UI 이미지 적용을 위한 스프라이트 
     //0:광산 1: 농장 2: 터렛 3: 성 4: 풀 5: 모래 6: 흙 7: 화성? 8: 돌 9: 바다 10: 일꾼
+    [SerializeField]
+    GameObject mainBarObj;                      // 메인 바 UI
 
     /**********
      * 게임 인터페이스
@@ -409,6 +411,7 @@ public class GameMng : MonoBehaviour
     public void clickTile(Tile tile)
     {
         cleanActList();
+        mainBarObj.SetActive(true);
 
         // 유닛이 없다면 정적인 타일이란 뜻
         if (tile._unitObj == null && tile._builtObj == null)
@@ -669,12 +672,56 @@ public class GameMng : MonoBehaviour
             actList[i].gameObject.SetActive(false);
         }
         setMainInterface(false);
+
+        mainBarObj.SetActive(false);
     }
 
     /**
-    * @brief 레이케스트 레이저 생성 및 hit 리턴
-    * @param isTarget 레이케스트 타겟을 변경할때 사용. targetTile 값을 받아올때 true 해주면 됨
-    */
+     * @brief 유저 이름을 uniqueNumber로 알아올때 사용
+     * @param uniqueNumber 알아올 유저의 고유 번호
+     * @return 유저 이름
+     */
+    public string getUserName(int uniqueNumber)
+    {
+        for (int i = 0; i < NetworkMng.getInstance.v_user.Count; i++)
+        {
+            if (NetworkMng.getInstance.v_user[i].uniqueNumber.Equals(uniqueNumber))
+            {
+                return NetworkMng.getInstance.v_user[i].nickName;
+            }
+        }
+        return "(알수없음)";
+    }
+
+    /**
+     * @brief 유저 종족을 uniqueNumber로 알아올때 사용
+     * @param uniqueNumber 알아올 유저의 고유 번호
+     * @return 유저 종족
+     */
+    public string getUserTribe(int uniqueNumber)
+    {
+        for (int i = 0; i < NetworkMng.getInstance.v_user.Count; i++)
+        {
+            if (NetworkMng.getInstance.v_user[i].uniqueNumber.Equals(uniqueNumber))
+            {
+                switch (NetworkMng.getInstance.v_user[i].tribe)
+                {
+                    case 0:
+                        return "숲";
+                    case 1:
+                        return "물";
+                    case 2:
+                        return "사막";
+                }
+            }
+        }
+        return "(알수없음)";
+    }
+
+    /**
+     * @brief 레이케스트 레이저 생성 및 hit 리턴
+     * @param isTarget 레이케스트 타겟을 변경할때 사용. targetTile 값을 받아올때 true 해주면 됨
+     */
     public void addActMessage(string msg, int posX, int posY)
     {
         NetworkMng.getInstance._soundGM.newActMsg();
@@ -778,7 +825,7 @@ public class GameMng : MonoBehaviour
             _UnitGM.reversalUnit(obj.transform, _hextile.GetCell(toX, toY).transform);
         obj._anim.SetTrigger("isAttacking");
 
-        addActMessage(string.Format("{0}님이 공격했습니다.", obj._uniqueNumber), posX, posY);
+        addActMessage(string.Format("{0}님이 공격했습니다.", getUserName(obj._uniqueNumber)), posX, posY);
 
         // 공격받는 대상의 HP 가 줄어들게 해줌
         obj = null;

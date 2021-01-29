@@ -18,10 +18,15 @@ public class Sea_Witch_0 : Unit
         maxCreateCount = 3;
         maintenanceCost = 1;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
-        _emoteSide.color = GetUserColor(_uniqueNumber);
 
         GameMng.I._BuiltGM.act = ACTIVITY.NONE;
         GameMng.I.AddDelegate(this.waitingCreate);
+    }
+
+    void Start()
+    {
+        _name = string.Format("바다 종족 법사 0  (소유자 : {0})", GameMng.I.getUserName(_uniqueNumber));
+        _emoteSide.color = GetUserColor(_uniqueNumber);
     }
 
     public override void init()

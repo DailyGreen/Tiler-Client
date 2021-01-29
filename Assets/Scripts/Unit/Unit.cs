@@ -46,7 +46,7 @@ public class Unit : DynamicObject
 
     public void maintenance()
     {
-        GameMng.I.minGold(maintenanceCost);
+        GameMng.I.minFood(maintenanceCost);
     }
 
 

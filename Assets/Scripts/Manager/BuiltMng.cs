@@ -124,6 +124,8 @@ public class BuiltMng : MonoBehaviour
         GameMng.I._hextile.GetCell(posX, posY)._unitObj.SaveX = byX;
         GameMng.I._hextile.GetCell(posX, posY)._unitObj.SaveY = byY;
 
+        GameMng.I.addActMessage(string.Format("{0}님이 일꾼을 생성하고 있습니다.", GameMng.I.getUserName(uniqueNumber)), posX, posY);
+
         if (GameMng.I._hextile.GetCell(byX, byY)._builtObj._code == (int)BUILT.MILLITARY_BASE)
         {
             MillitaryBase SaveData = GameMng.I._hextile.GetCell(byX, byY)._builtObj.GetComponent<MillitaryBase>();

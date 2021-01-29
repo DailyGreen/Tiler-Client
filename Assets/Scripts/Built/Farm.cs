@@ -16,9 +16,14 @@ public class Farm : Built
         making = 2;
         maxCreateCount = 3;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
-        _emoteSide.color = GetUserColor(_uniqueNumber);
 
         GameMng.I.AddDelegate(this.waitingCreate);
+    }
+
+    void Start()
+    {
+        _name = string.Format("{0} 종족 농장  (소유자 : {1})", GameMng.I.getUserTribe(_uniqueNumber), GameMng.I.getUserName(_uniqueNumber));
+        _emoteSide.color = GetUserColor(_uniqueNumber);
     }
 
     void init()

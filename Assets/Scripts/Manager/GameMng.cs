@@ -101,6 +101,8 @@ public class GameMng : MonoBehaviour
     [SerializeField]
     UnityEngine.UI.Image[] frameImg;            // 버튼별 클릭 불가 이미지
     [SerializeField]
+    UnityEngine.UI.Image[] costImg;             // 버튼별 코스트(골드) 아이콘
+    [SerializeField]
     ActMessage[] actMessages;                   // 행동 도우미 메세지들
     [SerializeField]
     UnityEngine.UI.Image[] playerListImg;       // 유저 목록들 이미지   (tab키 UI)
@@ -418,7 +420,7 @@ public class GameMng : MonoBehaviour
                     UnityEngine.UI.Text[] childsTxt = actList[i].GetComponentsInChildren<UnityEngine.UI.Text>();
                     try
                     {
-                        checkActivity(obj._activity[i], actList[i], childsTxt[0], childsTxt[1], frameImg[i]);
+                        checkActivity(obj._activity[i], actList[i], childsTxt[0], childsTxt[1], frameImg[i], childsTxt[2], costImg[i]);
                     }
                     catch
                     {
@@ -531,7 +533,7 @@ public class GameMng : MonoBehaviour
                 try
                 {
                     // 3. actList 의 내용들을 변경해 줘야함
-                    checkActivity(obj._activity[i], actList[i], childsTxt[0], childsTxt[1], frameImg[i]);
+                    checkActivity(obj._activity[i], actList[i], childsTxt[0], childsTxt[1], frameImg[i], childsTxt[2], costImg[i]);
                 }
                 catch
                 {
@@ -547,38 +549,53 @@ public class GameMng : MonoBehaviour
      * @param actButton 행동 버튼
      * @param actName 행동 이름
      * @param actDesc 행동 설명
+     * @param costText 행동 비용
      */
-    public void checkActivity(ACTIVITY activity, UnityEngine.UI.Button actButton, UnityEngine.UI.Text actName, UnityEngine.UI.Text actDesc, UnityEngine.UI.Image Frame)
+    public void checkActivity(ACTIVITY activity, UnityEngine.UI.Button actButton, UnityEngine.UI.Text actName, UnityEngine.UI.Text actDesc, UnityEngine.UI.Image Frame, UnityEngine.UI.Text costText, UnityEngine.UI.Image costImg)
     {
         switch (activity)
         {
             case ACTIVITY.MOVE:
                 actName.text = "이동";
                 actDesc.text = "한 턴 소요";
+                costText.enabled = false;
+                costImg.enabled = false;
                 actButton.onClick.AddListener(delegate { _UnitGM.act = activity; _range.AttackrangeTileReset(); _UnitGM.Move(); });
                 canUseActivity(actButton, Frame, 0);
                 break;
             case ACTIVITY.BUILD_MINE:
                 actName.text = "광산";
                 actDesc.text = "한 턴 소요";
+                costText.enabled = true;
+                costImg.enabled = true;
+                costText.text = MINE_COST.ToString();
                 actButton.onClick.AddListener(delegate { _UnitGM.act = activity; _UnitGM.buildMine(); });
                 canUseActivity(actButton, Frame, MINE_COST);
                 break;
             case ACTIVITY.BUILD_FARM:
                 actName.text = "농장";
                 actDesc.text = "한 턴 소요";
+                costText.enabled = true;
+                costImg.enabled = true;
+                costText.text = FARM_COST.ToString();
                 actButton.onClick.AddListener(delegate { _UnitGM.act = activity; _UnitGM.buildFarm(); });
                 canUseActivity(actButton, Frame, FARM_COST);
                 break;
             case ACTIVITY.BUILD_ATTACK_BUILDING:
                 actName.text = "터렛";
                 actDesc.text = "두 턴 소요";
+                costText.enabled = true;
+                costImg.enabled = true;
+                costText.text = TURRET_COST.ToString();
                 actButton.onClick.AddListener(delegate { _UnitGM.act = activity; _UnitGM.buildAttackBuilding(); });
                 canUseActivity(actButton, Frame, TURRET_COST);
                 break;
             case ACTIVITY.BUILD_MILLITARY_BASE:
                 actName.text = "군사 기지";
                 actDesc.text = "두 턴 소요";
+                costText.enabled = true;
+                costImg.enabled = true;
+                costText.text = MILITARYBASE_COST.ToString();
                 actButton.onClick.AddListener(delegate { _UnitGM.act = activity; _UnitGM.buildMillitaryBaseBuilding(); });
                 canUseActivity(actButton, Frame, MILITARYBASE_COST);
                 break;
@@ -594,47 +611,69 @@ public class GameMng : MonoBehaviour
                 break;
             case ACTIVITY.WORKER_UNIT_CREATE:
                 actName.text = "일꾼 생성";
+                costText.enabled = true;
+                costImg.enabled = true;
+                costText.text = WORKER_COST.ToString();
                 actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; Castle.CreateUnitBtn(); });
                 canUseActivity(actButton, Frame, WORKER_COST);
                 break;
             case ACTIVITY.DESTROY_BUILT:
                 actName.text = "건물 파괴";
+                costText.enabled = false;
+                costImg.enabled = false;
                 actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; _BuiltGM.DestroyBuilt(); });
                 canUseActivity(actButton, Frame, 0);
                 break;
             case ACTIVITY.ATTACK:
                 actName.text = "공격";
                 actDesc.text = "두 턴 소요";
+                costText.enabled = false;
+                costImg.enabled = false;
                 actButton.onClick.AddListener(delegate { _UnitGM.act = activity; _range.rangeTileReset(); _UnitGM.unitAttacking(); });
                 canUseActivity(actButton, Frame, 0);
                 break;
             case ACTIVITY.SOLDIER_0_UNIT_CREATE:
                 actName.text = "전사1 생성";
                 actDesc.text = "두 턴 소요";
+                costText.enabled = true;
+                costImg.enabled = true;
+                costText.text = SOLDIER_0_COST.ToString();
                 actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; MillitaryBase.CreateAttackFirstUnitBtn(); });
                 canUseActivity(actButton, Frame, SOLDIER_0_COST);
                 break;
             case ACTIVITY.SOLDIER_1_UNIT_CREATE:
                 actName.text = "전사2 생성";
                 actDesc.text = "두 턴 소요";
+                costText.enabled = true;
+                costImg.enabled = true;
+                costText.text = SOLDIER_1_COST.ToString();
                 actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; MillitaryBase.CreateAttackSecondUnitBtn(); });
                 canUseActivity(actButton, Frame, SOLDIER_1_COST);
                 break;
             case ACTIVITY.SOLDIER_2_UNIT_CREATE:
                 actName.text = "전사3 생성";
                 actDesc.text = "두 턴 소요";
+                costText.enabled = true;
+                costImg.enabled = true;
+                costText.text = SOLDIER_2_COST.ToString();
                 actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; MillitaryBase.CreateAttackThirdUnitBtn(); });
                 canUseActivity(actButton, Frame, SOLDIER_2_COST);
                 break;
             case ACTIVITY.WITCH_0_UNIT_CREATE:
                 actName.text = "마법사1 생성";
                 actDesc.text = "두 턴 소요";
+                costText.enabled = true;
+                costImg.enabled = true;
+                costText.text = WITCH_0_COST.ToString();
                 actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; MillitaryBase.CreateAttackFourthUnitBtn(); });
                 canUseActivity(actButton, Frame, WITCH_0_COST);
                 break;
             case ACTIVITY.WITCH_1_UNIT_CREATE:
                 actName.text = "마법사2 생성";
                 actDesc.text = "두 턴 소요";
+                costText.enabled = true;
+                costImg.enabled = true;
+                costText.text = WITCH_1_COST.ToString();
                 actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; MillitaryBase.CreateAttackFifthUnitBtn(); });
                 canUseActivity(actButton, Frame, WITCH_1_COST);
                 break;

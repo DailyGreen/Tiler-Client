@@ -26,6 +26,14 @@ public class GameMng : MonoBehaviour
 
     public int myTurnCount = 0;                     // 내 차례
     public int myMaxTurnCount = 10;                 // 최대 차례
+
+    public int WORKER_COST = 0;
+    public int SOLDIER_0_COST = 0;
+    public int SOLDIER_1_COST = 0;
+    public int SOLDIER_2_COST = 0;
+    public int WITCH_0_COST = 0;
+    public int WITCH_1_COST = 0;
+
     public bool myTurn = false;                     // 내 차례인지
 
     /**********
@@ -181,6 +189,36 @@ public class GameMng : MonoBehaviour
         ColorUtility.TryParseHtmlString(CustomColor.TransColor((COLOR)NetworkMng.getInstance.myColor), out color);
         myFlagImage.color = color;
         myFlagTribe.sprite = tribeSprites[(int)NetworkMng.getInstance.myTribe];
+
+        // 내 종족 유닛 코스트를 설정
+        switch ((int)NetworkMng.getInstance.myTribe)
+        {
+            case 0:    // 숲 종족
+                WORKER_COST = 4;
+                SOLDIER_0_COST = 4;
+                SOLDIER_1_COST = 5;
+                SOLDIER_2_COST = 3;
+                WITCH_0_COST = 6;
+                WITCH_1_COST = 7;
+                break;
+            case 1:    // 물 종족
+                WORKER_COST = 4;
+                SOLDIER_0_COST = 5;
+                SOLDIER_1_COST = 4;
+                SOLDIER_2_COST = 6;
+                WITCH_0_COST = 6;
+                WITCH_1_COST = 8;
+                break;
+            case 2:    // 사막 종족
+                WORKER_COST = 4;
+                SOLDIER_0_COST = 5;
+                SOLDIER_1_COST = 5;
+                SOLDIER_2_COST = 4;
+                WITCH_0_COST = 5;
+                WITCH_1_COST = 6;
+                break;
+        }
+
     }
 
     void SampleTurnFunc()
@@ -540,7 +578,7 @@ public class GameMng : MonoBehaviour
             case ACTIVITY.WORKER_UNIT_CREATE:
                 actName.text = "일꾼 생성";
                 actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; Castle.CreateUnitBtn(); });
-                canUseActivity(actButton, Frame, Forest_Worker.cost);
+                canUseActivity(actButton, Frame, WORKER_COST);
                 break;
             case ACTIVITY.DESTROY_BUILT:
                 actName.text = "건물 파괴";
@@ -557,31 +595,31 @@ public class GameMng : MonoBehaviour
                 actName.text = "전사1 생성";
                 actDesc.text = "두 턴 소요";
                 actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; MillitaryBase.CreateAttackFirstUnitBtn(); });
-                canUseActivity(actButton, Frame, Forest_Soldier_0.cost);
+                canUseActivity(actButton, Frame, SOLDIER_0_COST);
                 break;
             case ACTIVITY.SOLDIER_1_UNIT_CREATE:
                 actName.text = "전사2 생성";
                 actDesc.text = "두 턴 소요";
                 actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; MillitaryBase.CreateAttackSecondUnitBtn(); });
-                canUseActivity(actButton, Frame, Forest_Soldier_1.cost);
+                canUseActivity(actButton, Frame, SOLDIER_1_COST);
                 break;
             case ACTIVITY.SOLDIER_2_UNIT_CREATE:
                 actName.text = "전사3 생성";
                 actDesc.text = "두 턴 소요";
                 actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; MillitaryBase.CreateAttackThirdUnitBtn(); });
-                canUseActivity(actButton, Frame, Forest_Soldier_2.cost);
+                canUseActivity(actButton, Frame, SOLDIER_2_COST);
                 break;
             case ACTIVITY.WITCH_0_UNIT_CREATE:
                 actName.text = "마법사1 생성";
                 actDesc.text = "두 턴 소요";
                 actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; MillitaryBase.CreateAttackFourthUnitBtn(); });
-                canUseActivity(actButton, Frame, Forest_Witch_0.cost);
+                canUseActivity(actButton, Frame, WITCH_0_COST);
                 break;
             case ACTIVITY.WITCH_1_UNIT_CREATE:
                 actName.text = "마법사2 생성";
                 actDesc.text = "두 턴 소요";
                 actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; MillitaryBase.CreateAttackFifthUnitBtn(); });
-                canUseActivity(actButton, Frame, Forest_Witch_1.cost);
+                canUseActivity(actButton, Frame, WITCH_1_COST);
                 break;
             default:
                 break;

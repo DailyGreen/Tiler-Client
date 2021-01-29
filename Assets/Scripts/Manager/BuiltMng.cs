@@ -22,22 +22,22 @@ public class BuiltMng : MonoBehaviour
             {
                 case ACTIVITY.WORKER_UNIT_CREATE:
                     //GameMng.I._hextile.GetCell(GameMng.I.CastlePosX, GameMng.I.CastlePosZ)._builtObj._anim.SetTrigger("isMaking");
-                    CreateUnit(Forest_Worker.cost, (int)UNIT.FOREST_WORKER + (int)(NetworkMng.getInstance.myTribe) * 6);
+                    CreateUnit(GameMng.I.WORKER_COST, (int)UNIT.FOREST_WORKER + (int)(NetworkMng.getInstance.myTribe) * 6);
                     break;
                 case ACTIVITY.SOLDIER_0_UNIT_CREATE:
-                    CreateUnit(Forest_Soldier_0.cost, (int)UNIT.FOREST_SOLDIER_0 + (int)(NetworkMng.getInstance.myTribe) * 6);
+                    CreateUnit(GameMng.I.SOLDIER_0_COST, (int)UNIT.FOREST_SOLDIER_0 + (int)(NetworkMng.getInstance.myTribe) * 6);
                     break;
                 case ACTIVITY.SOLDIER_1_UNIT_CREATE:
-                    CreateUnit(Forest_Soldier_1.cost, (int)UNIT.FOREST_SOLDIER_1 + (int)(NetworkMng.getInstance.myTribe) * 6);
+                    CreateUnit(GameMng.I.SOLDIER_1_COST, (int)UNIT.FOREST_SOLDIER_1 + (int)(NetworkMng.getInstance.myTribe) * 6);
                     break;
                 case ACTIVITY.SOLDIER_2_UNIT_CREATE:
-                    CreateUnit(Forest_Soldier_2.cost, (int)UNIT.FOREST_SOLDIER_2 + (int)(NetworkMng.getInstance.myTribe) * 6);
+                    CreateUnit(GameMng.I.SOLDIER_2_COST, (int)UNIT.FOREST_SOLDIER_2 + (int)(NetworkMng.getInstance.myTribe) * 6);
                     break;
                 case ACTIVITY.WITCH_0_UNIT_CREATE:
-                    CreateUnit(Forest_Witch_0.cost, (int)UNIT.FOREST_WITCH_0 + (int)(NetworkMng.getInstance.myTribe) * 6);
+                    CreateUnit(GameMng.I.WITCH_0_COST, (int)UNIT.FOREST_WITCH_0 + (int)(NetworkMng.getInstance.myTribe) * 6);
                     break;
                 case ACTIVITY.WITCH_1_UNIT_CREATE:
-                    CreateUnit(Forest_Witch_1.cost, (int)UNIT.FOREST_WITCH_1 + (int)(NetworkMng.getInstance.myTribe) * 6);
+                    CreateUnit(GameMng.I.WITCH_1_COST, (int)UNIT.FOREST_WITCH_1 + (int)(NetworkMng.getInstance.myTribe) * 6);
                     break;
             }
             GameMng.I._range.SelectTileSetting(true);

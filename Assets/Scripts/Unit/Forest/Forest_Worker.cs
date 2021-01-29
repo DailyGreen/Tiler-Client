@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Forest_Worker : Worker
 {
-    public static int cost = 4;
-
     void Awake()
     {
         _name = "Ω£ ¡æ¡∑ ¿œ≤€";

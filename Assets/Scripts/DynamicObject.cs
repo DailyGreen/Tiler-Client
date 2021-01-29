@@ -33,10 +33,21 @@ public class DynamicObject : Object
 
     public bool _bActAccess = true;         // 오브젝트들의 행동 제어
 
-    public Color GetUserColor()
+    /**
+     * @brief 플레이어 구분 코드에 맞는 색을 반환
+     * @param int uniqueNumber 플레이어 구분 코드
+     */
+    public Color GetUserColor(int uniqueNumber)
     {
-        Color color;
-        ColorUtility.TryParseHtmlString(CustomColor.TransColor(NetworkMng.getInstance.myColor), out color);
+        Color color = Color.white;
+        ColorUtility.TryParseHtmlString(CustomColor.TransColor(NetworkMng.getInstance.myColor), out color); for (int i = 0; i < NetworkMng.getInstance.v_user.Count; i++)
+        {
+            if (NetworkMng.getInstance.v_user[i].uniqueNumber.Equals(uniqueNumber))
+            {
+                ColorUtility.TryParseHtmlString(CustomColor.TransColor((COLOR)NetworkMng.getInstance.v_user[i].color), out color);
+                break;
+            }
+        }
         return color;
     }
 

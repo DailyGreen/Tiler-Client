@@ -255,7 +255,18 @@ AnimationClip:
     path: Pant
   m_ScaleCurves: []
   m_FloatCurves: []
-  m_PPtrCurves: []
+  m_PPtrCurves:
+  - curve:
+    - time: 0
+      value: {fileID: 21300000, guid: f9c90e17f6479ed429fbb4b7649b9806, type: 3}
+    - time: 0.2
+      value: {fileID: 21300000, guid: fbd13d5f974cd08488d54752b23cf714, type: 3}
+    - time: 0.43333334
+      value: {fileID: 21300000, guid: f1701e5a503c5204d87f13c18d467a93, type: 3}
+    attribute: m_Sprite
+    path: emote__
+    classID: 212
+    script: {fileID: 0}
   m_SampleRate: 60
   m_WrapMode: 0
   m_Bounds:
@@ -312,7 +323,17 @@ AnimationClip:
       typeID: 4
       customType: 4
       isPPtrCurve: 0
-    pptrCurveMapping: []
+    - serializedVersion: 2
+      path: 2270983130
+      attribute: 0
+      script: {fileID: 0}
+      typeID: 212
+      customType: 23
+      isPPtrCurve: 1
+    pptrCurveMapping:
+    - {fileID: 21300000, guid: f9c90e17f6479ed429fbb4b7649b9806, type: 3}
+    - {fileID: 21300000, guid: fbd13d5f974cd08488d54752b23cf714, type: 3}
+    - {fileID: 21300000, guid: f1701e5a503c5204d87f13c18d467a93, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}

@@ -247,6 +247,7 @@ MonoBehaviour:
   _hp: 0
   _max_hp: 0
   _uniqueNumber: 0
+  _emoteSide: {fileID: 7016696139686152193}
   _anim: {fileID: 1321628165604687377}
   dyingClip: {fileID: 7400000, guid: fa5459cc9de78984aa38c6b231b427b9, type: 2}
   createCount: 0
@@ -257,6 +258,8 @@ MonoBehaviour:
   SaveY: 0
   _bActAccess: 1
   _damage: 0
+  maintenanceCost: 0
+  _unitDesc: 
 --- !u!1 &2308508713452559915
 GameObject:
   m_ObjectHideFlags: 0
@@ -1267,7 +1270,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8038886451881918520}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.55, z: 0}
+  m_LocalPosition: {x: 0, y: 0.65, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4106350704442305833}

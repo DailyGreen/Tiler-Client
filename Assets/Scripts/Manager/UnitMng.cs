@@ -9,6 +9,8 @@ public class UnitMng : MonoBehaviour
 
     public GameObject[] builtObj = null;
 
+    public GameObject AttackEffect = null;
+
     private void Start()
     {
         act = ACTIVITY.NONE;
@@ -326,6 +328,8 @@ public class UnitMng : MonoBehaviour
             {
                 GameMng.I.targetTile._unitObj._hp -= GameMng.I.selectedTile._unitObj._damage;
 
+                AttackEffectSetting(GameMng.I.selectedTile._unitObj._code); ;                           // 공격하는 유닛에 맞는 이펙트를 적용시킴
+
                 if (GameMng.I.targetTile._unitObj._hp <= 0)
                 {
                     GameMng.I.targetTile._unitObj.DestroyMyself();
@@ -338,6 +342,8 @@ public class UnitMng : MonoBehaviour
             else if (GameMng.I.targetTile._builtObj != null && GameMng.I.targetTile._builtObj._uniqueNumber != NetworkMng.getInstance.uniqueNumber && GameMng.I.targetTile.Distance <= distance)
             {
                 GameMng.I.targetTile._builtObj._hp -= GameMng.I.selectedTile._unitObj._damage;
+                
+                AttackEffectSetting(GameMng.I.selectedTile._unitObj._code); ;                           // 공격하는 유닛에 맞는 이펙트를 적용시킴
 
                 if (GameMng.I.targetTile._builtObj._code == (int)BUILT.AIRDROP)
                 {
@@ -374,6 +380,55 @@ public class UnitMng : MonoBehaviour
         }
     }
 
+    /**
+     * @brief 이펙트가 필요한 유닛들에게 맞는 이펙트 적용
+     * @param unitcode 유닛의 코드
+     */
+    void AttackEffectSetting(int unitcode)
+    {
+        GameObject EffectParent = GameObject.Find("AttackEffect");
+        switch (unitcode)
+        {
+            case (int)UNIT.FOREST_WITCH_0:
+                AttackEffect = EffectParent.transform.Find("Forest").transform.Find("ForestEffect_0").gameObject;
+                break;
+            case (int)UNIT.FOREST_WITCH_1:
+                AttackEffect = EffectParent.transform.Find("Forest").transform.Find("ForestEffect_1").gameObject;
+                break;
+            case (int)UNIT.SEA_WITCH_0:
+                AttackEffect = EffectParent.transform.Find("Sea").transform.Find("SeaEffect_0").gameObject;
+                break;
+            case (int)UNIT.SEA_WITCH_1:
+                AttackEffect = EffectParent.transform.Find("Sea").transform.Find("SeaEffect_2").gameObject;
+                break;
+            case (int)UNIT.DESERT_WITCH_0:
+                AttackEffect = EffectParent.transform.Find("Desert").transform.Find("DesertEffect_0").gameObject;
+                break;
+            case (int)UNIT.DESERT_WITCH_1:
+                AttackEffect = EffectParent.transform.Find("Desert").transform.Find("DesertEffect_2").gameObject;
+                break;
+            default:
+                break;
+        }
+        AttackEffect.SetActive(true);
+        AttackEffect.transform.position = new Vector3(GameMng.I.targetTile.transform.position.x, GameMng.I.targetTile.transform.position.y, -10f);
+        StartCoroutine("AttackEffectReset");
+    }
+    
+    /**
+     * @brief 이펙트 파티클이 끝난후 적용되는 소스
+     */
+    IEnumerator AttackEffectReset()
+    {
+        yield return new WaitForSeconds(2.3f);                      // 현재 있는 이펙트중 제일 오래 유지되는 이펙트가 2.3초임
+        AttackEffect.transform.localPosition = new Vector3(0f, 0f, 10f);
+        AttackEffect.SetActive(false);
+        AttackEffect = null;
+    }
+
+    /**
+     * @brief 공격 명령 (클라)
+     */
     void EnforceAttack()
     {
         reversalUnit(GameMng.I.selectedTile._unitObj.transform, GameMng.I.targetTile.transform);

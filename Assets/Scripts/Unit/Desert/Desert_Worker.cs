@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Desert_Worker : Worker
 {
-    public static int cost = 4;
-
     void Awake()
     {
         _name = "사막 종족 일꾼";

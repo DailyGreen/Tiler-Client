@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Desert_Witch_1 : Unit
 {
-    public static int cost = 4;
     void Awake()
     {
         _name = "นýป็ 1";

@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Sea_Soldier_0 : Unit
 {
-    public static int cost = 4;
-
     void Awake()
     {
         _name = "물 종족 전사 0";

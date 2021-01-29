@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Forest_Soldier_2 : Unit
 {
-    public static int cost = 4;
     void Awake()
     {
         _name = "ภüป็ 2";

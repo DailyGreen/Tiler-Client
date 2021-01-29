@@ -16,7 +16,7 @@ public class Farm : Built
         making = 2;
         maxCreateCount = 3;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
-        _emoteSide.color = GetUserColor();
+        _emoteSide.color = GetUserColor(_uniqueNumber);
 
         GameMng.I.AddDelegate(this.waitingCreate);
     }

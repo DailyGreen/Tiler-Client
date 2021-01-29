@@ -13,7 +13,7 @@ public class Castle : Built
         _hp = _max_hp;
         _code = (int)BUILT.CASTLE;
         _anim.SetTrigger("isSpawn");
-        _emoteSide.color = GetUserColor();
+        _emoteSide.color = GetUserColor(_uniqueNumber);
 
         if (NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))
             _activity.Add(ACTIVITY.WORKER_UNIT_CREATE);

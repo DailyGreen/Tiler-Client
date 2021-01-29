@@ -16,7 +16,9 @@ public class Sea_Witch_1 : Unit
         _basedistance = 2;
         _attackdistance = 2;
         maxCreateCount = 3;
+        maintenanceCost = 1;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
+        _emoteSide.color = GetUserColor(_uniqueNumber);
 
         GameMng.I._BuiltGM.act = ACTIVITY.NONE;
         GameMng.I.AddDelegate(this.waitingCreate);

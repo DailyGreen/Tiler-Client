@@ -21,6 +21,9 @@ public class ActMessage : MonoBehaviour
     public void moveToTarget()
     {
         // 버튼 눌렀을때 호출. posX, posY 좌표로 카메라 이동
+        Vector3 pos = GameMng.I._hextile.GetCell(posX, posY).transform.position;
+        pos.z = -10;
+        Camera.main.transform.position = pos;
     }
 
     IEnumerator waiting()

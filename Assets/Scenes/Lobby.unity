@@ -957,16 +957,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioClip:
-  - {fileID: 8300000, guid: 31a197be7d4162a41817ac0e96c3d817, type: 3}
-  - {fileID: 8300000, guid: 1e94a32d752a93641835f1619059b1c7, type: 3}
-  - {fileID: 8300000, guid: 41c8d233a7ffb5c4e9cdbd4bd29363ba, type: 3}
+  - {fileID: 8300000, guid: ff55b305c0030134eb277a1f542710ce, type: 3}
+  - {fileID: 8300000, guid: ba8823c9b5ff7454a87a040453657acc, type: 3}
+  - {fileID: 8300000, guid: 0b3b9586a69deb0419ecf35fcb5760eb, type: 3}
+  ingameClip:
+  - {fileID: 8300000, guid: 5a47e6d2733213140ba556b8543f6c6f, type: 3}
+  - {fileID: 8300000, guid: 5b8e62d29d9d53d4ea6539c475aeedaf, type: 3}
+  - {fileID: 8300000, guid: 8d6d74c3a6ed87f4bbe24f6c2f600438, type: 3}
+  - {fileID: 8300000, guid: 7fbcbb7e78a77974db073b34e6964ba3, type: 3}
+  - {fileID: 8300000, guid: b3e39be9676f6744f91ab3ee28a9a541, type: 3}
+  - {fileID: 8300000, guid: c7471edae956a3d4b93854a81bffd94d, type: 3}
   _audio: {fileID: 503214272}
   effectClip:
   - {fileID: 8300000, guid: f83aa42b6bd2e6b40838125551b3bcca, type: 3}
+  - {fileID: 8300000, guid: f466deecf7182b746ab655b1bb3eec7d, type: 3}
+  - {fileID: 8300000, guid: a2e957bc5cf33ef4083777b0975ad76e, type: 3}
   tileClip:
   - {fileID: 8300000, guid: e91ba206aeb959a4784e7dbc70f18802, type: 3}
+  builtClip: {fileID: 8300000, guid: 864233466afc29f40851ff06acf0526b, type: 3}
   unitClip:
-  - {fileID: 8300000, guid: 65c408f006e2ac34b8115d95f7d58495, type: 3}
+  - {fileID: 8300000, guid: 8e6b70b7ff2865240ba50bce288bc840, type: 3}
+  - {fileID: 8300000, guid: fb7dbad9ff4107144bca9f155328c587, type: 3}
+  - {fileID: 8300000, guid: fa56ea75f30c0bb4e9660fa971863238, type: 3}
+  - {fileID: 8300000, guid: 46ddb1aa423a60548b3a18649d84c117, type: 3}
+  - {fileID: 8300000, guid: 9f191f54c646313439a4d385fd19e790, type: 3}
+  - {fileID: 8300000, guid: 6ae85033490c6ce41af9d20daf2d901e, type: 3}
   _effect: {fileID: 620999419}
   _tile: {fileID: 2053439837}
   _unit: {fileID: 1664468474}

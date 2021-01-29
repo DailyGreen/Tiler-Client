@@ -36,6 +36,7 @@ public class GameMng : MonoBehaviour
     public RangeControl _range;
     public ChatMng _chat;
     public HexTileCreate _hextile;
+    public MainCamera _mainCamera;
 
     /**********
      * 레이케스트 위한 변수
@@ -43,6 +44,7 @@ public class GameMng : MonoBehaviour
     public RaycastHit2D hit;
     public Tile selectedTile = null;
     public Tile targetTile = null;
+
     /**********
      * UI적용을 위한 변수
      */
@@ -88,11 +90,21 @@ public class GameMng : MonoBehaviour
     [SerializeField]
     UnityEngine.UI.Image[] playerListImg;       // 유저 목록들 이미지   (tab키 UI)
     [SerializeField]
+    UnityEngine.UI.Image[] playerListTribe;     // 유저 목록들 종족   (tab키 UI)
+    [SerializeField]
     UnityEngine.UI.Text[] playerListName;       // 유저 목록들 이름   (tab키 UI)
     [SerializeField]
-    GameObject[] playerListExit;                // 유저 목록들 사망 이미지    (tab키 UI)
+    GameObject[] playerListExit;                // 유저 목록들 사망 이미지   (tab키 UI)
     [SerializeField]
     GameObject enemySelectedTile;               // 적이 선택한 타일을 보여주는 오브젝트
+    [SerializeField]
+    Sprite[] tribeSprites;                      // 종족 이미지들
+    [SerializeField]
+    UnityEngine.UI.Image myFlagImage;           // 내 프로필을 보여주는 이미지 (색)
+    [SerializeField]
+    UnityEngine.UI.Image myFlagTribe;           // 내 프로필을 보여주는 이미지 (종족)
+    [SerializeField]
+    UnityEngine.UI.Text myFlagNickname;         // 내 프로필을 보여주는 이미지 (이름)
 
 
     // ---- 맵의 가로 세로 크기 읽기
@@ -151,16 +163,22 @@ public class GameMng : MonoBehaviour
         UserListRefresh(NetworkMng.getInstance.firstPlayerUniqueNumber);
 
         // 누구 턴인지 색 변경
+        Color color;
         for (int i = 0; i < NetworkMng.getInstance.v_user.Count; i++)
         {
             if (NetworkMng.getInstance.v_user[i].uniqueNumber.Equals(NetworkMng.getInstance.firstPlayerUniqueNumber))
             {
-                Color color;
                 ColorUtility.TryParseHtmlString(CustomColor.TransColor((COLOR)NetworkMng.getInstance.v_user[i].color), out color);
                 turnDescImage.color = color;
                 break;
             }
         }
+
+        // 내 깃발 정보를 표시해줌
+        myFlagNickname.text = NetworkMng.getInstance.nickName;
+        ColorUtility.TryParseHtmlString(CustomColor.TransColor((COLOR)NetworkMng.getInstance.myColor), out color);
+        myFlagImage.color = color;
+        myFlagTribe.sprite = tribeSprites[(int)NetworkMng.getInstance.myTribe];
     }
 
     void SampleTurnFunc()
@@ -282,8 +300,8 @@ public class GameMng : MonoBehaviour
         UserListRefresh(uniqueNumber);
 
         /// 유지비가 - 가 되었다면 디버프 행동 추가
-        //
-        //
+        // 행동 불능으로 만든다거나
+        // 죽게 만든다던가
 
         // 누구 차례인지 뿌려주기
         if (NetworkMng.getInstance.uniqueNumber == uniqueNumber)
@@ -414,19 +432,20 @@ public class GameMng : MonoBehaviour
             objImage.sprite = getObjSprite(tile._unitObj._code);
             objImage.SetNativeSize();
             setMainInterface();
+            NetworkMng.getInstance._soundGM.unitClick(obj._code);
         }
         else
         {
             obj = tile._builtObj;
             //타일에 있는 건물의 코드의 따른 스프라이트 변경, 로고 text 켜고 끄기
             objImage.sprite = getObjSprite(tile._builtObj._code);
+            NetworkMng.getInstance._soundGM.builtClick();
         }
 
         objectNameTxt.text = obj._name;
         objectDescTxt.text = obj._desc;
 
         hpText.text = (tile._unitObj ? tile._unitObj._hp : tile._builtObj._hp) + "" + " / " + (tile._unitObj ? tile._unitObj._max_hp : tile._builtObj._max_hp);
-        NetworkMng.getInstance._soundGM.unitClick(UNIT.FOREST_WORKER);
         //damageText.text = tile._unitObj._damage + "";
 
         Color color;
@@ -658,6 +677,8 @@ public class GameMng : MonoBehaviour
     */
     public void addActMessage(string msg, int posX, int posY)
     {
+        NetworkMng.getInstance._soundGM.newActMsg();
+
         for (int i = 0; i < 5; i++)
         {
             if (actMessages[i].gameObject.activeSelf == false)
@@ -708,6 +729,7 @@ public class GameMng : MonoBehaviour
             ColorUtility.TryParseHtmlString(CustomColor.TransColor((COLOR)NetworkMng.getInstance.v_user[i].color), out color);
             playerListImg[i].gameObject.SetActive(true);
             playerListImg[i].color = color;
+            playerListTribe[i].sprite = tribeSprites[(int)NetworkMng.getInstance.v_user[i].tribe];
             playerListName[i].text = NetworkMng.getInstance.v_user[i].nickName;
             if (NetworkMng.getInstance.v_user[i].uniqueNumber.Equals(uniqueNumber))
                 playerListImg[i].transform.localScale = new Vector3(1.3f, 1.3f, 1);
@@ -778,6 +800,8 @@ public class GameMng : MonoBehaviour
             }
         }
 
+        EffectSave(_hextile.GetCell(posX, posY)._unitObj._code, _hextile.GetCell(toX, toY).GetTileVec2.x, _hextile.GetCell(toX, toY).GetTileVec2.y);
+
         obj._hp -= damage;
         if (obj._hp <= 0)
         {
@@ -788,8 +812,58 @@ public class GameMng : MonoBehaviour
             _hextile.GetCell(toX, toY)._builtObj = null;
             _hextile.TilecodeClear(toX, toY);            // TODO : 코드 값 원래 값으로
         }
-
     }
+
+    /**
+     * @brief 클릭한 타일의 코드에 따른 스프라이트값 조정
+     * @param unitcode 코드
+     * @param targetX, targetY targetTile의 트랜스폼 X,Y값
+     */
+    void EffectSave(int unitcode, float targetX, float targetY)
+    {
+        GameObject EffectParent = GameObject.Find("AttackEffect");
+        switch (unitcode)
+        {
+            case (int)UNIT.FOREST_WITCH_0:
+                _UnitGM.AttackEffect = EffectParent.transform.Find("Forest").transform.Find("ForestEffect_0").gameObject;
+                break;
+            case (int)UNIT.FOREST_WITCH_1:
+                _UnitGM.AttackEffect = EffectParent.transform.Find("Forest").transform.Find("ForestEffect_1").gameObject;
+                break;
+            case (int)UNIT.SEA_WITCH_0:
+                _UnitGM.AttackEffect = EffectParent.transform.Find("Sea").transform.Find("SeaEffect_0").gameObject;
+                break;
+            case (int)UNIT.SEA_WITCH_1:
+                _UnitGM.AttackEffect = EffectParent.transform.Find("Sea").transform.Find("SeaEffect_2").gameObject;
+                break;
+            case (int)UNIT.DESERT_WITCH_0:
+                _UnitGM.AttackEffect = EffectParent.transform.Find("Desert").transform.Find("DesertEffect_0").gameObject;
+                break;
+            case (int)UNIT.DESERT_WITCH_1:
+                _UnitGM.AttackEffect = EffectParent.transform.Find("Desert").transform.Find("DesertEffect_2").gameObject;
+                break;
+            default:
+                break;
+        }
+        _UnitGM.AttackEffect.SetActive(true);
+        _UnitGM.AttackEffect.transform.position = new Vector3(targetX, targetY, -10f);
+        StartCoroutine("SaveEffectReset");
+    }
+
+    /**
+     * @brief 파티클이 끝난 이펙트 위치 초기화
+     */
+    IEnumerator SaveEffectReset()
+    {
+        yield return new WaitForSeconds(2.3f);                      // 현재 있는 이펙트중 제일 오래 유지되는 이펙트가 2.3초임
+        _UnitGM.AttackEffect.transform.localPosition = new Vector3(0f, 0f, 10f);
+        _UnitGM.AttackEffect.SetActive(false);
+        _UnitGM.AttackEffect = null;
+    }
+
+    /**
+     * @brief UI 버튼 눌렀을때
+     */
     public void uiClickBT()
     {
         NetworkMng.getInstance._soundGM.uiBTClick();

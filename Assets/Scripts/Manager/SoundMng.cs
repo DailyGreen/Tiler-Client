@@ -4,17 +4,33 @@ using UnityEngine;
 
 public class SoundMng : MonoBehaviour
 {
+    //=========================
+    // 0 : 로그인 배경음
+    // 1 : 방 배경음
+    // 2 : 게임 준비 배경음
+    // 3 : 패배 배경음
+    // 4 : 승리 배경음
     [SerializeField]
     AudioClip[] audioClip;
 
     [SerializeField]
+    AudioClip[] ingameClip;
+
+    [SerializeField]
     AudioSource _audio;
 
+    //=========================
+    // 0 : UI 버튼 클릭
+    // 1 : 새 행동 리스트 효과음
+    // 2 : 새 채팅 메세지 효과음
     [SerializeField]
     AudioClip[] effectClip;
 
     [SerializeField]
     AudioClip[] tileClip;
+
+    [SerializeField]
+    AudioClip builtClip;
 
     [SerializeField]
     AudioClip[] unitClip;
@@ -62,13 +78,57 @@ public class SoundMng : MonoBehaviour
         //_audio.Play();
         StartCoroutine(changeTo(audioClip[1]));
     }
+    
+    public void ingameBGM()
+    {
+        StartCoroutine(PlayInGameBGM());
+    }
+
+    IEnumerator PlayInGameBGM()
+    {
+        for (int i = 0; i < ingameClip.Length; i++)
+        {
+            _audio.Stop();
+            _audio.clip = ingameClip[i];
+            _audio.volume = audioVolume;
+            _audio.Play();
+            yield return new WaitForSeconds(ingameClip[i].length - 3f); // 3초 전에 소리 조금씩 줄임
+            _audio.volume = audioVolume / 3;
+            yield return new WaitForSeconds(1); // 3초 전에 소리 조금씩 줄임
+            _audio.volume = audioVolume / 5;
+            yield return new WaitForSeconds(1); // 3초 전에 소리 조금씩 줄임
+            _audio.volume = 0;
+            yield return new WaitForSeconds(1); // 3초 전에 소리 조금씩 줄임
+            _audio.volume = audioVolume;
+        }
+        yield return null;
+        StartCoroutine(PlayInGameBGM());
+    }
+
+    public void loseBGM()
+    {
+        StopCoroutine(PlayInGameBGM());
+        _audio.clip = audioClip[3];
+        _audio.volume = audioVolume;
+        _audio.Play();
+    }
+
+    public void winBGM()
+    {
+        StopCoroutine(PlayInGameBGM());
+        _audio.clip = audioClip[4];
+        _audio.volume = audioVolume;
+        _audio.Play();
+    }
+
     public void waitBGM()
     {
-        _audio.Stop();
-        _audio.volume = audioVolume;
-        _audio.loop = false;
-        _audio.clip = audioClip[2];
-        _audio.Play();
+        //_audio.Stop();
+        //_audio.volume = audioVolume;
+        //_audio.loop = false;
+        //_audio.clip = audioClip[2];
+        //_audio.Play();
+        ingameBGM();
     }
 
     public void uiBTClick()
@@ -77,6 +137,21 @@ public class SoundMng : MonoBehaviour
         _effect.volume = effectVolume;
         _effect.Play();
     }
+
+    public void newActMsg()
+    {
+        _effect.clip = effectClip[1];
+        _effect.volume = effectVolume;
+        _effect.Play();
+    }
+
+    public void newChatMsg()
+    {
+        _effect.clip = effectClip[2];
+        _effect.volume = effectVolume;
+        _effect.Play();
+    }
+
     public void tileClick()
     {
         _tile.clip = tileClip[0];
@@ -84,9 +159,16 @@ public class SoundMng : MonoBehaviour
         _tile.Play();
     }
 
-    public void unitClick(UNIT unitCode)
+    public void builtClick()
     {
-        _unit.clip = unitClip[0];
+        _tile.clip = builtClip;
+        _tile.volume = effectVolume;
+        _tile.Play();
+    }
+
+    public void unitClick(int unitCode)
+    {
+        _unit.clip = unitClip[(unitCode - (int)UNIT.FOREST_WORKER) % 6];
         _unit.volume = effectVolume;
         _unit.Play();
     }

@@ -5788,6 +5788,12 @@ MonoBehaviour:
   CastlePosZ: 0
   myTurnCount: 0
   myMaxTurnCount: 10
+  WORKER_COST: 0
+  SOLDIER_0_COST: 0
+  SOLDIER_1_COST: 0
+  SOLDIER_2_COST: 0
+  WITCH_0_COST: 0
+  WITCH_1_COST: 0
   myTurn: 0
   _UnitGM: {fileID: 1655282530}
   _BuiltGM: {fileID: 1923391220}
@@ -10652,7 +10658,7 @@ MonoBehaviour:
   _camera: {fileID: 1354095964}
   minZoom: 8
   maxZoom: 4.5
-  limitPos: {x: 0, y: 0, z: 0}
+  limitPos: {x: 100, y: 100, z: 0}
   fMoveSpeed: 10
   UserListPanel: {fileID: 2129117833}
   savePointBT:

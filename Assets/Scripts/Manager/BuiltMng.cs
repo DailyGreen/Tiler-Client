@@ -136,19 +136,17 @@ public class BuiltMng : MonoBehaviour
     }
 
     /**
-     * @brief 焊鞭 积己
-     */
+    * @brief 焊鞭 积己
+    */
     public void CreateAirDrop()
     {
-        int nPosX, nPosY;
-        nPosX = Random.Range(0, GameMng.I.GetMapWidth);
-        nPosY = Random.Range(0, GameMng.I.GetMapHeight);
+        int index = Random.Range(0, GameMng.I._hextile.cells.Length);
 
-        if (GameMng.I._hextile.GetCell(nPosX, nPosY)._builtObj == null && GameMng.I._hextile.GetCell(nPosX, nPosY)._unitObj == null && GameMng.I._hextile.GetCell(nPosX, nPosY)._code < (int)TILE.CAN_MOVE)
+        if (GameMng.I._hextile.cells[index]._builtObj == null && GameMng.I._hextile.cells[index]._unitObj == null && GameMng.I._hextile.cells[index]._code < (int)TILE.CAN_MOVE)
         {
-            GameObject Child = Instantiate(AirDropobj, GameMng.I._hextile.GetCell(nPosX, nPosY).transform) as GameObject;
-            GameMng.I._hextile.GetCell(nPosX, nPosY)._code = (int)TILE.CAN_MOVE;
-            GameMng.I._hextile.GetCell(nPosX, nPosY)._builtObj = Child.GetComponent<AirDrop>();
+            GameObject Child = Instantiate(AirDropobj, GameMng.I._hextile.cells[index].transform) as GameObject;
+            GameMng.I._hextile.cells[index]._code = (int)TILE.CAN_MOVE;
+            GameMng.I._hextile.cells[index]._builtObj = Child.GetComponent<AirDrop>();
         }
         else
         {

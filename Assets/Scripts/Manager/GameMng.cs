@@ -36,6 +36,8 @@ public class GameMng : MonoBehaviour
 
     public bool myTurn = false;                     // 내 차례인지
 
+    public bool isWriting = false;                  // 채팅을 치고 있는지
+
     /**********
      * 게임 서브 매니저
      */

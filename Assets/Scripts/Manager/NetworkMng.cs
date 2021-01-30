@@ -41,6 +41,7 @@ public class NetworkMng : MonoBehaviour
 
     public RoomMng _roomGM;
     public SoundMng _soundGM;
+    public bool roomOwner = false;
 
     [SerializeField]
     GameObject profile;
@@ -379,6 +380,11 @@ public class NetworkMng : MonoBehaviour
         {
             // x값, y값, 건물 코드, 생성자, 건물 x값, 건물 y값
             GameMng.I._UnitGM.CreateBuilt(int.Parse(txt[1]), int.Parse(txt[2]), int.Parse(txt[3]), int.Parse(txt[4]), int.Parse(txt[5]), int.Parse(txt[6]));
+        }
+        else if (txt[0].Equals("CREATE_AIRDROP"))
+        {
+            // 보급이 생성될 배열의 번호, 보급이 떨어질 곳의 코드 값
+            GameMng.I._BuiltGM.CreateAirDrop(int.Parse(txt[1]), int.Parse(txt[2]));
         }
         else if (txt[0].Equals("MOVE_UNIT"))
         {

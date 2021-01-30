@@ -142,6 +142,7 @@ public class UnitMng : MonoBehaviour
             NetworkMng.getInstance.SendMsg("TURN");
 
             act = ACTIVITY.NONE;
+            Debug.Log("ASDFASDFASDFASDFASDF");
         }
     }
 

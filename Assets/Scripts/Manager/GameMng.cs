@@ -39,6 +39,9 @@ public class GameMng : MonoBehaviour
     public int MINE_COST = 0;
     public int MILITARYBASE_COST = 0;
 
+    public int TurnCount = 0;                       // 몇턴이 지났는지
+    public int RandomCount = 0;                     // 몇턴 후 보급이 생성 되는지
+
     public bool myTurn = false;                     // 내 차례인지
     public bool isWriting = false;                  // 채팅을 치고 있는지
 
@@ -361,6 +364,21 @@ public class GameMng : MonoBehaviour
         countDel();
         refreshMainUI();
         UserListRefresh(uniqueNumber);
+
+        if (RandomCount == 0)
+        {
+            RandomCount = Random.Range(1, 11);                                                  // 1~10턴 중에 랜덤
+        }
+        else
+        {
+            if (TurnCount % RandomCount == 0)                                                   // 나중에 더 좋은 방법이 있으면 변경
+            {
+                _BuiltGM.CreateAirDrop(Random.Range(0, _hextile.cells.Length));                 // 턴을 카운트해서 특정 턴마다 생성
+                RandomCount = 0;
+            }
+        }
+
+        TurnCount++;
 
         /// 유지비가 - 가 되었다면 디버프 행동 추가
         // 행동 불능으로 만든다거나
@@ -769,9 +787,11 @@ public class GameMng : MonoBehaviour
             actList[i].onClick.RemoveAllListeners();
             actList[i].gameObject.SetActive(false);
         }
+
         setMainInterface(false);
 
-        mainBarObj.SetActive(false);
+        if (myTurn)
+            mainBarObj.SetActive(false);
     }
 
     /**

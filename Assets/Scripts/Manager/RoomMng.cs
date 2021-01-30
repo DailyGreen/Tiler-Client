@@ -88,6 +88,8 @@ public class RoomMng : MonoBehaviour
                 color = 0
             };
             NetworkMng.getInstance.v_user.Add(userInfo);
+
+            NetworkMng.getInstance.roomOwner = true;
         }
     }
 
@@ -204,6 +206,8 @@ public class RoomMng : MonoBehaviour
         NetworkMng.getInstance.SendMsg(string.Format("ROOM_EXIT:{0}", NetworkMng.getInstance.uniqueNumber));
         roomPanel.SetActive(false);
         NetworkMng.getInstance._soundGM.loginBGM();
+
+        NetworkMng.getInstance.roomOwner = false;
         //lobbyPanel.SetActive(true);
     }
 

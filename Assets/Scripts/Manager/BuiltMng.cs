@@ -112,6 +112,7 @@ public class BuiltMng : MonoBehaviour
         GameMng.I._hextile.GetCell(posX, posY)._unitObj = Child.GetComponent<Unit>();
         GameMng.I._hextile.GetCell(posX, posY)._code = GameMng.I._hextile.GetCell(posX, posY)._unitObj._code;
         GameMng.I._hextile.GetCell(posX, posY)._unitObj._uniqueNumber = uniqueNumber;
+        Debug.Log(GameMng.I._hextile.GetCell(byX, byY)._builtObj);
         GameMng.I._hextile.GetCell(byX, byY)._builtObj._bActAccess = false;
         GameMng.I._hextile.GetCell(posX, posY)._unitObj.SaveX = byX;
         GameMng.I._hextile.GetCell(posX, posY)._unitObj.SaveY = byY;

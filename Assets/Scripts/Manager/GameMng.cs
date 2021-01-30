@@ -1113,7 +1113,7 @@ public class GameMng : MonoBehaviour
      */
     public void changeAudioVolume(float vol)
     {
-        NetworkMng.getInstance._soundGM.effectVolume = vol;
+        NetworkMng.getInstance._soundGM.changeAudioVolume(vol);
     }
 
     /**
@@ -1121,7 +1121,7 @@ public class GameMng : MonoBehaviour
      */
     public void changeEffectVolume(float vol)
     {
-        NetworkMng.getInstance._soundGM.audioVolume = vol;
+        NetworkMng.getInstance._soundGM.changeEffectVolume(vol);
     }
 
     /**
@@ -1207,4 +1207,3 @@ public class GameMng : MonoBehaviour
         return null;
     }
 }
-

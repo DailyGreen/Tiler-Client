@@ -294,7 +294,7 @@ public class UnitMng : MonoBehaviour
         if (GameMng.I._hextile.GetCell(byX, byY)._code == (int)UNIT.FOREST_WORKER || GameMng.I._hextile.GetCell(byX, byY)._code == (int)UNIT.DESERT_WORKER || GameMng.I._hextile.GetCell(byX, byY)._code == (int)UNIT.SEA_WORKER)
         {
             GameMng.I._UnitGM.reversalUnit(GameMng.I._hextile.GetCell(byX, byY)._unitObj.transform, GameMng.I._hextile.GetCell(posX, posY).transform);
-            GameMng.I.selectedTile._unitObj.GetComponent<Worker>().working();
+            GameMng.I._hextile.GetCell(byX, byY)._unitObj.GetComponent<Worker>().working();
         }
 
         GameMng.I.addActMessage(string.Format("{0}님의 건물이 지어지고 있습니다.", GameMng.I.getUserName(uniqueNumber)), posX, posY);

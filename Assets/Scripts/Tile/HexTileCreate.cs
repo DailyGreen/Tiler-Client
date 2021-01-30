@@ -75,10 +75,11 @@ public class HexTileCreate : MonoBehaviour
         cells = new Tile[GameMng.I.GetMapHeight * GameMng.I.GetMapWidth];
         for (int y = 0; y < GameMng.I.GetMapHeight; y++)
         {
+            tilestate.PosZ = y;
             mapReadChar = mapreadlines[y].ToCharArray();
             for (int x = 0; x < GameMng.I.GetMapWidth; x++)
             {
-                tilestate.PosX = x - y / 2; ;
+                tilestate.PosX = x - y / 2;
                 tilestate.PosY = tilestate.PosY;
                 if (mapReadChar[x] >= (char)TILE.GRASS_START) { tilestate._code = (int)mapReadChar[x]; }
                 else { tilestate._code = (int)Char.GetNumericValue(mapReadChar[x]); }
@@ -105,7 +106,7 @@ public class HexTileCreate : MonoBehaviour
                 }
                 SetNeighborTile(x, y, i++);
             }
-            tilestate.PosZ++;
+
         }
     }
 

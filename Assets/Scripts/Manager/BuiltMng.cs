@@ -74,7 +74,6 @@ public class BuiltMng : MonoBehaviour
                 GameMng.I.targetTile._code = index;
                 GameMng.I.targetTile._unitObj._uniqueNumber = NetworkMng.getInstance.uniqueNumber;
 
-
                 if (GameMng.I.selectedTile._code == (int)BUILT.MILLITARY_BASE)                  // 군사기지에서 유닛 생성 시
                 {
                     MillitaryBase SaveUnitData = GameMng.I.selectedTile._builtObj.GetComponent<MillitaryBase>();

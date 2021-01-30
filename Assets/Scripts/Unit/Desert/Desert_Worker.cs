@@ -9,6 +9,7 @@ public class Desert_Worker : Worker
         _name = "사막 종족 일꾼";
         _unitDesc = "듬직해 보인다.";
         _code = (int)UNIT.DESERT_WORKER;
+        _damage = 0;
         _max_hp = 10;
         _hp = _max_hp;
         _basedistance = 1;

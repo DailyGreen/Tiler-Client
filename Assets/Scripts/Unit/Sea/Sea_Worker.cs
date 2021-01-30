@@ -9,6 +9,7 @@ public class Sea_Worker : Worker
         _name = "물 종족 일꾼";
         _unitDesc = "듬직해 보인다.";
         _code = (int)UNIT.SEA_WORKER;
+        _damage = 0;
         _max_hp = 10;
         _hp = _max_hp;
         maxCreateCount = 2;

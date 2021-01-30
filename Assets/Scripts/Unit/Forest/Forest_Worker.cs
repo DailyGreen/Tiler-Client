@@ -9,6 +9,7 @@ public class Forest_Worker : Worker
         _name = "Ω£ ¡æ¡∑ ¿œ≤€";
         _unitDesc = "µÎ¡˜«ÿ ∫∏¿Œ¥Ÿ.";
         _code = (int)UNIT.FOREST_WORKER;
+        _damage = 0;
         _max_hp = 10;
         _hp = _max_hp;
         _basedistance = 1;

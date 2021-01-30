@@ -42,6 +42,8 @@ public class GameMng : MonoBehaviour
     public bool myTurn = false;                     // 내 차례인지
     public bool isWriting = false;                  // 채팅을 치고 있는지
 
+    public int countHungry = 0;
+
     /**********
      * 게임 서브 매니저
      */
@@ -91,11 +93,13 @@ public class GameMng : MonoBehaviour
     [SerializeField]
     UnityEngine.UI.Text damageText;             // 데미지
     [SerializeField]
+    UnityEngine.UI.Text maintCostText;          // 유지비
+    [SerializeField]
     UnityEngine.UI.Image maskImage;             // 오브젝트 이미지 배경
     [SerializeField]
     UnityEngine.UI.Image objImage;              // 오브젝트이미지
     [SerializeField]
-    UnityEngine.UI.Image[] logoImage;           // 메인바 로고 이미지         0: HP로고 1: 데미지 로고
+    UnityEngine.UI.Image[] logoImage;           // 메인바 로고 이미지         0: HP로고 1: 데미지 로고 2: 유지비 로고
     [SerializeField]
     UnityEngine.UI.Text turnCountText;          // 턴 수
     [SerializeField]
@@ -362,7 +366,9 @@ public class GameMng : MonoBehaviour
         refreshMainUI();
         UserListRefresh(uniqueNumber);
 
-        /// 유지비가 - 가 되었다면 디버프 행동 추가
+        // 유지비가 - 가 되었다면 디버프 행동 추가
+        if (_food < 0)
+            countHungry++;
         // 행동 불능으로 만든다거나
         // 죽게 만든다던가
 
@@ -406,7 +412,6 @@ public class GameMng : MonoBehaviour
         if (selectedTile._unitObj != null) { obj = selectedTile._unitObj; }
         else if (selectedTile._builtObj != null) { obj = selectedTile._builtObj; }
 
-
         // 내 턴이 아닐떄 건물이나 유닛이 어떤 행동을 했는지 새로고침
         if (obj != null)
         {
@@ -414,6 +419,7 @@ public class GameMng : MonoBehaviour
             objectNameTxt.text = obj._name;
             objectDescTxt.text = obj._desc;
             hpText.text = obj._hp + " / " + obj._max_hp;
+
             setMainInterface();
 
             if (onActList)
@@ -497,6 +503,9 @@ public class GameMng : MonoBehaviour
             objImage.SetNativeSize();
             setMainInterface();
             NetworkMng.getInstance._soundGM.unitClick(obj._code);
+
+            damageText.text = tile._unitObj._damage.ToString();
+            maintCostText.text = tile._unitObj.maintenanceCost.ToString();
         }
         else
         {
@@ -860,6 +869,9 @@ public class GameMng : MonoBehaviour
         objImage.enabled = showObj;
         objectNameTxt.enabled = showObj;
         objectDescTxt.enabled = showObj;
+
+        maintCostText.enabled = showDamage;    // 유지비는 대미지와 마찬가지로 유닛만 가지고 있음
+        logoImage[2].enabled = showDamage;
     }
 
     /**

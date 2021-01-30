@@ -18,8 +18,8 @@ public class UnitMng : MonoBehaviour
 
     void Update()
     {
-        /*if (Input.GetKeyDown(KeyCode.Space))
-            NetworkMng.getInstance.SendMsg("TURN");*/
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //    NetworkMng.getInstance.SendMsg("TURN");
 
         if (Input.GetMouseButtonDown(0) && act != ACTIVITY.ACTING && GameMng.I._BuiltGM.act == ACTIVITY.NONE && !EventSystem.current.IsPointerOverGameObject())
         {

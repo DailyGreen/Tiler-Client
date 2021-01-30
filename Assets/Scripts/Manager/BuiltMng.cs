@@ -176,6 +176,22 @@ public class BuiltMng : MonoBehaviour
             GameMng.I.RemoveDelegate(GameMng.I.selectedTile._builtObj.GetComponent<Turret>().Attack);
         }
 
+        switch (GameMng.I.selectedTile._builtObj._code)
+        {
+            case (int)BUILT.MINE:
+                GameMng.I.addGold((GameMng.I.MINE_COST / 4) * 3);
+                break;
+            case (int)BUILT.FARM:
+                GameMng.I.addGold((GameMng.I.FARM_COST / 4) * 3);
+                break;
+            case (int)BUILT.ATTACK_BUILDING:
+                GameMng.I.addGold((GameMng.I.TURRET_COST / 4) * 3);
+                break;
+            case (int)BUILT.MILLITARY_BASE:
+                GameMng.I.addGold((GameMng.I.MILITARYBASE_COST / 4) * 3);
+                break;
+        }
+
         GameMng.I.selectedTile._builtObj.DestroyMyself();
 
         act = ACTIVITY.NONE;

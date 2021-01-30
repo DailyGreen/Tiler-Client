@@ -8,6 +8,8 @@ public class Turret : Built
 
     public Tile tilestate;          // 터렛이 올라가 있는 타일 정보
 
+    public int maintenanceCost = 0;   // 유지 비용
+
     void Awake()
     {
         _name = "터렛";
@@ -71,15 +73,24 @@ public class Turret : Built
             if (NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))
             {
                 init();
+                GameMng.I.AddDelegate(maintenance);
             }
         }
     }
 
+    public void maintenance()
+    {
+        GameMng.I.minGold(maintenanceCost);
+    }
+
+
     /**
-    * @brief 사거리 내에 있는 적을 공격
-    */
+     * @brief 사거리 내에 있는 적을 공격
+     */
     public void Attack()
     {
+        maintenance();
+
         int around = 0;
         if (GameMng.I.myTurn)
         {

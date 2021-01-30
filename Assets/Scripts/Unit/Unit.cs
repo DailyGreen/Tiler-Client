@@ -47,6 +47,15 @@ public class Unit : DynamicObject
     public void maintenance()
     {
         GameMng.I.minFood(maintenanceCost);
+
+        if (GameMng.I.countHungry > (NetworkMng.getInstance.v_user.Count * 3))
+        {
+            // Çàµ¿ ºÒ´É
+        }
+        else if (GameMng.I.countHungry > 10)
+        {
+            // ·£´ý »ç¸Á (È®·ü %)
+        }
     }
 
 

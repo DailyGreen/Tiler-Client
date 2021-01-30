@@ -128,15 +128,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 761f94fc2668e9546b44e4ecc37405b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _code: 0
+  _code: 70
   _name: 
   _desc: 
   _activity: 
-  posX: 0
-  posY: 0
-  posZ: 0
+  posX: 25
+  posY: -74
+  posZ: 50
   distance: 0
-  tileuniquecode: 0
+  tileuniquecode: 70
   tileSprite:
   - {fileID: 21300000, guid: 3ef21efafde12d740babff416570ade2, type: 3}
   - {fileID: 21300000, guid: 94a80911aec957f4b8e56f8f1740842d, type: 3}

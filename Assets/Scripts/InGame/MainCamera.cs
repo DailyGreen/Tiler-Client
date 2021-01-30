@@ -24,7 +24,9 @@ public class MainCamera : MonoBehaviour
     public float fMoveSpeed = 10f;
     private const float borderThickness = 10f;      // 마우스가 스크린 밖에 닿는 범위( 두께 )
     [SerializeField]
-    private GameObject UserListPanel;
+    GameObject UserListPanel;
+    [SerializeField]
+    GameObject SettingPanel;
 
     // 세이브 포인트
     Object[] savePoints = new Object[5];
@@ -74,6 +76,10 @@ public class MainCamera : MonoBehaviour
         else if (Input.GetKeyUp(KeyCode.Tab))
         {
             UserListPanel.SetActive(false);
+        }
+        else if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SettingPanel.SetActive(true);
         }
         // 세이브 포인트로 이동하기
         else if (Input.GetKeyDown(KeyCode.Alpha1) && savePoints[0] != null) GoToSavePoint(0);

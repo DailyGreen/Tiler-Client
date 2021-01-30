@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class GameMng : MonoBehaviour
 {
@@ -18,15 +19,17 @@ public class GameMng : MonoBehaviour
     public int _maxMem = 0;
     private const int mapWidth = 50;                             // 맵 가로
     private const int mapHeight = 50;                            // 맵 높이
-    //public Tile[,] mapTile = new Tile[mapWidth, mapHeight];      // 타일의 2차원 배열 값
-    public float unitSpeed = 3.0f;
-    public float distanceOfTiles = 0.0f;
     public Vector3 CastlePos;                                   // 내 성의 Transform 위치값
     public int CastlePosX, CastlePosZ;                          // 내 성의 X, Z 값
+    public bool isWriting = false;                  // 채팅을 치고 있는지
 
-    public int myTurnCount = 0;                     // 내 차례
-    public int myMaxTurnCount = 10;                 // 최대 차례
+    //public int myTurnCount = 0;                     // 내 차례
+    //public int myMaxTurnCount = 10;                 // 최대 차례
 
+
+    /**********
+     * 오브젝트 데이터
+     */
     public int WORKER_COST = 0;
     public int SOLDIER_0_COST = 0;
     public int SOLDIER_1_COST = 0;
@@ -39,8 +42,16 @@ public class GameMng : MonoBehaviour
     public int MINE_COST = 0;
     public int MILITARYBASE_COST = 0;
 
+    public float unitSpeed = 3.0f;
+
+    /**********
+     * 턴 관련 데이터
+     */
+    public int TurnCount = 0;                       // 몇턴이 지났는지
+    public int RandomCount = 0;                     // 몇턴 후 보급이 생성 되는지
     public bool myTurn = false;                     // 내 차례인지
-    public bool isWriting = false;                  // 채팅을 치고 있는지
+    public int countHungry = 0;                     // 몇턴이나 굶었는지
+
 
     /**********
      * 게임 서브 매니저
@@ -53,11 +64,12 @@ public class GameMng : MonoBehaviour
     public MainCamera _mainCamera;
 
     /**********
-     * 레이케스트 위한 변수
+     * 타일 인풋 관련 데이터
      */
     public RaycastHit2D hit;
     public Tile selectedTile = null;
     public Tile targetTile = null;
+    public float distanceOfTiles = 0.0f;
 
     /**********
      * UI적용을 위한 변수
@@ -91,11 +103,13 @@ public class GameMng : MonoBehaviour
     [SerializeField]
     UnityEngine.UI.Text damageText;             // 데미지
     [SerializeField]
+    UnityEngine.UI.Text maintCostText;           // 유지 비용 UI
+    [SerializeField]
     UnityEngine.UI.Image maskImage;             // 오브젝트 이미지 배경
     [SerializeField]
     UnityEngine.UI.Image objImage;              // 오브젝트이미지
     [SerializeField]
-    UnityEngine.UI.Image[] logoImage;           // 메인바 로고 이미지         0: HP로고 1: 데미지 로고
+    UnityEngine.UI.Image[] logoImage;           // 메인바 로고 이미지         0: HP로고 1: 데미지 로고 2: 유지비 로고
     [SerializeField]
     UnityEngine.UI.Text turnCountText;          // 턴 수
     [SerializeField]
@@ -126,7 +140,12 @@ public class GameMng : MonoBehaviour
     UnityEngine.UI.Image myFlagTribe;           // 내 프로필을 보여주는 이미지 (종족)
     [SerializeField]
     UnityEngine.UI.Text myFlagNickname;         // 내 프로필을 보여주는 이미지 (이름)
-
+    [SerializeField]
+    UnityEngine.UI.Slider audioSlider;          // 오디오 볼륨 세팅
+    [SerializeField]
+    UnityEngine.UI.Slider effectSlider;         // 이펙트 볼륨 세팅
+    [SerializeField]
+    GameObject myTurnEffect;                    // 내 턴 이펙트
 
     // ---- 맵의 가로 세로 크기 읽기
     public int GetMapWidth
@@ -182,6 +201,9 @@ public class GameMng : MonoBehaviour
 
         // 같이 플레이 중인 유저 목록들 보여주기
         UserListRefresh(NetworkMng.getInstance.firstPlayerUniqueNumber);
+
+        audioSlider.value = NetworkMng.getInstance._soundGM.audioVolume;
+        effectSlider.value = NetworkMng.getInstance._soundGM.effectVolume;
 
         // 누구 턴인지 색 변경
         Color color;
@@ -335,25 +357,27 @@ public class GameMng : MonoBehaviour
     {
         this.countDel -= Method;
     }
-    public void imActing()
-    {
-        this.myTurnCount++;
 
-        if (this.myMaxTurnCount == this.myTurnCount)
-        {
-            this.myTurnCount = 0;
-            // 턴 교체
-            // 원래라면 인원수에 따라 바뀌지만 테스트 용으로 2인플레이라 생각하고 turn 바꿔주는중
-            this.myTurn = !this.myTurn;
-        }
-        this.turnCountText.text = this.myTurnCount + " / " + this.myMaxTurnCount;
-        this.turnDescText.text = this.myTurn ? "내 차례" : "상대 차례";
-    }
+    // 버그 없으면 지울것
+    //public void imActing()
+    //{
+    //    this.myTurnCount++;
+
+    //    if (this.myMaxTurnCount == this.myTurnCount)
+    //    {
+    //        this.myTurnCount = 0;
+    //        // 턴 교체
+    //        // 원래라면 인원수에 따라 바뀌지만 테스트 용으로 2인플레이라 생각하고 turn 바꿔주는중
+    //        this.myTurn = !this.myTurn;
+    //    }
+    //    this.turnCountText.text = this.myTurnCount + " / " + this.myMaxTurnCount;
+    //    this.turnDescText.text = this.myTurn ? "내 차례" : "상대 차례";
+    //}
 
     /**
-    * @brief 턴이 변경 되었을때 호출
-    * @param uniqueNumber 변경될 유저의 고유 번호
-    */
+     * @brief 턴이 변경 되었을때 호출
+     * @param uniqueNumber 변경될 유저의 고유 번호
+     */
     public void turnManage(int uniqueNumber)
     {
         Color color;
@@ -361,6 +385,28 @@ public class GameMng : MonoBehaviour
         countDel();
         refreshMainUI();
         UserListRefresh(uniqueNumber);
+
+        // 유지비가 - 가 되었다면 디버프 행동 추가
+        if (_food < 0)
+            countHungry++;
+
+        if (RandomCount == 0)
+        {
+            // 1~10턴 중에 랜덤
+            RandomCount = Random.Range(1, 11);
+        }
+        else
+        {
+            // 나중에 더 좋은 방법이 있으면 변경
+            if (TurnCount % RandomCount == 0)
+            {
+                // 턴을 카운트해서 특정 턴마다 생성
+                _BuiltGM.CreateAirDrop(Random.Range(0, _hextile.cells.Length));
+                RandomCount = 0;
+            }
+        }
+
+        TurnCount++;
 
         /// 유지비가 - 가 되었다면 디버프 행동 추가
         // 행동 불능으로 만든다거나
@@ -371,11 +417,17 @@ public class GameMng : MonoBehaviour
         {
             this.myTurn = true;
             this.turnDescText.text = "내 차례";
+
             ColorUtility.TryParseHtmlString(CustomColor.TransColor(NetworkMng.getInstance.myColor), out color);
             turnDescImage.color = color;
+
             enemySelectedTile.gameObject.transform.position = new Vector3(-100, -100, 0);
+
             if (selectedTile != null)
                 NetworkMng.getInstance.SendMsg(string.Format("SELECTING:{0}:{1}", selectedTile.PosX, selectedTile.PosZ));
+
+            myTurnEffect.SetActive(true);
+
             return;
         }
         cleanActList();
@@ -385,8 +437,12 @@ public class GameMng : MonoBehaviour
             if (NetworkMng.getInstance.v_user[i].uniqueNumber.Equals(uniqueNumber))
             {
                 this.turnDescText.text = NetworkMng.getInstance.v_user[i].nickName + " 차례";
+
                 ColorUtility.TryParseHtmlString(CustomColor.TransColor((COLOR)NetworkMng.getInstance.v_user[i].color), out color);
                 turnDescImage.color = color;
+
+                myTurnEffect.SetActive(false);
+
                 break;
             }
         }
@@ -497,6 +553,9 @@ public class GameMng : MonoBehaviour
             objImage.SetNativeSize();
             setMainInterface();
             NetworkMng.getInstance._soundGM.unitClick(obj._code);
+
+            damageText.text = tile._unitObj._damage.ToString();
+            maintCostText.text = tile._unitObj.maintenanceCost.ToString();
         }
         else
         {
@@ -771,7 +830,8 @@ public class GameMng : MonoBehaviour
         }
         setMainInterface(false);
 
-        mainBarObj.SetActive(false);
+        if (myTurn)
+            mainBarObj.SetActive(false);
     }
 
     /**
@@ -856,6 +916,8 @@ public class GameMng : MonoBehaviour
         logoImage[0].enabled = showHP;
         damageText.enabled = showDamage;
         logoImage[1].enabled = showDamage;
+        maintCostText.enabled = showDamage;    // 유지비는 대미지와 마찬가지로 유닛만 가지고 있음
+        logoImage[2].enabled = showDamage;
 
         objImage.enabled = showObj;
         objectNameTxt.enabled = showObj;
@@ -891,9 +953,10 @@ public class GameMng : MonoBehaviour
     {
         for (int i = 0; i < NetworkMng.getInstance.v_user.Count; i++)
         {
-            if (NetworkMng.getInstance.v_user[i].Equals(uniqueNumber))
+            if (NetworkMng.getInstance.v_user[i].uniqueNumber.Equals(uniqueNumber))
             {
                 playerListExit[i].SetActive(true);
+                playerListImg[i].transform.localScale = new Vector3(1, 1, 1);
                 break;
             }
         }
@@ -959,7 +1022,7 @@ public class GameMng : MonoBehaviour
             // 내 성이 파괴되었다면 서버에게 말해줌
             if (obj._code.Equals(BUILT.CASTLE) && obj._uniqueNumber.Equals(NetworkMng.getInstance.uniqueNumber))
             {
-                NetworkMng.getInstance.SendMsg(string.Format("LOSE:{0}:", NetworkMng.getInstance.uniqueNumber));
+                NetworkMng.getInstance.SendMsg(string.Format("LOSE:{0}", NetworkMng.getInstance.uniqueNumber));
             }
 
             // 파괴
@@ -1025,21 +1088,47 @@ public class GameMng : MonoBehaviour
     {
         NetworkMng.getInstance._soundGM.uiBTClick();
     }
+
     /**
-    * @brief 상대방이 클릭한 타일 세팅
-    * @param posX 상대방이 클릭한 타일 X
-    * @param posZ 상대방이 클릭한 타일 Y
-    */
+     * @brief 상대방이 클릭한 타일 세팅
+     * @param posX 상대방이 클릭한 타일 X
+     * @param posZ 상대방이 클릭한 타일 Y
+     */
     public void enemyClickTile(int posX, int posZ)
     {
         enemySelectedTile.transform.position = _hextile.GetCell(posX, posZ).transform.position;
     }
 
     /**
-    * @brief 클릭한 타일의 코드에 따른 스프라이트값 조정
-    * @param code 코드
-    * @return 스프라이트 이미지
-    */
+     * @brief 항복
+     */
+    public void surrender()
+    {
+        NetworkMng.getInstance.SendMsg(string.Format("LOSE:{0}", NetworkMng.getInstance.uniqueNumber));
+        SceneManager.LoadScene("Lobby");    // TODO : Networkmange가 중복되서 버그남
+    }
+
+    /**
+     * @brief 오디오 볼륨 사이즈 조절
+     */
+    public void changeAudioVolume(float vol)
+    {
+        NetworkMng.getInstance._soundGM.effectVolume = vol;
+    }
+
+    /**
+     * @brief 효과음 볼륨 사이즈 조절
+     */
+    public void changeEffectVolume(float vol)
+    {
+        NetworkMng.getInstance._soundGM.audioVolume = vol;
+    }
+
+    /**
+     * @brief 클릭한 타일의 코드에 따른 스프라이트값 조정
+     * @param code 코드
+     * @return 스프라이트 이미지
+     */
     public Sprite getObjSprite(int code)
     {
         switch (code)

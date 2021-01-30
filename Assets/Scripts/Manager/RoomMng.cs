@@ -88,12 +88,9 @@ public class RoomMng : MonoBehaviour
                 color = 0
             };
             NetworkMng.getInstance.v_user.Add(userInfo);
-        }
-    }
 
-    public void writeRoomName(string roomName)
-    {
-        //this.roomName = roomName;
+            NetworkMng.getInstance.roomOwner = true;
+        }
     }
 
     /**
@@ -122,11 +119,6 @@ public class RoomMng : MonoBehaviour
         go.transform.localScale = Vector2.one;
         go.transform.localPosition = new Vector3(0, 0, 0);
     }
-
-    //void AddListener(UnityEngine.UI.Button b, string roomName, string roomIdx, string roomPW)
-    //{
-    //    b.onClick.AddListener(() => checkRoomPW(roomName, roomIdx, roomPW));
-    //}
 
     /**
      * @brief 방 암호 확인
@@ -177,6 +169,9 @@ public class RoomMng : MonoBehaviour
         this.inputPW = inputPW;
     }
 
+    /**
+     * @brief 게임 시작 버튼 클릭.  조건 확인해서 시작하기
+     */
     public void gameStart()
     {
         //if (!nowMem.Equals("1"))
@@ -186,28 +181,63 @@ public class RoomMng : MonoBehaviour
         //}
     }
 
+    /**
+     * @brief 빠른 방 검색 시도했을때 호출
+     */
     public void fastGameStart()
     {
         NetworkMng.getInstance.SendMsg(string.Format("FAST_ROOM"));
     }
 
+    /**
+     * @brief 들어가 있던 방을 나올때 호출
+     */
     public void exitRoom()
     {
         gameStartBT.gameObject.SetActive(false);
         readyUI.SetActive(true);
+
         for (int i = 0; i < players.Length; i++)
         {
             players[i].SetActive(false);
             playersName[i].text = "";
         }
+
+        if (NetworkMng.getInstance.roomOwner)
+        {
+            for (int i = 0; i < NetworkMng.getInstance.v_user.Count; i++)
+            {
+                if (!NetworkMng.getInstance.v_user[i].uniqueNumber.Equals(NetworkMng.getInstance.uniqueNumber))
+                {
+                    NetworkMng.getInstance.SendMsg(string.Format("NOW_ROOM_OWNER:{0}",NetworkMng.getInstance.v_user[i].uniqueNumber));
+                    break;
+                }
+            }
+        }
+
         NetworkMng.getInstance.v_user.Clear();
+
         NetworkMng.getInstance.SendMsg(string.Format("ROOM_EXIT:{0}", NetworkMng.getInstance.uniqueNumber));
+
         roomPanel.SetActive(false);
+        
         NetworkMng.getInstance._soundGM.loginBGM();
-        //lobbyPanel.SetActive(true);
+
+        NetworkMng.getInstance.roomOwner = false;
     }
 
-    // 다른 사람 방에 들어가고 나서 호출
+    /**
+     * @brief 방 주인이 내가 됬을때
+     */
+    public void nowRoomOwner()
+    {
+        gameStartBT.gameObject.SetActive(true);
+        readyUI.SetActive(false);
+    }
+
+    /**
+     * @brief 다른 사람 방에 들어가고 나서 호출
+     */
     public void intoRoom()
     {
         checkPWpop.SetActive(false);
@@ -215,18 +245,25 @@ public class RoomMng : MonoBehaviour
         players[0].SetActive(true);
         playersName[0].text = NetworkMng.getInstance.nickName;
         roomInfo.text = roomName;
+
         NetworkMng.getInstance._soundGM.roomBGM();
     }
+
+    /**
+     * @brief 다른 사람 방에 들어가고 나서 호출
+     * @param roomName 방 제목
+     */
     public void intoRoom(string roomName)
     {
         intoRoom();
         roomInfo.text = roomName;
     }
 
-    // 스스로 방 만들고 나서 호출
+    /**
+     * @brief 스스로 방 만들고 나서 호출
+     */
     public void changeRoom()
     {
-        //lobbyPanel.SetActive(false);
         roomPanel.SetActive(true);
         players[0].SetActive(true);
         playersName[0].text = NetworkMng.getInstance.nickName;
@@ -237,6 +274,9 @@ public class RoomMng : MonoBehaviour
         NetworkMng.getInstance._soundGM.roomBGM();
     }
 
+    /**
+     * @brief 방 정보를 새로고침
+     */
     public void roomRefresh()
     {
         for (int i = 1; i < players.Length; i++)
@@ -275,17 +315,31 @@ public class RoomMng : MonoBehaviour
         nowMem = (NetworkMng.getInstance.v_user.Count) + "";
     }
 
+    /**
+     * @brief 종족을 변경 (내가 변경했을때. 클라용)
+     * @param tribeNum 변경할 종족
+     */
     public void wantChangeTribe(int tribeNum)
     {
         NetworkMng.getInstance.myTribe = (TRIBE)tribeNum;
         NetworkMng.getInstance.SendMsg(string.Format("TRIBE:{0}", tribeNum));
     }
+
+    /**
+     * @brief 색상을 변경 (내가 변경했을때. 클라용)
+     * @param tribeNum 변경할 색상
+     */
     public void wantChangeColor (int colorNum)
     {
         NetworkMng.getInstance.myColor = (COLOR)colorNum;
         NetworkMng.getInstance.SendMsg(string.Format("COLOR:{0}", colorNum));
     }
 
+    /**
+     * @brief 종족을 변경 (다른 유저가 변경했을때. 서버용)
+     * @param uniqueCode 대상
+     * @param tribeNum 종족
+     */
     public void changeTribe(int uniqueCode, int tribeNum)
     {
         for (int i = 0; i < NetworkMng.getInstance.v_user.Count; i++)
@@ -301,6 +355,11 @@ public class RoomMng : MonoBehaviour
         roomRefresh();
     }
 
+    /**
+     * @brief 색상을 변경 (다른 유저가 변경했을때. 서버용)
+     * @param uniqueCode 대상
+     * @param colorNum 색상
+     */
     public void changeColor(int uniqueCode, int colorNum)
     {
         for (int i = 0; i < NetworkMng.getInstance.v_user.Count; i++)

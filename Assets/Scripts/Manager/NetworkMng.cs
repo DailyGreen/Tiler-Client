@@ -41,6 +41,7 @@ public class NetworkMng : MonoBehaviour
 
     public RoomMng _roomGM;
     public SoundMng _soundGM;
+    public bool roomOwner = false;
 
     [SerializeField]
     GameObject profile;
@@ -236,12 +237,78 @@ public class NetworkMng : MonoBehaviour
         string msg = Encoding.UTF8.GetString(this.buf, 2, len - 2);
         string[] txt = msg.Split(':');
 
-        // 접속 - 첫 로그인
-        if (txt[0].Equals("CONNECT"))
+        // 상대가 타일을 누를때
+        if (txt[0].Equals("SELECTING"))
         {
-            Debug.Log("Connected.");
-            SendMsg(string.Format("LOGIN:{0}", nickName));
-            profileNickname.text = nickName;
+            if (!GameMng.I.myTurn)
+                GameMng.I.enemyClickTile(int.Parse(txt[1]), int.Parse(txt[2]));
+        }
+        // 턴 넘김
+        else if (txt[0].Equals("TURN"))
+        {
+            GameMng.I.turnManage(int.Parse(txt[1]));
+        }
+        else if (txt[0].Equals("CREATE_UNIT"))
+        {
+            // x값, y값, 유닛 코드, 생성자, 건물 x값, 건물 y값
+            GameMng.I._BuiltGM.CreateUnit(int.Parse(txt[1]), int.Parse(txt[2]), int.Parse(txt[3]), int.Parse(txt[4]), int.Parse(txt[5]), int.Parse(txt[6]));
+        }
+        else if (txt[0].Equals("CREATE_BUILT"))
+        {
+            // x값, y값, 건물 코드, 생성자, 건물 x값, 건물 y값
+            GameMng.I._UnitGM.CreateBuilt(int.Parse(txt[1]), int.Parse(txt[2]), int.Parse(txt[3]), int.Parse(txt[4]), int.Parse(txt[5]), int.Parse(txt[6]));
+        }
+        else if (txt[0].Equals("MOVE_UNIT"))
+        {
+            // 현재 x값, y값, 이동할 x값, y값
+            StartCoroutine(GameMng.I._UnitGM.MovingUnit(int.Parse(txt[1]), int.Parse(txt[2]), int.Parse(txt[3]), int.Parse(txt[4])));
+        }
+        else if (txt[0].Equals("CREATE_AIRDROP"))
+        {
+            // 보급이 생성될 배열의 번호, 보급이 떨어질 곳의 코드 값
+            GameMng.I._BuiltGM.CreateAirDrop(int.Parse(txt[1]), int.Parse(txt[2]));
+        }
+        else if (txt[0].Equals("ATTACK"))
+        {
+            // 오브젝트 x값, y값, 공격할 x값, y값
+            // 현재 오브젝트를 찾아서 공격력 찾은 다음 대상 위치의 hp 를 깎음
+            GameMng.I.attack(int.Parse(txt[1]), int.Parse(txt[2]), int.Parse(txt[3]), int.Parse(txt[4]), int.Parse(txt[5]));
+        }
+        else if (txt[0].Equals("CHAT"))
+        {
+            GameMng.I._chat.newMessage(txt[1], txt[2]);
+        }
+        else if (txt[0].Equals("PLUNDER"))
+        {
+            Debug.Log(txt[1] + "," + txt[2] + "," + txt[3] + "," + txt[4]);
+            // 공격한 사람 고유번호, 공격당한 사람 고유번호, 약달한 골드
+            switch (int.Parse(txt[1]))
+            {
+                case 0:
+                    if (uniqueNumber.Equals(int.Parse(txt[1])))
+                    {
+                        GameMng.I.addGold(int.Parse(txt[3]));
+                    }
+                    else if (uniqueNumber.Equals(int.Parse(txt[2])))
+                    {
+                        GameMng.I.minGold(int.Parse(txt[3]));
+                    }
+                    break;
+                case 1:
+                    if (uniqueNumber.Equals(int.Parse(txt[1])))
+                    {
+                        GameMng.I.addFood(int.Parse(txt[3]));
+                    }
+                    else if (uniqueNumber.Equals(int.Parse(txt[2])))
+                    {
+                        GameMng.I.minFood(int.Parse(txt[3]));
+                    }
+                    break;
+            }
+        }
+        else if (txt[0].Equals("DESTROY_BUILT"))
+        {
+            GameMng.I._BuiltGM.DestroyBuilt(int.Parse(txt[1]), int.Parse(txt[2]));
         }
         // 방에 있던 사람 중 누군가 나감
         else if (txt[0].Equals("SOMEONE_EXIT"))
@@ -267,10 +334,11 @@ public class NetworkMng : MonoBehaviour
         // 게임 도중 방에 있던 사람 중 누군가 나감 SOMEONE_EXIT 와는 상황이 조금 다름
         else if (txt[0].Equals("LOGOUT"))
         {
-            Debug.Log("COME IN LOGOUT");
-
             if (v_user.Count == 0)
                 return;
+
+            if (firstPlayerUniqueNumber != -1)
+                GameMng.I.UserExit(int.Parse(txt[1]));
 
             int i;
             for (i = 0; i < v_user.Count; i++)
@@ -281,48 +349,10 @@ public class NetworkMng : MonoBehaviour
                 }
             }
 
-            Debug.Log("LOGOUT " + i);
-            Debug.Log("USER MAX " + v_user.Count);
-
             v_user.RemoveAt(i);
 
-            _roomGM.roomRefresh();
-        }
-        else if (txt[0].Equals("GAME_START"))
-        {
-            Debug.Log(msg);
-
-            //uniqueNumber = int.Parse(txt[1]);
-
-            Debug.Log("GAME START !!!");
-            _soundGM.waitBGM();
-            Debug.Log("txt 메세지 사이즈 (2개 + 3*인원수 여야됨) : " + txt.Length);
-
-            // 1: 고유번호, 2: 첫 시작 위치
-            for (int k = 0; k < (txt.Length - 1) / 2; k++)
-            {
-                for (int j = 0; j < v_user.Count; j++)
-                {
-                    if (v_user[j].uniqueNumber == int.Parse(txt[1 + k * 2]))
-                    {
-                        UserInfo info = v_user[j];
-                        info.startPos = int.Parse(txt[2 + k * 2]);
-                        v_user[j] = info;
-                        break;
-                    }
-                }
-            }
-
-            firstPlayerUniqueNumber = int.Parse(txt[1]);
-            SceneManager.LoadScene("InGame");
-        }
-        else if (txt[0].Equals("TURN"))
-        {
-            GameMng.I.turnManage(int.Parse(txt[1]));
-        }
-        else if (txt[0].Equals("DESTROY_BUILT"))
-        {
-            GameMng.I._BuiltGM.DestroyBuilt(int.Parse(txt[1]), int.Parse(txt[2]));
+            if (firstPlayerUniqueNumber == -1)    // 인게임이라면 사용안함
+                _roomGM.roomRefresh();
         }
         // 직접 방 생성후 이동
         else if (txt[0].Equals("CHANGE_ROOM"))
@@ -370,26 +400,16 @@ public class NetworkMng : MonoBehaviour
                 myRoom = 0;
             }
         }
-        else if (txt[0].Equals("CREATE_UNIT"))
+        // 누군가 대기 방에서 나갔을때 방 주인 변경
+        else if (txt[0].Equals("NOW_ROOM_OWNER"))
         {
-            // x값, y값, 유닛 코드, 생성자, 건물 x값, 건물 y값
-            GameMng.I._BuiltGM.CreateUnit(int.Parse(txt[1]), int.Parse(txt[2]), int.Parse(txt[3]), int.Parse(txt[4]), int.Parse(txt[5]), int.Parse(txt[6]));
+            roomOwner = true;
+            _roomGM.nowRoomOwner();
         }
-        else if (txt[0].Equals("CREATE_BUILT"))
+        // 누군가 게임 도중 나갔을때 방 주인을 변경할때 호출됨
+        else if (txt[0].Equals("CHANGE_ROOM_OWNER"))
         {
-            // x값, y값, 건물 코드, 생성자, 건물 x값, 건물 y값
-            GameMng.I._UnitGM.CreateBuilt(int.Parse(txt[1]), int.Parse(txt[2]), int.Parse(txt[3]), int.Parse(txt[4]), int.Parse(txt[5]), int.Parse(txt[6]));
-        }
-        else if (txt[0].Equals("MOVE_UNIT"))
-        {
-            // 현재 x값, y값, 이동할 x값, y값
-            StartCoroutine(GameMng.I._UnitGM.MovingUnit(int.Parse(txt[1]), int.Parse(txt[2]), int.Parse(txt[3]), int.Parse(txt[4])));
-        }
-        else if (txt[0].Equals("ATTACK"))
-        {
-            // 오브젝트 x값, y값, 공격할 x값, y값
-            // 현재 오브젝트를 찾아서 공격력 찾은 다음 대상 위치의 hp 를 깎음
-            GameMng.I.attack(int.Parse(txt[1]), int.Parse(txt[2]), int.Parse(txt[3]), int.Parse(txt[4]), int.Parse(txt[5]));
+            roomOwner = true;
         }
         else if (txt[0].Equals("LOSE"))
         {
@@ -399,34 +419,6 @@ public class NetworkMng : MonoBehaviour
         else if (txt[0].Equals("WIN"))
         {
             GameMng.I.winUI.SetActive(true);
-        }
-        else if (txt[0].Equals("PLUNDER"))
-        {
-            Debug.Log(txt[1] + "," + txt[2] + "," + txt[3] + "," + txt[4]);
-            // 공격한 사람 고유번호, 공격당한 사람 고유번호, 약달한 골드
-            switch (int.Parse(txt[1]))
-            {
-                case 0:
-                    if (uniqueNumber.Equals(int.Parse(txt[1])))
-                    {
-                        GameMng.I.addGold(int.Parse(txt[3]));
-                    }
-                    else if (uniqueNumber.Equals(int.Parse(txt[2])))
-                    {
-                        GameMng.I.minGold(int.Parse(txt[3]));
-                    }
-                    break;
-                case 1:
-                    if (uniqueNumber.Equals(int.Parse(txt[1])))
-                    {
-                        GameMng.I.addFood(int.Parse(txt[3]));
-                    }
-                    else if (uniqueNumber.Equals(int.Parse(txt[2])))
-                    {
-                        GameMng.I.minFood(int.Parse(txt[3]));
-                    }
-                    break;
-            }
         }
         else if (txt[0].Equals("TRIBE"))
         {
@@ -438,18 +430,44 @@ public class NetworkMng : MonoBehaviour
             // 색상을 변경하는 유저의 코드와 변경하는 색상의 코드
             _roomGM.changeColor(int.Parse(txt[1]), int.Parse(txt[2]));
         }
+        else if (txt[0].Equals("GAME_START"))
+        {
+            Debug.Log(msg);
+
+            //uniqueNumber = int.Parse(txt[1]);
+
+            Debug.Log("GAME START !!!");
+            _soundGM.waitBGM();
+            Debug.Log("txt 메세지 사이즈 (2개 + 3*인원수 여야됨) : " + txt.Length);
+
+            // 1: 고유번호, 2: 첫 시작 위치
+            for (int k = 0; k < (txt.Length - 1) / 2; k++)
+            {
+                for (int j = 0; j < v_user.Count; j++)
+                {
+                    if (v_user[j].uniqueNumber == int.Parse(txt[1 + k * 2]))
+                    {
+                        UserInfo info = v_user[j];
+                        info.startPos = int.Parse(txt[2 + k * 2]);
+                        v_user[j] = info;
+                        break;
+                    }
+                }
+            }
+
+            firstPlayerUniqueNumber = int.Parse(txt[1]);
+            SceneManager.LoadScene("InGame");
+        }
         else if (txt[0].Equals("UNIQUE"))
         {
             uniqueNumber = int.Parse(txt[1]);
         }
-        else if (txt[0].Equals("SELECTING"))
+        // 접속 - 첫 로그인
+        else if (txt[0].Equals("CONNECT"))
         {
-            if (!GameMng.I.myTurn)
-                GameMng.I.enemyClickTile(int.Parse(txt[1]), int.Parse(txt[2]));
-        }
-        else if (txt[0].Equals("CHAT"))
-        {
-            GameMng.I._chat.newMessage(txt[1], txt[2]);
+            Debug.Log("Connected.");
+            SendMsg(string.Format("LOGIN:{0}", nickName));
+            profileNickname.text = nickName;
         }
         // 누군가 들어올때 받음
         else if (txt[0].Equals("SOMEONE_ENTER"))
@@ -473,9 +491,11 @@ public class NetworkMng : MonoBehaviour
     {
         if (socket != null && socket.Connected)
         {
-            // 광장이 아니였을 때
-            if (myRoom != 0)
+            // 광장이 아니고, 게임 진행중도 아닐때 (대기 방일때만)
+            if (myRoom != 0 && firstPlayerUniqueNumber == -1)
                 SendMsg(string.Format("ROOM_EXIT:{0}", NetworkMng.getInstance.uniqueNumber));
+            if (roomOwner)
+                SendMsg(string.Format("CHANGE_ROOM_OWNER"));
             SendMsg("DISCONNECT");
             Thread.Sleep(500);
             socket.Close();

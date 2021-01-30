@@ -6,8 +6,6 @@ public class MillitaryBase : Built
 {
     public GameObject CreatingUnitobj = null;
 
-    public int maintenanceCost = 0;   // 유지 비용
-
     public int CreatingUnitX = 0;
     public int CreatingUnitY = 0;
 
@@ -31,17 +29,14 @@ public class MillitaryBase : Built
             case 0:     // 숲 종족
                 _max_hp = 10;
                 _hp = _max_hp;
-                maintenanceCost = 3;
                 break;
             case 1:     // 물 종족
                 _max_hp = 10;
                 _hp = _max_hp;
-                maintenanceCost = 3;
                 break;
             case 2:     // 사막 종족
                 _max_hp = 10;
                 _hp = _max_hp;
-                maintenanceCost = 3;
                 break;
         }
     }
@@ -75,16 +70,9 @@ public class MillitaryBase : Built
             if (NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))
             {
                 init();
-                GameMng.I.AddDelegate(maintenance);
             }
         }
     }
-
-    public void maintenance()
-    {
-        GameMng.I.minGold(maintenanceCost);
-    }
-
 
     public static void CreateAttackFirstUnitBtn()
     {
@@ -136,8 +124,6 @@ public class MillitaryBase : Built
     {
         if (createCount < maxCreateCount - 1)
             GameMng.I.RemoveDelegate(waitingCreate);
-        else
-            GameMng.I.RemoveDelegate(maintenance);
 
         if (CreatingUnitobj != null)
         {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class GameMng : MonoBehaviour
 {
@@ -126,7 +127,12 @@ public class GameMng : MonoBehaviour
     UnityEngine.UI.Image myFlagTribe;           // 내 프로필을 보여주는 이미지 (종족)
     [SerializeField]
     UnityEngine.UI.Text myFlagNickname;         // 내 프로필을 보여주는 이미지 (이름)
-
+    [SerializeField]
+    UnityEngine.UI.Slider audioSlider;          // 오디오 볼륨 세팅
+    [SerializeField]
+    UnityEngine.UI.Slider effectSlider;         // 이펙트 볼륨 세팅
+    [SerializeField]
+    GameObject myTurnEffect;                    // 내 턴 이펙트
 
     // ---- 맵의 가로 세로 크기 읽기
     public int GetMapWidth
@@ -182,6 +188,9 @@ public class GameMng : MonoBehaviour
 
         // 같이 플레이 중인 유저 목록들 보여주기
         UserListRefresh(NetworkMng.getInstance.firstPlayerUniqueNumber);
+
+        audioSlider.value = NetworkMng.getInstance._soundGM.audioVolume;
+        effectSlider.value = NetworkMng.getInstance._soundGM.effectVolume;
 
         // 누구 턴인지 색 변경
         Color color;
@@ -350,10 +359,12 @@ public class GameMng : MonoBehaviour
         this.turnDescText.text = this.myTurn ? "내 차례" : "상대 차례";
     }
 
+    public int countHungry = 0;
+
     /**
-    * @brief 턴이 변경 되었을때 호출
-    * @param uniqueNumber 변경될 유저의 고유 번호
-    */
+     * @brief 턴이 변경 되었을때 호출
+     * @param uniqueNumber 변경될 유저의 고유 번호
+     */
     public void turnManage(int uniqueNumber)
     {
         Color color;
@@ -361,6 +372,10 @@ public class GameMng : MonoBehaviour
         countDel();
         refreshMainUI();
         UserListRefresh(uniqueNumber);
+
+        // 내돈이 - 됬는지 확인
+        countHungry++;
+
 
         /// 유지비가 - 가 되었다면 디버프 행동 추가
         // 행동 불능으로 만든다거나
@@ -371,11 +386,17 @@ public class GameMng : MonoBehaviour
         {
             this.myTurn = true;
             this.turnDescText.text = "내 차례";
+
             ColorUtility.TryParseHtmlString(CustomColor.TransColor(NetworkMng.getInstance.myColor), out color);
             turnDescImage.color = color;
+
             enemySelectedTile.gameObject.transform.position = new Vector3(-100, -100, 0);
+
             if (selectedTile != null)
                 NetworkMng.getInstance.SendMsg(string.Format("SELECTING:{0}:{1}", selectedTile.PosX, selectedTile.PosZ));
+
+            myTurnEffect.SetActive(true);
+
             return;
         }
         cleanActList();
@@ -385,8 +406,12 @@ public class GameMng : MonoBehaviour
             if (NetworkMng.getInstance.v_user[i].uniqueNumber.Equals(uniqueNumber))
             {
                 this.turnDescText.text = NetworkMng.getInstance.v_user[i].nickName + " 차례";
+
                 ColorUtility.TryParseHtmlString(CustomColor.TransColor((COLOR)NetworkMng.getInstance.v_user[i].color), out color);
                 turnDescImage.color = color;
+
+                myTurnEffect.SetActive(false);
+
                 break;
             }
         }
@@ -891,9 +916,10 @@ public class GameMng : MonoBehaviour
     {
         for (int i = 0; i < NetworkMng.getInstance.v_user.Count; i++)
         {
-            if (NetworkMng.getInstance.v_user[i].Equals(uniqueNumber))
+            if (NetworkMng.getInstance.v_user[i].uniqueNumber.Equals(uniqueNumber))
             {
                 playerListExit[i].SetActive(true);
+                playerListImg[i].transform.localScale = new Vector3(1, 1, 1);
                 break;
             }
         }
@@ -959,7 +985,7 @@ public class GameMng : MonoBehaviour
             // 내 성이 파괴되었다면 서버에게 말해줌
             if (obj._code.Equals(BUILT.CASTLE) && obj._uniqueNumber.Equals(NetworkMng.getInstance.uniqueNumber))
             {
-                NetworkMng.getInstance.SendMsg(string.Format("LOSE:{0}:", NetworkMng.getInstance.uniqueNumber));
+                NetworkMng.getInstance.SendMsg(string.Format("LOSE:{0}", NetworkMng.getInstance.uniqueNumber));
             }
 
             // 파괴
@@ -1025,21 +1051,47 @@ public class GameMng : MonoBehaviour
     {
         NetworkMng.getInstance._soundGM.uiBTClick();
     }
+
     /**
-    * @brief 상대방이 클릭한 타일 세팅
-    * @param posX 상대방이 클릭한 타일 X
-    * @param posZ 상대방이 클릭한 타일 Y
-    */
+     * @brief 상대방이 클릭한 타일 세팅
+     * @param posX 상대방이 클릭한 타일 X
+     * @param posZ 상대방이 클릭한 타일 Y
+     */
     public void enemyClickTile(int posX, int posZ)
     {
         enemySelectedTile.transform.position = _hextile.GetCell(posX, posZ).transform.position;
     }
 
     /**
-    * @brief 클릭한 타일의 코드에 따른 스프라이트값 조정
-    * @param code 코드
-    * @return 스프라이트 이미지
-    */
+     * @brief 항복
+     */
+    public void surrender()
+    {
+        NetworkMng.getInstance.SendMsg(string.Format("LOSE:{0}", NetworkMng.getInstance.uniqueNumber));
+        SceneManager.LoadScene("Lobby");    // TODO : Networkmange가 중복되서 버그남
+    }
+
+    /**
+     * @brief 오디오 볼륨 사이즈 조절
+     */
+    public void changeAudioVolume(float vol)
+    {
+        NetworkMng.getInstance._soundGM.effectVolume = vol;
+    }
+
+    /**
+     * @brief 효과음 볼륨 사이즈 조절
+     */
+    public void changeEffectVolume(float vol)
+    {
+        NetworkMng.getInstance._soundGM.audioVolume = vol;
+    }
+
+    /**
+     * @brief 클릭한 타일의 코드에 따른 스프라이트값 조정
+     * @param code 코드
+     * @return 스프라이트 이미지
+     */
     public Sprite getObjSprite(int code)
     {
         switch (code)

@@ -41,6 +41,7 @@ public class NetworkMng : MonoBehaviour
 
     public RoomMng _roomGM;
     public SoundMng _soundGM;
+    public bool roomOwner = false;
 
     [SerializeField]
     GameObject profile;
@@ -267,10 +268,11 @@ public class NetworkMng : MonoBehaviour
         // 게임 도중 방에 있던 사람 중 누군가 나감 SOMEONE_EXIT 와는 상황이 조금 다름
         else if (txt[0].Equals("LOGOUT"))
         {
-            Debug.Log("COME IN LOGOUT");
-
             if (v_user.Count == 0)
                 return;
+
+            if (firstPlayerUniqueNumber != -1)
+                GameMng.I.UserExit(int.Parse(txt[1]));
 
             int i;
             for (i = 0; i < v_user.Count; i++)
@@ -281,12 +283,10 @@ public class NetworkMng : MonoBehaviour
                 }
             }
 
-            Debug.Log("LOGOUT " + i);
-            Debug.Log("USER MAX " + v_user.Count);
-
             v_user.RemoveAt(i);
 
-            _roomGM.roomRefresh();
+            if (firstPlayerUniqueNumber == -1)    // 인게임이라면 사용안함
+                _roomGM.roomRefresh();
         }
         else if (txt[0].Equals("GAME_START"))
         {
@@ -391,6 +391,17 @@ public class NetworkMng : MonoBehaviour
             // 현재 오브젝트를 찾아서 공격력 찾은 다음 대상 위치의 hp 를 깎음
             GameMng.I.attack(int.Parse(txt[1]), int.Parse(txt[2]), int.Parse(txt[3]), int.Parse(txt[4]), int.Parse(txt[5]));
         }
+        // 누군가 대기 방에서 나갔을때 방 주인 변경
+        else if (txt[0].Equals("NOW_ROOM_OWNER"))
+        {
+            roomOwner = true;
+            _roomGM.nowRoomOwner();
+        }
+        // 누군가 게임 도중 나갔을때 방 주인을 변경할때 호출됨
+        else if (txt[0].Equals("CHANGE_ROOM_OWNER"))
+        {
+            roomOwner = true;
+        }
         else if (txt[0].Equals("LOSE"))
         {
             // Tab UI 에서 죽은 유저로 표시하기
@@ -473,9 +484,11 @@ public class NetworkMng : MonoBehaviour
     {
         if (socket != null && socket.Connected)
         {
-            // 광장이 아니였을 때
-            if (myRoom != 0)
+            // 광장이 아니고, 게임 진행중도 아닐때 (대기 방일때만)
+            if (myRoom != 0 && firstPlayerUniqueNumber == -1)
                 SendMsg(string.Format("ROOM_EXIT:{0}", NetworkMng.getInstance.uniqueNumber));
+            if (roomOwner)
+                SendMsg(string.Format("CHANGE_ROOM_OWNER"));
             SendMsg("DISCONNECT");
             Thread.Sleep(500);
             socket.Close();

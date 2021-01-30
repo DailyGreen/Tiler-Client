@@ -19,7 +19,6 @@ public class Worker : Unit
 
     public void working()
     {
-        GameMng.I._UnitGM.reversalUnit(GameMng.I.selectedTile._unitObj.transform, GameMng.I.targetTile.transform);
         _anim.SetBool("isWorking", true);
     }
 }

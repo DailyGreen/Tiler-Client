@@ -47,6 +47,15 @@ public class Unit : DynamicObject
     public void maintenance()
     {
         GameMng.I.minFood(maintenanceCost);
+
+        if (GameMng.I.countHungry > 5)
+        {
+            // 행동불능
+        }
+        else if (GameMng.I.countHungry > 10)
+        {
+            // 사망
+        }
     }
 
 

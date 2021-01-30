@@ -237,17 +237,11 @@ public class UnitMng : MonoBehaviour
 
                 NetworkMng.getInstance.SendMsg(string.Format("CREATE_BUILT:{0}:{1}:{2}:{3}:{4}:{5}", GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosZ, index, NetworkMng.getInstance.uniqueNumber, GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosZ));
 
-                switch (unitindex)
+                // 일꾼이라면
+                if (unitindex == (int)UNIT.FOREST_WORKER || unitindex == (int)UNIT.DESERT_WORKER || unitindex == (int)UNIT.SEA_WORKER)
                 {
-                    case (int)UNIT.FOREST_WORKER:
-                        GameMng.I.selectedTile._unitObj.GetComponent<Forest_Worker>().working();
-                        break;
-                    case (int)UNIT.DESERT_WORKER:
-                        GameMng.I.selectedTile._unitObj.GetComponent<Desert_Worker>().working();
-                        break;
-                    case (int)UNIT.SEA_WORKER:
-                        GameMng.I.selectedTile._unitObj.GetComponent<Sea_Worker>().working();
-                        break;
+                    GameMng.I._UnitGM.reversalUnit(GameMng.I.selectedTile._unitObj.transform, GameMng.I.targetTile.transform);
+                    GameMng.I.selectedTile._unitObj.GetComponent<Worker>().working();
                 }
 
                 GameMng.I.cleanSelected();
@@ -277,10 +271,10 @@ public class UnitMng : MonoBehaviour
     }
 
     /**
-     * @brief 유닛을 생성함 (서버에서 클라로 정보를 보낼때 호출됨)
+     * @brief 건물을 생성함 (서버에서 클라로 정보를 보낼때 호출됨)
      * @param posX 생성할 X 위치
      * @param posY 생성할 Y 위치
-     * @param index 유닛 코드
+     * @param index 건물 코드
      * @param uniqueNumber 생성자
      * @param byX 생성을 지시한 X 위치
      * @param byY 생성을 지시한 Y 위치
@@ -297,17 +291,10 @@ public class UnitMng : MonoBehaviour
         GameMng.I._hextile.GetCell(posX, posY)._builtObj.SaveX = byX;
         GameMng.I._hextile.GetCell(posX, posY)._builtObj.SaveY = byY;
 
-        switch (GameMng.I._hextile.GetCell(byX, byY)._code)
+        if (GameMng.I._hextile.GetCell(byX, byY)._code == (int)UNIT.FOREST_WORKER || GameMng.I._hextile.GetCell(byX, byY)._code == (int)UNIT.DESERT_WORKER || GameMng.I._hextile.GetCell(byX, byY)._code == (int)UNIT.SEA_WORKER)
         {
-            case (int)UNIT.FOREST_WORKER:
-                GameMng.I._hextile.GetCell(byX, byY)._unitObj.GetComponent<Forest_Worker>().working();
-                break;
-            case (int)UNIT.DESERT_WORKER:
-                GameMng.I._hextile.GetCell(byX, byY)._unitObj.GetComponent<Desert_Worker>().working();
-                break;
-            case (int)UNIT.SEA_WORKER:
-                GameMng.I._hextile.GetCell(byX, byY)._unitObj.GetComponent<Sea_Worker>().working();
-                break;
+            GameMng.I._UnitGM.reversalUnit(GameMng.I._hextile.GetCell(byX, byY)._unitObj.transform, GameMng.I._hextile.GetCell(posX, posY).transform);
+            GameMng.I.selectedTile._unitObj.GetComponent<Worker>().working();
         }
 
         GameMng.I.addActMessage(string.Format("{0}님의 건물이 지어지고 있습니다.", GameMng.I.getUserName(uniqueNumber)), posX, posY);

@@ -42,8 +42,8 @@ public class SoundMng : MonoBehaviour
     [SerializeField]
     AudioSource _unit;
 
-    float audioVolume = .5f;
-    float effectVolume = .5f;
+    public float audioVolume = .5f;
+    public float effectVolume = .5f;
 
     void Start()
     {

@@ -12,8 +12,6 @@ public class BuiltMng : MonoBehaviour
     [SerializeField]
     private GameObject AirDropobj = null;
 
-    private int nAirDropCount = 0;
-
     void Update()
     {
         if (Input.GetMouseButtonDown(0) && act != ACTIVITY.ACTING && GameMng.I._UnitGM.act == ACTIVITY.NONE && !EventSystem.current.IsPointerOverGameObject())
@@ -40,11 +38,6 @@ public class BuiltMng : MonoBehaviour
                     break;
             }
             GameMng.I._range.SelectTileSetting(true);
-        }
-
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            CreateAirDrop();
         }
     }
 
@@ -135,28 +128,34 @@ public class BuiltMng : MonoBehaviour
     }
 
     /**
-     * @brief 보급 생성
+     * @brief 보급에 대한 정보를 서버로 전송
      */
-    public void CreateAirDrop()
+    public void CreateAirDrop(int index)
     {
-        int index = Random.Range(0, GameMng.I._hextile.cells.Length);
-
-        if (GameMng.I._hextile.cells[index]._builtObj == null && GameMng.I._hextile.cells[index]._unitObj == null && GameMng.I._hextile.cells[index]._code < (int)TILE.CAN_MOVE)
+        if (NetworkMng.getInstance.roomOwner)
         {
-            GameObject Child = Instantiate(AirDropobj, GameMng.I._hextile.cells[index].transform) as GameObject;
-            GameMng.I._hextile.cells[index]._code = (int)TILE.CAN_MOVE;
-            GameMng.I._hextile.cells[index]._builtObj = Child.GetComponent<AirDrop>();
-        }
-        else
-        {
-            if (nAirDropCount < 5)
+            if (GameMng.I._hextile.cells[index]._builtObj == null && GameMng.I._hextile.cells[index]._unitObj == null && GameMng.I._hextile.cells[index]._code < (int)TILE.CAN_MOVE)
             {
-                nAirDropCount++;
-                CreateAirDrop();
+                NetworkMng.getInstance.SendMsg(string.Format("CREATE_AIRDROP:{0}:{1}", index, (int)TILE.CAN_MOVE));
+                GameObject Child = Instantiate(AirDropobj, GameMng.I._hextile.cells[index].transform) as GameObject;
+                GameMng.I._hextile.cells[index]._code = (int)TILE.CAN_MOVE;
+                GameMng.I._hextile.cells[index]._builtObj = Child.GetComponent<AirDrop>();
             }
             else
-                nAirDropCount = 0;
+            {
+                CreateAirDrop(Random.Range(0, GameMng.I._hextile.cells.Length));
+            }
         }
+    }
+
+    /**
+     * @brief 서버에서 보급에 대한 정보 받아오는 함수
+     */
+    public void CreateAirDrop(int index, int code)
+    {
+        GameObject Child = Instantiate(AirDropobj, GameMng.I._hextile.cells[index].transform) as GameObject;
+        GameMng.I._hextile.cells[index]._code = (int)TILE.CAN_MOVE;
+        GameMng.I._hextile.cells[index]._builtObj = Child.GetComponent<AirDrop>();
     }
 
     /**

@@ -11,15 +11,17 @@ public class RangeControl : MonoBehaviour
     [SerializeField]
     private Transform selectRangeTr;
 
-   /**
-   * @brief 이동 범위 계산
-   * @param distance 이동 범위
-   */
+    /**
+     * @brief 이동 범위 계산
+     * @param distance 이동 범위
+     */
     public void moveRange(int distance)
     {
         int count = 0;
         for (int i = 0; i < GameMng.I._hextile.cells.Length; i++)
         {
+            if (count > 18) break;
+
             if (GameMng.I._hextile.cells[i].Distance <= distance && !GameMng.I._hextile.cells[i].Distance.Equals(0) && GameMng.I._hextile.cells[i]._code < (int)TILE.CAN_MOVE)
             {
                 moveRangeTr[count].transform.position = GameMng.I._hextile.cells[i].transform.position;
@@ -29,26 +31,28 @@ public class RangeControl : MonoBehaviour
     }
 
     /**
-    * @brief 범위 타일 위치 리셋
-    */
+     * @brief 범위 타일 위치 리셋
+     */
     public void rangeTileReset()
     {
         for (int i = 0; i < moveRangeTr.Length; i++)
         {
-            moveRangeTr[i].transform.localPosition = Vector2.zero;                           //범위타일 위치 초기화
+            // 범위타일 위치 초기화
+            moveRangeTr[i].transform.localPosition = Vector2.zero;
         }
     }
 
     /**
-    * @brief 공격 범위 계산
-    * @param distance 공격 범위
-    */
-
+     * @brief 공격 범위 계산
+     * @param distance 공격 범위
+     */
     public void attackRange(int distance)
     {
         int count = 0;
         for (int i = 0; i < GameMng.I._hextile.cells.Length; i++)
         {
+            if (count > 18) break;
+
             if (GameMng.I._hextile.cells[i].Distance <= distance && !GameMng.I._hextile.cells[i].Distance.Equals(0))
             {
                 if (GameMng.I.selectedTile._code.Equals((int)BUILT.ATTACK_BUILDING))
@@ -74,17 +78,23 @@ public class RangeControl : MonoBehaviour
             }
         }
     }
+
     /**
-    * @brief 공격 범위 타일 위치 리셋
-    */
+     * @brief 공격 범위 타일 위치 리셋
+     */
     public void AttackrangeTileReset()
     {
         for (int i = 0; i < attackRangeTr.Length; i++)
         {
-            attackRangeTr[i].transform.localPosition = Vector2.zero;                           //범위타일 위치 초기화
+            // 범위타일 위치 초기화
+            attackRangeTr[i].transform.localPosition = Vector2.zero;
         }
     }
 
+    /**
+     * @brief 선택한 타일로 위치 지정
+     * @param TrSetting 자기가 선택한 타일이 뭔지
+     */
     public void SelectTileSetting(bool TrSetting = false)
     {
         if (TrSetting)

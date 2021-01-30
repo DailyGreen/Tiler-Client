@@ -48,13 +48,13 @@ public class Unit : DynamicObject
     {
         GameMng.I.minFood(maintenanceCost);
 
-        if (GameMng.I.countHungry > 5)
+        if (GameMng.I.countHungry > (NetworkMng.getInstance.v_user.Count * 3))
         {
-            // Çàµ¿ºÒ´É
+            // Çàµ¿ ºÒ´É
         }
         else if (GameMng.I.countHungry > 10)
         {
-            // »ç¸Á
+            // ·£´ý »ç¸Á (È®·ü %)
         }
     }
 

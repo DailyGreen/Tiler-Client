@@ -472,7 +472,7 @@ public class GameMng : MonoBehaviour
             hpText.text = obj._hp + " / " + obj._max_hp;
             setMainInterface();
 
-            if (onActList)
+            if (onActList && myTurn)
             {
                 for (int i = 0; i < obj._activity.Count; i++)
                 {

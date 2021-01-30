@@ -396,6 +396,10 @@ public class NetworkMng : MonoBehaviour
             // Tab UI 에서 죽은 유저로 표시하기
             GameMng.I.UserExit(int.Parse(txt[1]));
         }
+        else if (txt[0].Equals("WIN"))
+        {
+            GameMng.I.winUI.SetActive(true);
+        }
         else if (txt[0].Equals("PLUNDER"))
         {
             Debug.Log(txt[1] + "," + txt[2] + "," + txt[3] + "," + txt[4]);

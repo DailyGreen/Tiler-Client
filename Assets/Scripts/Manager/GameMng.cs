@@ -61,6 +61,9 @@ public class GameMng : MonoBehaviour
     //0:광산 1: 농장 2: 터렛 3: 성 4: 풀 5: 모래 6: 흙 7: 화성? 8: 돌 9: 바다 10: 일꾼
     [SerializeField]
     GameObject mainBarObj;                      // 메인 바 UI
+    [SerializeField]
+    GameObject loseUI;                          // 패배 UI
+    public GameObject winUI;                    // 승리 UI
 
     /**********
      * 게임 인터페이스
@@ -837,6 +840,12 @@ public class GameMng : MonoBehaviour
                 break;
             }
         }
+
+        // 내가 죽었다면 패배 UI 켜기
+        if (uniqueNumber.Equals(NetworkMng.getInstance.uniqueNumber))
+        {
+            loseUI.SetActive(true);
+        }
     }
 
     /**
@@ -890,6 +899,12 @@ public class GameMng : MonoBehaviour
         obj._hp -= damage;
         if (obj._hp <= 0)
         {
+            // 내 성이 파괴되었다면 서버에게 말해줌
+            if (obj._code.Equals(BUILT.CASTLE) && obj._uniqueNumber.Equals(NetworkMng.getInstance.uniqueNumber))
+            {
+                NetworkMng.getInstance.SendMsg(string.Format("LOSE:{0}:", NetworkMng.getInstance.uniqueNumber));
+            }
+
             // 파괴
             obj.DestroyMyself();
             //Destroy(obj.gameObject);

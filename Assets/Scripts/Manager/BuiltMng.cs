@@ -21,7 +21,6 @@ public class BuiltMng : MonoBehaviour
             switch (act)
             {
                 case ACTIVITY.WORKER_UNIT_CREATE:
-                    //GameMng.I._hextile.GetCell(GameMng.I.CastlePosX, GameMng.I.CastlePosZ)._builtObj._anim.SetTrigger("isMaking");
                     CreateUnit(GameMng.I.WORKER_COST, (int)UNIT.FOREST_WORKER + (int)(NetworkMng.getInstance.myTribe) * 6);
                     break;
                 case ACTIVITY.SOLDIER_0_UNIT_CREATE:
@@ -140,15 +139,13 @@ public class BuiltMng : MonoBehaviour
      */
     public void CreateAirDrop()
     {
-        int nPosX, nPosY;
-        nPosX = Random.Range(0, GameMng.I.GetMapWidth);
-        nPosY = Random.Range(0, GameMng.I.GetMapHeight);
+        int index = Random.Range(0, GameMng.I._hextile.cells.Length);
 
-        if (GameMng.I._hextile.GetCell(nPosX, nPosY)._builtObj == null && GameMng.I._hextile.GetCell(nPosX, nPosY)._unitObj == null && GameMng.I._hextile.GetCell(nPosX, nPosY)._code < (int)TILE.CAN_MOVE)
+        if (GameMng.I._hextile.cells[index]._builtObj == null && GameMng.I._hextile.cells[index]._unitObj == null && GameMng.I._hextile.cells[index]._code < (int)TILE.CAN_MOVE)
         {
-            GameObject Child = Instantiate(AirDropobj, GameMng.I._hextile.GetCell(nPosX, nPosY).transform) as GameObject;
-            GameMng.I._hextile.GetCell(nPosX, nPosY)._code = (int)TILE.CAN_MOVE;
-            GameMng.I._hextile.GetCell(nPosX, nPosY)._builtObj = Child.GetComponent<AirDrop>();
+            GameObject Child = Instantiate(AirDropobj, GameMng.I._hextile.cells[index].transform) as GameObject;
+            GameMng.I._hextile.cells[index]._code = (int)TILE.CAN_MOVE;
+            GameMng.I._hextile.cells[index]._builtObj = Child.GetComponent<AirDrop>();
         }
         else
         {
@@ -175,6 +172,22 @@ public class BuiltMng : MonoBehaviour
         {
             GameMng.I._range.AttackrangeTileReset();
             GameMng.I.RemoveDelegate(GameMng.I.selectedTile._builtObj.GetComponent<Turret>().Attack);
+        }
+
+        switch (GameMng.I.selectedTile._builtObj._code)
+        {
+            case (int)BUILT.MINE:
+                GameMng.I.addGold((GameMng.I.MINE_COST / 4) * 3);
+                break;
+            case (int)BUILT.FARM:
+                GameMng.I.addGold((GameMng.I.FARM_COST / 4) * 3);
+                break;
+            case (int)BUILT.ATTACK_BUILDING:
+                GameMng.I.addGold((GameMng.I.TURRET_COST / 4) * 3);
+                break;
+            case (int)BUILT.MILLITARY_BASE:
+                GameMng.I.addGold((GameMng.I.MILITARYBASE_COST / 4) * 3);
+                break;
         }
 
         GameMng.I.selectedTile._builtObj.DestroyMyself();

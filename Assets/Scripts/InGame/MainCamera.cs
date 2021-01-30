@@ -63,7 +63,7 @@ public class MainCamera : MonoBehaviour
                 }
             }
         }
-        else if (Input.GetKeyDown(KeyCode.Space))
+        else if (Input.GetKeyDown(KeyCode.Space) && !GameMng.I.isWriting)
         {
             GoToMyCastle();
         }
@@ -122,7 +122,9 @@ public class MainCamera : MonoBehaviour
      */
     public void GoToMyCastle()
     {
-        Camera.main.transform.position = GameMng.I.CastlePos;
+        Vector3 pos = GameMng.I.CastlePos;
+        pos.z = -10;
+        Camera.main.transform.position = pos;
     }
 
     /**
@@ -181,26 +183,26 @@ public class MainCamera : MonoBehaviour
     void CameraMove()
     {
         Vector3 pos = this.transform.position;
-        if (Input.GetKey("w") || Input.mousePosition.y >= Screen.height - borderThickness)
+        if ((Input.GetKey("w") || Input.mousePosition.y >= Screen.height - borderThickness) && !GameMng.I.isWriting)
         {
             pos.y += fMoveSpeed * Time.deltaTime;
         }
-        if (Input.GetKey("s") || Input.mousePosition.y <= borderThickness)
+        if ((Input.GetKey("s") || Input.mousePosition.y <= borderThickness) && !GameMng.I.isWriting)
         {
             pos.y -= fMoveSpeed * Time.deltaTime;
         }
-        if (Input.GetKey("d") || Input.mousePosition.x >= Screen.width - borderThickness)
+        if ((Input.GetKey("d") || Input.mousePosition.x >= Screen.width - borderThickness) && !GameMng.I.isWriting)
         {
             pos.x += fMoveSpeed * Time.deltaTime;
         }
-        if (Input.GetKey("a") || Input.mousePosition.x <= borderThickness)
+        if ((Input.GetKey("a") || Input.mousePosition.x <= borderThickness) && !GameMng.I.isWriting)
         {
             pos.x -= fMoveSpeed * Time.deltaTime;
         }
         pos.z = -20;
 
-        //pos.x = Mathf.Clamp(pos.x, -limitPos.x, limitPos.x);
-        //pos.y = Mathf.Clamp(pos.y, -limitPos.y, limitPos.y);
+        pos.x = Mathf.Clamp(pos.x, -limitPos.x, limitPos.x);
+        pos.y = Mathf.Clamp(pos.y, -limitPos.y, limitPos.y);
         this.transform.position = pos;
     }
 }

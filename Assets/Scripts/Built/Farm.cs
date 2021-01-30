@@ -5,15 +5,11 @@ using UnityEngine;
 public class Farm : Built
 {
     public int making;              // 식량 생산량
-    public static int cost = 4;     // 건설 비용
 
     void Awake()
     {
         _name = "농장";
-        _max_hp = 10;
-        _hp = _max_hp;
         _code = (int)BUILT.FARM;
-        making = 2;
         maxCreateCount = 3;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
 
@@ -24,6 +20,25 @@ public class Farm : Built
     {
         _name = string.Format("{0} 종족 농장  (소유자 : {1})", GameMng.I.getUserTribe(_uniqueNumber), GameMng.I.getUserName(_uniqueNumber));
         _emoteSide.color = GetUserColor(_uniqueNumber);
+
+        switch ((int)NetworkMng.getInstance.myTribe)
+        {
+            case 0:     // 숲 종족
+                _max_hp = 7;
+                _hp = _max_hp;
+                making = 5;
+                break;
+            case 1:     // 물 종족
+                _max_hp = 7;
+                _hp = _max_hp;
+                making = 5;
+                break;
+            case 2:     // 사막 종족
+                _max_hp = 7;
+                _hp = _max_hp;
+                making = 5;
+                break;
+        }
     }
 
     void init()

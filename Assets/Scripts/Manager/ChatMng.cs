@@ -14,31 +14,29 @@ public class ChatMng : MonoBehaviour
     GameObject chatPanel;       // 채팅 전체 패널
     public string myChatField;
 
-    public bool isWriting = false;
-
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Return))
         {
             //if (!chatPanel.activeSelf)
-            if (!isWriting)
+            if (!GameMng.I.isWriting)
             {
-                isWriting = true;
+                GameMng.I.isWriting = true;
                 chatAnim.SetTrigger("ChatOpen");
                 chatInput.Select();
                 //chatInput.ActivateInputField();
                 //chatInput.next();
                 //chatPanel.SetActive(true);
             }
-            else if (myChatField == "" && isWriting)
+            else if (myChatField == "" && GameMng.I.isWriting)
             {
-                isWriting = false;
+                GameMng.I.isWriting = false;
                 chatAnim.SetTrigger("ChatClose");
                 //chatPanel.SetActive(false);
             }
             else
             {
-                isWriting = false;
+                GameMng.I.isWriting = false;
                 chatAnim.SetTrigger("MessageOpen");
                 NetworkMng.getInstance.SendMsg(string.Format("CHAT:{0}", myChatField));
                 chatLogs.text += string.Format("\n[{0}] : {1} ({2})", NetworkMng.getInstance.nickName, myChatField, System.DateTime.Now.Hour + ":" + System.DateTime.Now.Minute);
@@ -59,7 +57,7 @@ public class ChatMng : MonoBehaviour
 
         NetworkMng.getInstance._soundGM.newChatMsg();
 
-        if (!isWriting)
+        if (!GameMng.I.isWriting)
             chatAnim.SetTrigger("MessageOpen");
     }
 }

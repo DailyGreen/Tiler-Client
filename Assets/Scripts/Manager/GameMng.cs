@@ -34,7 +34,13 @@ public class GameMng : MonoBehaviour
     public int WITCH_0_COST = 0;
     public int WITCH_1_COST = 0;
 
+    public int TURRET_COST = 0;
+    public int FARM_COST = 0;
+    public int MINE_COST = 0;
+    public int MILITARYBASE_COST = 0;
+
     public bool myTurn = false;                     // 내 차례인지
+    public bool isWriting = false;                  // 채팅을 치고 있는지
 
     /**********
      * 게임 서브 매니저
@@ -61,6 +67,9 @@ public class GameMng : MonoBehaviour
     //0:광산 1: 농장 2: 터렛 3: 성 4: 풀 5: 모래 6: 흙 7: 화성? 8: 돌 9: 바다 10: 일꾼
     [SerializeField]
     GameObject mainBarObj;                      // 메인 바 UI
+    [SerializeField]
+    GameObject loseUI;                          // 패배 UI
+    public GameObject winUI;                    // 승리 UI
 
     /**********
      * 게임 인터페이스
@@ -95,6 +104,8 @@ public class GameMng : MonoBehaviour
     UnityEngine.UI.Text turnDescText;           // 누구 턴인지 설명
     [SerializeField]
     UnityEngine.UI.Image[] frameImg;            // 버튼별 클릭 불가 이미지
+    [SerializeField]
+    UnityEngine.UI.Image[] costImg;             // 버튼별 코스트(골드) 아이콘
     [SerializeField]
     ActMessage[] actMessages;                   // 행동 도우미 메세지들
     [SerializeField]
@@ -190,7 +201,7 @@ public class GameMng : MonoBehaviour
         myFlagImage.color = color;
         myFlagTribe.sprite = tribeSprites[(int)NetworkMng.getInstance.myTribe];
 
-        // 내 종족 유닛 코스트를 설정
+        // 내 종족 오브젝트의 코스트를 설정
         switch ((int)NetworkMng.getInstance.myTribe)
         {
             case 0:    // 숲 종족
@@ -200,6 +211,10 @@ public class GameMng : MonoBehaviour
                 SOLDIER_2_COST = 3;
                 WITCH_0_COST = 6;
                 WITCH_1_COST = 7;
+                TURRET_COST = 3;
+                FARM_COST = 2;
+                MINE_COST = 2;
+                MILITARYBASE_COST = 4;
                 break;
             case 1:    // 물 종족
                 WORKER_COST = 4;
@@ -208,6 +223,10 @@ public class GameMng : MonoBehaviour
                 SOLDIER_2_COST = 6;
                 WITCH_0_COST = 6;
                 WITCH_1_COST = 8;
+                TURRET_COST = 3;
+                FARM_COST = 3;
+                MINE_COST = 2;
+                MILITARYBASE_COST = 5;
                 break;
             case 2:    // 사막 종족
                 WORKER_COST = 4;
@@ -216,6 +235,10 @@ public class GameMng : MonoBehaviour
                 SOLDIER_2_COST = 4;
                 WITCH_0_COST = 5;
                 WITCH_1_COST = 6;
+                TURRET_COST = 4;
+                FARM_COST = 2;
+                MINE_COST = 2;
+                MILITARYBASE_COST = 5;
                 break;
         }
 
@@ -401,7 +424,7 @@ public class GameMng : MonoBehaviour
                     UnityEngine.UI.Text[] childsTxt = actList[i].GetComponentsInChildren<UnityEngine.UI.Text>();
                     try
                     {
-                        checkActivity(obj._activity[i], actList[i], childsTxt[0], childsTxt[1], frameImg[i]);
+                        checkActivity(obj._activity[i], actList[i], childsTxt[0], childsTxt[1], frameImg[i], childsTxt[2], costImg[i]);
                     }
                     catch
                     {
@@ -514,7 +537,7 @@ public class GameMng : MonoBehaviour
                 try
                 {
                     // 3. actList 의 내용들을 변경해 줘야함
-                    checkActivity(obj._activity[i], actList[i], childsTxt[0], childsTxt[1], frameImg[i]);
+                    checkActivity(obj._activity[i], actList[i], childsTxt[0], childsTxt[1], frameImg[i], childsTxt[2], costImg[i]);
                 }
                 catch
                 {
@@ -530,40 +553,55 @@ public class GameMng : MonoBehaviour
      * @param actButton 행동 버튼
      * @param actName 행동 이름
      * @param actDesc 행동 설명
+     * @param costText 행동 비용
      */
-    public void checkActivity(ACTIVITY activity, UnityEngine.UI.Button actButton, UnityEngine.UI.Text actName, UnityEngine.UI.Text actDesc, UnityEngine.UI.Image Frame)
+    public void checkActivity(ACTIVITY activity, UnityEngine.UI.Button actButton, UnityEngine.UI.Text actName, UnityEngine.UI.Text actDesc, UnityEngine.UI.Image Frame, UnityEngine.UI.Text costText, UnityEngine.UI.Image costImg)
     {
         switch (activity)
         {
             case ACTIVITY.MOVE:
                 actName.text = "이동";
                 actDesc.text = "한 턴 소요";
+                costText.enabled = false;
+                costImg.enabled = false;
                 actButton.onClick.AddListener(delegate { _UnitGM.act = activity; _range.AttackrangeTileReset(); _UnitGM.Move(); });
                 canUseActivity(actButton, Frame, 0);
                 break;
             case ACTIVITY.BUILD_MINE:
                 actName.text = "광산";
                 actDesc.text = "한 턴 소요";
+                costText.enabled = true;
+                costImg.enabled = true;
+                costText.text = MINE_COST.ToString();
                 actButton.onClick.AddListener(delegate { _UnitGM.act = activity; _UnitGM.buildMine(); });
-                canUseActivity(actButton, Frame, Mine.cost);
+                canUseActivity(actButton, Frame, MINE_COST);
                 break;
             case ACTIVITY.BUILD_FARM:
                 actName.text = "농장";
                 actDesc.text = "한 턴 소요";
+                costText.enabled = true;
+                costImg.enabled = true;
+                costText.text = FARM_COST.ToString();
                 actButton.onClick.AddListener(delegate { _UnitGM.act = activity; _UnitGM.buildFarm(); });
-                canUseActivity(actButton, Frame, Farm.cost);
+                canUseActivity(actButton, Frame, FARM_COST);
                 break;
             case ACTIVITY.BUILD_ATTACK_BUILDING:
                 actName.text = "터렛";
                 actDesc.text = "두 턴 소요";
+                costText.enabled = true;
+                costImg.enabled = true;
+                costText.text = TURRET_COST.ToString();
                 actButton.onClick.AddListener(delegate { _UnitGM.act = activity; _UnitGM.buildAttackBuilding(); });
-                canUseActivity(actButton, Frame, Turret.cost);
+                canUseActivity(actButton, Frame, TURRET_COST);
                 break;
             case ACTIVITY.BUILD_MILLITARY_BASE:
                 actName.text = "군사 기지";
                 actDesc.text = "두 턴 소요";
+                costText.enabled = true;
+                costImg.enabled = true;
+                costText.text = MILITARYBASE_COST.ToString();
                 actButton.onClick.AddListener(delegate { _UnitGM.act = activity; _UnitGM.buildMillitaryBaseBuilding(); });
-                canUseActivity(actButton, Frame, MillitaryBase.cost);
+                canUseActivity(actButton, Frame, MILITARYBASE_COST);
                 break;
             case ACTIVITY.BUILD_SHIELD_BUILDING:
                 actName.text = "방어 건물";
@@ -577,47 +615,69 @@ public class GameMng : MonoBehaviour
                 break;
             case ACTIVITY.WORKER_UNIT_CREATE:
                 actName.text = "일꾼 생성";
+                costText.enabled = true;
+                costImg.enabled = true;
+                costText.text = WORKER_COST.ToString();
                 actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; Castle.CreateUnitBtn(); });
                 canUseActivity(actButton, Frame, WORKER_COST);
                 break;
             case ACTIVITY.DESTROY_BUILT:
                 actName.text = "건물 파괴";
+                costText.enabled = false;
+                costImg.enabled = false;
                 actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; _BuiltGM.DestroyBuilt(); });
                 canUseActivity(actButton, Frame, 0);
                 break;
             case ACTIVITY.ATTACK:
                 actName.text = "공격";
                 actDesc.text = "두 턴 소요";
+                costText.enabled = false;
+                costImg.enabled = false;
                 actButton.onClick.AddListener(delegate { _UnitGM.act = activity; _range.rangeTileReset(); _UnitGM.unitAttacking(); });
                 canUseActivity(actButton, Frame, 0);
                 break;
             case ACTIVITY.SOLDIER_0_UNIT_CREATE:
                 actName.text = "전사1 생성";
                 actDesc.text = "두 턴 소요";
+                costText.enabled = true;
+                costImg.enabled = true;
+                costText.text = SOLDIER_0_COST.ToString();
                 actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; MillitaryBase.CreateAttackFirstUnitBtn(); });
                 canUseActivity(actButton, Frame, SOLDIER_0_COST);
                 break;
             case ACTIVITY.SOLDIER_1_UNIT_CREATE:
                 actName.text = "전사2 생성";
                 actDesc.text = "두 턴 소요";
+                costText.enabled = true;
+                costImg.enabled = true;
+                costText.text = SOLDIER_1_COST.ToString();
                 actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; MillitaryBase.CreateAttackSecondUnitBtn(); });
                 canUseActivity(actButton, Frame, SOLDIER_1_COST);
                 break;
             case ACTIVITY.SOLDIER_2_UNIT_CREATE:
                 actName.text = "전사3 생성";
                 actDesc.text = "두 턴 소요";
+                costText.enabled = true;
+                costImg.enabled = true;
+                costText.text = SOLDIER_2_COST.ToString();
                 actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; MillitaryBase.CreateAttackThirdUnitBtn(); });
                 canUseActivity(actButton, Frame, SOLDIER_2_COST);
                 break;
             case ACTIVITY.WITCH_0_UNIT_CREATE:
                 actName.text = "마법사1 생성";
                 actDesc.text = "두 턴 소요";
+                costText.enabled = true;
+                costImg.enabled = true;
+                costText.text = WITCH_0_COST.ToString();
                 actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; MillitaryBase.CreateAttackFourthUnitBtn(); });
                 canUseActivity(actButton, Frame, WITCH_0_COST);
                 break;
             case ACTIVITY.WITCH_1_UNIT_CREATE:
                 actName.text = "마법사2 생성";
                 actDesc.text = "두 턴 소요";
+                costText.enabled = true;
+                costImg.enabled = true;
+                costText.text = WITCH_1_COST.ToString();
                 actButton.onClick.AddListener(delegate { _BuiltGM.act = activity; MillitaryBase.CreateAttackFifthUnitBtn(); });
                 canUseActivity(actButton, Frame, WITCH_1_COST);
                 break;
@@ -837,6 +897,12 @@ public class GameMng : MonoBehaviour
                 break;
             }
         }
+
+        // 내가 죽었다면 패배 UI 켜기
+        if (uniqueNumber.Equals(NetworkMng.getInstance.uniqueNumber))
+        {
+            loseUI.SetActive(true);
+        }
     }
 
     /**
@@ -890,6 +956,12 @@ public class GameMng : MonoBehaviour
         obj._hp -= damage;
         if (obj._hp <= 0)
         {
+            // 내 성이 파괴되었다면 서버에게 말해줌
+            if (obj._code.Equals(BUILT.CASTLE) && obj._uniqueNumber.Equals(NetworkMng.getInstance.uniqueNumber))
+            {
+                NetworkMng.getInstance.SendMsg(string.Format("LOSE:{0}:", NetworkMng.getInstance.uniqueNumber));
+            }
+
             // 파괴
             obj.DestroyMyself();
             //Destroy(obj.gameObject);

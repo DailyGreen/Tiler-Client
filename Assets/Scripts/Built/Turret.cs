@@ -5,17 +5,13 @@ using UnityEngine;
 public class Turret : Built
 {
     public int attack;              // 공격력
-    public static int cost = 5;     // 건설 비용
 
     public Tile tilestate;          // 터렛이 올라가 있는 타일 정보
 
     void Awake()
     {
         _name = "터렛";
-        _max_hp = 7;
-        _hp = _max_hp;
         _code = (int)BUILT.ATTACK_BUILDING;
-        attack = 5;
         _attackdistance = 2;
         maxCreateCount = 3;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
@@ -27,6 +23,25 @@ public class Turret : Built
     {
         _name = string.Format("{0} 종족 터렛  (소유자 : {1})", GameMng.I.getUserTribe(_uniqueNumber), GameMng.I.getUserName(_uniqueNumber));
         _emoteSide.color = GetUserColor(_uniqueNumber);
+
+        switch((int)NetworkMng.getInstance.myTribe)
+        {
+            case 0:     // 숲 종족
+                _max_hp = 7;
+                _hp = _max_hp;
+                attack = 5;
+                break;
+            case 1:     // 물 종족
+                _max_hp = 7;
+                _hp = _max_hp;
+                attack = 5;
+                break;
+            case 2:     // 사막 종족
+                _max_hp = 7;
+                _hp = _max_hp;
+                attack = 5;
+                break;
+        }
     }
 
     void init()
@@ -107,7 +122,7 @@ public class Turret : Built
     {
         if (createCount < maxCreateCount - 1)
             GameMng.I.RemoveDelegate(waitingCreate);
-        //else
-        //    GameMng.I.RemoveDelegate(Attack);
+        else
+            GameMng.I.RemoveDelegate(Attack);
     }
 }

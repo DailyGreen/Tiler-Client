@@ -11,7 +11,9 @@ public class Desert_Worker : Worker
         _code = (int)UNIT.DESERT_WORKER;
         _max_hp = 10;
         _hp = _max_hp;
+        _damage = 1;
         _basedistance = 1;
+        _attackdistance = 1;
         maxCreateCount = 2;
         maintenanceCost = 1;
         _damage = 0;

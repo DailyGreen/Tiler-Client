@@ -53,10 +53,20 @@ public class Unit : DynamicObject
         if (GameMng.I.countHungry > (NetworkMng.getInstance.v_user.Count * 3))
         {
             // Çàµ¿ ºÒ´É
+            _bActAccess = false;
         }
         else if (GameMng.I.countHungry > 10)
         {
+
+        }
+        else if (GameMng.I.countHungry > (NetworkMng.getInstance.v_user.Count * 6))
+        {
             // ·£´ý »ç¸Á (È®·ü %)
+            int diePercent = Random.Range(1, 100);
+            if (diePercent > 90)
+            {
+                // »ç¸Á
+            }
         }
     }
 

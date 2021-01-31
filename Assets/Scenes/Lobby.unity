@@ -973,6 +973,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: f83aa42b6bd2e6b40838125551b3bcca, type: 3}
   - {fileID: 8300000, guid: f466deecf7182b746ab655b1bb3eec7d, type: 3}
   - {fileID: 8300000, guid: a2e957bc5cf33ef4083777b0975ad76e, type: 3}
+  - {fileID: 8300000, guid: cc0700a3e33ecd742b2594c5e6eba6d3, type: 3}
   tileClip:
   - {fileID: 8300000, guid: e91ba206aeb959a4784e7dbc70f18802, type: 3}
   builtClip: {fileID: 8300000, guid: 864233466afc29f40851ff06acf0526b, type: 3}
@@ -19781,7 +19782,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1629416512185361
 GameObject:
   m_ObjectHideFlags: 0
@@ -33407,7 +33408,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -40, y: 60}
+  m_AnchoredPosition: {x: 0, y: 60}
   m_SizeDelta: {x: 75, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224135073869130225

@@ -10,8 +10,10 @@ public class Forest_Worker : Worker
         _unitDesc = "듬직해 보인다.";
         _code = (int)UNIT.FOREST_WORKER;
         _max_hp = 10;
+        _damage = 1;
         _hp = _max_hp;
         _basedistance = 1;
+        _attackdistance = 1;
         maxCreateCount = 2;
         maintenanceCost = 1;
         _damage = 0;

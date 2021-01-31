@@ -96,7 +96,7 @@ public class UnitMng : MonoBehaviour
                 GameMng.I.selectedTile._unitObj._anim.SetTrigger("isRunning");
 
                 NetworkMng.getInstance.SendMsg(string.Format("MOVE_UNIT:{0}:{1}:{2}:{3}", GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosZ, GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosZ));
-                
+
                 StartCoroutine("Moving", movedis);
             }
             else                                     // 범위가 아닌 다른 곳을 누름
@@ -117,7 +117,7 @@ public class UnitMng : MonoBehaviour
             && GameMng.I.distanceOfTiles <= movedis) // 캐릭터와 타일간 거리가 1.5 * a 이하일시 움직일수 있음 (거리 한칸당 1.24?정도 되드라)
         {
             GameMng.I.selectedTile._unitObj.transform.localPosition = Vector2.Lerp(GameMng.I.selectedTile._unitObj.transform.localPosition, GameMng.I.targetTile.transform.localPosition, GameMng.I.unitSpeed * Time.deltaTime);        //타일 간 부드러운 이동
-            
+
             yield return null;
 
             StartCoroutine("Moving", movedis);
@@ -130,7 +130,7 @@ public class UnitMng : MonoBehaviour
             GameMng.I.selectedTile._unitObj = null;
 
             GameMng.I._hextile.TilecodeClear(GameMng.I.selectedTile);
-            
+
             GameMng.I.selectedTile = GameMng.I.targetTile;
 
             GameMng.I._range.SelectTileSetting(false);
@@ -165,10 +165,15 @@ public class UnitMng : MonoBehaviour
 
         GameMng.I.addActMessage(string.Format("{0}님의 유닛이 이동했습니다.", GameMng.I.getUserName(GameMng.I._hextile.GetCell(posX, posY)._unitObj._uniqueNumber)), toX, toY);
 
+        GameMng.I.addLogMessage(GameMng.I.getUserName(GameMng.I._hextile.GetCell(posX, posY)._unitObj._uniqueNumber), "유닛이 이동했습니다.");
+
         while (isRun)
         {
+            if (GameMng.I._hextile.GetCell(posX, posY)._unitObj._hp <= 0) break;
             if (Vector2.Distance(GameMng.I._hextile.GetCell(posX, posY)._unitObj.transform.localPosition, GameMng.I._hextile.GetCell(toX, toY).transform.localPosition) >= 0.01f)
             {
+                Debug.Log(posX);
+                Debug.Log(posY + "ASDFASDFASDFADFSAFD");
                 GameMng.I._hextile.GetCell(posX, posY)._unitObj.transform.localPosition = Vector2.Lerp(GameMng.I._hextile.GetCell(posX, posY)._unitObj.transform.localPosition, GameMng.I._hextile.GetCell(toX, toY).transform.localPosition, GameMng.I.unitSpeed * Time.deltaTime);        //타일 간 부드러운 이동
                 yield return null;
             }
@@ -237,6 +242,8 @@ public class UnitMng : MonoBehaviour
 
                 NetworkMng.getInstance.SendMsg(string.Format("CREATE_BUILT:{0}:{1}:{2}:{3}:{4}:{5}", GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosZ, index, NetworkMng.getInstance.uniqueNumber, GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosZ));
 
+                GameMng.I.addLogMessage(NetworkMng.getInstance.nickName, "건물을 생성하고 있습니다.");
+
                 // 일꾼이라면
                 if (unitindex == (int)UNIT.FOREST_WORKER || unitindex == (int)UNIT.DESERT_WORKER || unitindex == (int)UNIT.SEA_WORKER)
                 {
@@ -298,6 +305,8 @@ public class UnitMng : MonoBehaviour
         }
 
         GameMng.I.addActMessage(string.Format("{0}님의 건물이 지어지고 있습니다.", GameMng.I.getUserName(uniqueNumber)), posX, posY);
+
+        GameMng.I.addLogMessage(GameMng.I.getUserName(uniqueNumber), "건물을 생성하고 있습니다.");
     }
 
     /**
@@ -312,8 +321,9 @@ public class UnitMng : MonoBehaviour
             if (GameMng.I.targetTile._unitObj != null && GameMng.I.targetTile._unitObj._uniqueNumber != NetworkMng.getInstance.uniqueNumber && GameMng.I.targetTile.Distance <= distance)
             {
                 GameMng.I.targetTile._unitObj._hp -= GameMng.I.selectedTile._unitObj._damage;
-
-                AttackEffectSetting(GameMng.I.selectedTile._unitObj._code); ;                           // 공격하는 유닛에 맞는 이펙트를 적용시킴
+                if ((GameMng.I.selectedTile._unitObj._code == (int)UNIT.FOREST_WITCH_0 + (int)(NetworkMng.getInstance.myTribe) * 6
+                    || GameMng.I.selectedTile._unitObj._code == (int)UNIT.FOREST_WITCH_1 + (int)(NetworkMng.getInstance.myTribe) * 6))
+                    AttackEffectSetting(GameMng.I.selectedTile._unitObj._code);                           // 공격하는 유닛에 맞는 이펙트를 적용시킴
 
                 if (GameMng.I.targetTile._unitObj._hp <= 0)
                 {
@@ -327,15 +337,14 @@ public class UnitMng : MonoBehaviour
             else if (GameMng.I.targetTile._builtObj != null && GameMng.I.targetTile._builtObj._uniqueNumber != NetworkMng.getInstance.uniqueNumber && GameMng.I.targetTile.Distance <= distance)
             {
                 GameMng.I.targetTile._builtObj._hp -= GameMng.I.selectedTile._unitObj._damage;
-                
-                AttackEffectSetting(GameMng.I.selectedTile._unitObj._code); ;                           // 공격하는 유닛에 맞는 이펙트를 적용시킴
+                if ((GameMng.I.selectedTile._unitObj._code == (int)UNIT.FOREST_WITCH_0 + (int)(NetworkMng.getInstance.myTribe) * 6
+                    || GameMng.I.selectedTile._unitObj._code == (int)UNIT.FOREST_WITCH_1 + (int)(NetworkMng.getInstance.myTribe) * 6))
+                    AttackEffectSetting(GameMng.I.selectedTile._unitObj._code);                           // 공격하는 유닛에 맞는 이펙트를 적용시킴
 
                 if (GameMng.I.targetTile._builtObj._code == (int)BUILT.AIRDROP)
                 {
                     int nKind = Random.Range(1, 3);            // 1: 골드,  2: 식량
                     int nResult = Random.Range(20, 60);
-
-                    Debug.Log(nKind + ", " + nResult);
 
                     if (nKind == 1)
                     {
@@ -399,7 +408,7 @@ public class UnitMng : MonoBehaviour
         AttackEffect.transform.position = new Vector3(GameMng.I.targetTile.transform.position.x, GameMng.I.targetTile.transform.position.y, -10f);
         StartCoroutine("AttackEffectReset");
     }
-    
+
     /**
      * @brief 이펙트 파티클이 끝난후 적용되는 소스
      */

@@ -173,6 +173,13 @@ public class SoundMng : MonoBehaviour
         _unit.Play();
     }
 
+    public void myTurnEffect()
+    {
+        _effect.clip = effectClip[3];
+        _effect.volume = effectVolume;
+        _effect.Play();
+    }
+
     IEnumerator changeTo(AudioClip clip)
     {
         while (_audio.volume > 0)

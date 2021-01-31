@@ -80,6 +80,8 @@ public class BuiltMng : MonoBehaviour
 
                 NetworkMng.getInstance.SendMsg(string.Format("CREATE_UNIT:{0}:{1}:{2}:{3}:{4}:{5}", GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosZ, index, NetworkMng.getInstance.uniqueNumber, GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosZ));
 
+                GameMng.I.addLogMessage(NetworkMng.getInstance.nickName, "유닛을 생성하고 있습니다");
+
                 GameMng.I.cleanActList();
                 GameMng.I._range.rangeTileReset();
                 GameMng.I.cleanSelected();
@@ -119,6 +121,8 @@ public class BuiltMng : MonoBehaviour
 
         GameMng.I.addActMessage(string.Format("{0}님이 일꾼을 생성하고 있습니다.", GameMng.I.getUserName(uniqueNumber)), posX, posY);
 
+        GameMng.I.addLogMessage(GameMng.I.getUserName(uniqueNumber), "일꾼을 생성하고 있습니다.");
+
         if (GameMng.I._hextile.GetCell(byX, byY)._builtObj._code == (int)BUILT.MILLITARY_BASE)
         {
             MillitaryBase SaveData = GameMng.I._hextile.GetCell(byX, byY)._builtObj.GetComponent<MillitaryBase>();
@@ -157,6 +161,13 @@ public class BuiltMng : MonoBehaviour
         GameObject Child = Instantiate(AirDropobj, GameMng.I._hextile.cells[index].transform) as GameObject;
         GameMng.I._hextile.cells[index]._code = (int)TILE.CAN_MOVE;
         GameMng.I._hextile.cells[index]._builtObj = Child.GetComponent<AirDrop>();
+
+        GameMng.I.addActMessage(
+            "▶    보급품이 떨어졌습니다!    ◀",
+            GameMng.I._hextile.cells[index].PosX,
+            GameMng.I._hextile.cells[index].PosZ);
+
+        GameMng.I.addLogMessage("시스템", "보급품이 떨어졌습니다.");
     }
 
     /**
@@ -167,6 +178,8 @@ public class BuiltMng : MonoBehaviour
         if (GameMng.I.selectedTile == null) { act = ACTIVITY.NONE; return; }
 
         NetworkMng.getInstance.SendMsg(string.Format("DESTROY_BUILT:{0}:{1}", GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosZ));
+
+        GameMng.I.addLogMessage(NetworkMng.getInstance.nickName, "건물을 파괴했습니다.");
 
         if (GameMng.I.selectedTile._builtObj._code == (int)BUILT.ATTACK_BUILDING)
         {

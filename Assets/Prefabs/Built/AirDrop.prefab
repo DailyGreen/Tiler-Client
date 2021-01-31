@@ -52,8 +52,9 @@ MonoBehaviour:
   _hp: 0
   _max_hp: 0
   _uniqueNumber: 0
+  _emoteSide: {fileID: 0}
   _anim: {fileID: 3852348693732725202}
-  dyingClip: {fileID: 0}
+  dyingClip: {fileID: 7400000, guid: dc4f45b8aeced3e49a59d594b06aa411, type: 2}
   createCount: 0
   maxCreateCount: 0
   _basedistance: 0
@@ -61,10 +62,6 @@ MonoBehaviour:
   SaveX: 0
   SaveY: 0
   _bActAccess: 0
-  mine: {fileID: 0}
-  farm: {fileID: 0}
-  turret: {fileID: 0}
-  millitarybase: {fileID: 0}
 --- !u!212 &4092942375965352707
 SpriteRenderer:
   m_ObjectHideFlags: 0

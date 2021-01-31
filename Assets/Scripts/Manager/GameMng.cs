@@ -13,14 +13,21 @@ public class GameMng : MonoBehaviour
     /**********
      * 게임 세팅 값
      */
+    [HideInInspector]
     public int _gold = 0;
+    [HideInInspector]
     public int _food = 0;
+    [HideInInspector]
     public int _nowMem = 0;
+    [HideInInspector]
     public int _maxMem = 0;
     private const int mapWidth = 50;                             // 맵 가로
     private const int mapHeight = 50;                            // 맵 높이
+    [HideInInspector]
     public Vector3 CastlePos;                                   // 내 성의 Transform 위치값
+    [HideInInspector]
     public int CastlePosX, CastlePosZ;                          // 내 성의 X, Z 값
+    [HideInInspector]
     public bool isWriting = false;                  // 채팅을 치고 있는지
 
     //public int myTurnCount = 0;                     // 내 차례
@@ -30,18 +37,29 @@ public class GameMng : MonoBehaviour
     /**********
      * 오브젝트 데이터
      */
+    [HideInInspector]
     public int WORKER_COST = 0;
+    [HideInInspector]
     public int SOLDIER_0_COST = 0;
+    [HideInInspector]
     public int SOLDIER_1_COST = 0;
+    [HideInInspector]
     public int SOLDIER_2_COST = 0;
+    [HideInInspector]
     public int WITCH_0_COST = 0;
+    [HideInInspector]
     public int WITCH_1_COST = 0;
 
+    [HideInInspector]
     public int TURRET_COST = 0;
+    [HideInInspector]
     public int FARM_COST = 0;
+    [HideInInspector]
     public int MINE_COST = 0;
+    [HideInInspector]
     public int MILITARYBASE_COST = 0;
 
+    [HideInInspector]
     public float unitSpeed = 3.0f;
 
     /**********
@@ -66,9 +84,13 @@ public class GameMng : MonoBehaviour
     /**********
      * 타일 인풋 관련 데이터
      */
+    [HideInInspector]
     public RaycastHit2D hit;
+    [HideInInspector]
     public Tile selectedTile = null;
+    [HideInInspector]
     public Tile targetTile = null;
+    [HideInInspector]
     public float distanceOfTiles = 0.0f;
 
     /**********
@@ -145,7 +167,9 @@ public class GameMng : MonoBehaviour
     [SerializeField]
     UnityEngine.UI.Slider effectSlider;         // 이펙트 볼륨 세팅
     [SerializeField]
-    GameObject myTurnEffect;                    // 내 턴 이펙트
+    GameObject myTurnEffect;                    // 내 턴 이펙트    
+    [SerializeField]
+    UnityEngine.UI.Text logsText;               // 로그 텍스트
 
     // ---- 맵의 가로 세로 크기 읽기
     public int GetMapWidth
@@ -222,6 +246,9 @@ public class GameMng : MonoBehaviour
         ColorUtility.TryParseHtmlString(CustomColor.TransColor((COLOR)NetworkMng.getInstance.myColor), out color);
         myFlagImage.color = color;
         myFlagTribe.sprite = tribeSprites[(int)NetworkMng.getInstance.myTribe];
+
+        // 게임 시작 로그 남기기
+        addLogMessage("시스템", "게임이 시작되었습니다.");
 
         // 내 종족 오브젝트의 코스트를 설정
         switch ((int)NetworkMng.getInstance.myTribe)
@@ -428,6 +455,8 @@ public class GameMng : MonoBehaviour
 
             myTurnEffect.SetActive(true);
 
+            NetworkMng.getInstance._soundGM.myTurnEffect();
+
             return;
         }
         cleanActList();
@@ -530,6 +559,8 @@ public class GameMng : MonoBehaviour
         cleanActList();
         mainBarObj.SetActive(true);
 
+        objImage.transform.localScale = Vector3.one;
+
         // 유닛이 없다면 정적인 타일이란 뜻
         if (tile._unitObj == null && tile._builtObj == null)
         {
@@ -539,6 +570,7 @@ public class GameMng : MonoBehaviour
 
             objImage.sprite = getObjSprite(tile._code);
             setMainInterface(false, false);
+            objImage.SetNativeSize();
 
             NetworkMng.getInstance._soundGM.tileClick();
 
@@ -550,8 +582,9 @@ public class GameMng : MonoBehaviour
         {
             obj = tile._unitObj;
             objImage.sprite = getObjSprite(tile._unitObj._code);
-            objImage.SetNativeSize();
+
             setMainInterface();
+            objImage.SetNativeSize();
             NetworkMng.getInstance._soundGM.unitClick(obj._code);
 
             damageText.text = tile._unitObj._damage.ToString();
@@ -563,6 +596,24 @@ public class GameMng : MonoBehaviour
             //타일에 있는 건물의 코드의 따른 스프라이트 변경, 로고 text 켜고 끄기
             objImage.sprite = getObjSprite(tile._builtObj._code);
             NetworkMng.getInstance._soundGM.builtClick();
+
+            if (obj._code == (int)BUILT.ATTACK_BUILDING)
+            {
+                damageText.text = Turret.attack.ToString();
+                maintCostText.text = Turret.maintenanceCost.ToString();
+                logoImage[2].sprite = costImg[0].sprite;
+            }
+
+            if (selectedTile._code == (int)BUILT.CASTLE)
+            {
+                objImage.transform.localScale = Vector3.one;
+                objImage.SetNativeSize();
+            }
+            else
+            {
+                objImage.transform.localScale = new Vector3(2f, 2f, 1f);
+                objImage.SetNativeSize();
+            }
         }
 
         objectNameTxt.text = obj._name;
@@ -877,8 +928,10 @@ public class GameMng : MonoBehaviour
     }
 
     /**
-     * @brief 레이케스트 레이저 생성 및 hit 리턴
-     * @param isTarget 레이케스트 타겟을 변경할때 사용. targetTile 값을 받아올때 true 해주면 됨
+     * @brief 행동 메세지를 추가할때
+     * @param msg 메세지 내용
+     * @param posX 대상 위치
+     * @param posY 대상 위치
      */
     public void addActMessage(string msg, int posX, int posY)
     {
@@ -905,6 +958,16 @@ public class GameMng : MonoBehaviour
         actMessages[4].setMessage(msg);
         actMessages[4].posX = posX;
         actMessages[4].posY = posY;
+    }
+
+    /**
+     * @brief 로그 메세지를 추가할때
+     * @param name 대상 이름
+     * @param msg 내용
+     */
+    public void addLogMessage(string name, string msg)
+    {
+        logsText.text += string.Format("\n[{0}] : {1} ({2})", name, msg, System.DateTime.Now.Hour + ":" + System.DateTime.Now.Minute);
     }
 
     /**
@@ -994,6 +1057,8 @@ public class GameMng : MonoBehaviour
 
         addActMessage(string.Format("{0}님이 공격했습니다.", getUserName(obj._uniqueNumber)), posX, posY);
 
+        addLogMessage(getUserName(obj._uniqueNumber), "공격을 시도했습니다.");
+
         // 공격받는 대상의 HP 가 줄어들게 해줌
         obj = null;
         if (_hextile.GetCell(toX, toY)._unitObj != null) obj = _hextile.GetCell(toX, toY)._unitObj;
@@ -1014,7 +1079,9 @@ public class GameMng : MonoBehaviour
             }
         }
 
-        EffectSave(_hextile.GetCell(posX, posY)._unitObj._code, _hextile.GetCell(toX, toY).GetTileVec2.x, _hextile.GetCell(toX, toY).GetTileVec2.y);
+        if (_hextile.GetCell(posX, posY)._unitObj._code == (int)UNIT.FOREST_WITCH_0 + (int)(NetworkMng.getInstance.myTribe) * 6 ||
+                    _hextile.GetCell(posX, posY)._unitObj._code == (int)UNIT.FOREST_WITCH_1 + (int)(NetworkMng.getInstance.myTribe) * 6)
+            EffectSave(_hextile.GetCell(posX, posY)._unitObj._code, _hextile.GetCell(toX, toY).GetTileVec2.x, _hextile.GetCell(toX, toY).GetTileVec2.y);
 
         obj._hp -= damage;
         if (obj._hp <= 0)
@@ -1034,6 +1101,42 @@ public class GameMng : MonoBehaviour
         }
     }
 
+    /**
+     * @brief 터랫 공격
+     * @param posX 터렛의 posX
+     * @param posY 터렛의 posY
+     * @param damage 터렛의 대미지
+     * @param uniqenum 공격한 터렛의 uniqenum
+     */
+    public void TurretAttack(int posX, int posY, int damage, int uniqenum)
+    {
+        Tile turrettile = null;
+        int count = 0;
+
+        turrettile = _hextile.GetCell(posX, posY);
+        _hextile.FindDistancesTo(turrettile);
+        for (int i = 0; i < _hextile.cells.Length; i++)
+        {
+            if (count >= 18) break;
+            if (_hextile.cells[i].Distance <= 2)
+            {
+                count++;
+                if (_hextile.cells[i]._unitObj != null && !_hextile.cells[i]._unitObj._uniqueNumber.Equals(uniqenum))
+                {
+                    turrettile._builtObj.GetComponent<Turret>()._anim.SetTrigger("isAttacking");
+                    _hextile.cells[i]._unitObj._hp -= damage;
+                    refreshMainUI();
+                    if (_hextile.cells[i]._unitObj._hp <= 0)
+                    {
+                        // 파괴
+                        _hextile.cells[i]._unitObj.DestroyMyself();
+                        _hextile.cells[i]._unitObj = null;
+                        _hextile.TilecodeClear(_hextile.cells[i]);            // TODO : 코드 값 원래 값으로
+                    }
+                }
+            }
+        }
+    }
     /**
      * @brief 클릭한 타일의 코드에 따른 스프라이트값 조정
      * @param unitcode 코드

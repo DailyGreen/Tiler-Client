@@ -10,9 +10,11 @@ public class Sea_Worker : Worker
         _unitDesc = "듬직해 보인다.";
         _code = (int)UNIT.SEA_WORKER;
         _max_hp = 10;
+        _damage = 1;
         _hp = _max_hp;
         maxCreateCount = 2;
         _basedistance = 1;
+        _attackdistance = 1;
         maintenanceCost = 1;
         _damage = 0;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";

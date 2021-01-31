@@ -413,6 +413,19 @@ public class NetworkMng : MonoBehaviour
         }
         else if (txt[0].Equals("LOSE"))
         {
+            for (int i = 0; i < v_user.Count; i++)
+            {
+                if (v_user[i].uniqueNumber.Equals(int.Parse(txt[1])))
+                {
+                    GameMng.I.addActMessage(
+                        string.Format("● {0}님이 패배했습니다. ●", GameMng.I.getUserName(int.Parse(txt[1]))),
+                        GameMng.I._hextile.starttile[v_user[i].startPos].PosX,
+                        GameMng.I._hextile.starttile[v_user[i].startPos].PosZ);
+                    GameMng.I.addLogMessage(GameMng.I.getUserName(int.Parse(txt[1])), "패배했습니다.");
+                    break;
+                }
+            }
+
             // Tab UI 에서 죽은 유저로 표시하기
             GameMng.I.UserExit(int.Parse(txt[1]));
         }

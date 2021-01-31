@@ -13,14 +13,21 @@ public class GameMng : MonoBehaviour
     /**********
      * 게임 세팅 값
      */
+    [HideInInspector]
     public int _gold = 0;
+    [HideInInspector]
     public int _food = 0;
+    [HideInInspector]
     public int _nowMem = 0;
+    [HideInInspector]
     public int _maxMem = 0;
     private const int mapWidth = 50;                             // 맵 가로
     private const int mapHeight = 50;                            // 맵 높이
+    [HideInInspector]
     public Vector3 CastlePos;                                   // 내 성의 Transform 위치값
+    [HideInInspector]
     public int CastlePosX, CastlePosZ;                          // 내 성의 X, Z 값
+    [HideInInspector]
     public bool isWriting = false;                  // 채팅을 치고 있는지
 
     //public int myTurnCount = 0;                     // 내 차례
@@ -30,26 +37,41 @@ public class GameMng : MonoBehaviour
     /**********
      * 오브젝트 데이터
      */
+    [HideInInspector]
     public int WORKER_COST = 0;
+    [HideInInspector]
     public int SOLDIER_0_COST = 0;
+    [HideInInspector]
     public int SOLDIER_1_COST = 0;
+    [HideInInspector]
     public int SOLDIER_2_COST = 0;
+    [HideInInspector]
     public int WITCH_0_COST = 0;
+    [HideInInspector]
     public int WITCH_1_COST = 0;
 
+    [HideInInspector]
     public int TURRET_COST = 0;
+    [HideInInspector]
     public int FARM_COST = 0;
+    [HideInInspector]
     public int MINE_COST = 0;
+    [HideInInspector]
     public int MILITARYBASE_COST = 0;
 
+    [HideInInspector]
     public float unitSpeed = 3.0f;
 
     /**********
      * 턴 관련 데이터
      */
+    [HideInInspector]
     public int TurnCount = 0;                       // 몇턴이 지났는지
+    [HideInInspector]
     public int RandomCount = 0;                     // 몇턴 후 보급이 생성 되는지
+    [HideInInspector]
     public bool myTurn = false;                     // 내 차례인지
+    [HideInInspector]
     public int countHungry = 0;                     // 몇턴이나 굶었는지
 
 
@@ -66,9 +88,13 @@ public class GameMng : MonoBehaviour
     /**********
      * 타일 인풋 관련 데이터
      */
+    [HideInInspector]
     public RaycastHit2D hit;
+    [HideInInspector]
     public Tile selectedTile = null;
+    [HideInInspector]
     public Tile targetTile = null;
+    [HideInInspector]
     public float distanceOfTiles = 0.0f;
 
     /**********
@@ -146,6 +172,8 @@ public class GameMng : MonoBehaviour
     UnityEngine.UI.Slider effectSlider;         // 이펙트 볼륨 세팅
     [SerializeField]
     GameObject myTurnEffect;                    // 내 턴 이펙트
+    [SerializeField]
+    UnityEngine.UI.Text logsText;               // 로그 텍스트
 
     // ---- 맵의 가로 세로 크기 읽기
     public int GetMapWidth
@@ -222,6 +250,9 @@ public class GameMng : MonoBehaviour
         ColorUtility.TryParseHtmlString(CustomColor.TransColor((COLOR)NetworkMng.getInstance.myColor), out color);
         myFlagImage.color = color;
         myFlagTribe.sprite = tribeSprites[(int)NetworkMng.getInstance.myTribe];
+
+        // 게임 시작 로그 남기기
+        addLogMessage("시스템", "게임이 시작되었습니다.");
 
         // 내 종족 오브젝트의 코스트를 설정
         switch ((int)NetworkMng.getInstance.myTribe)
@@ -877,8 +908,10 @@ public class GameMng : MonoBehaviour
     }
 
     /**
-     * @brief 레이케스트 레이저 생성 및 hit 리턴
-     * @param isTarget 레이케스트 타겟을 변경할때 사용. targetTile 값을 받아올때 true 해주면 됨
+     * @brief 행동 메세지를 추가할때
+     * @param msg 메세지 내용
+     * @param posX 대상 위치
+     * @param posY 대상 위치
      */
     public void addActMessage(string msg, int posX, int posY)
     {
@@ -905,6 +938,16 @@ public class GameMng : MonoBehaviour
         actMessages[4].setMessage(msg);
         actMessages[4].posX = posX;
         actMessages[4].posY = posY;
+    }
+
+    /**
+     * @brief 로그 메세지를 추가할때
+     * @param name 대상 이름
+     * @param msg 내용
+     */
+    public void addLogMessage(string name, string msg)
+    {
+        logsText.text += string.Format("\n[{0}] : {1} ({2})", name, msg, System.DateTime.Now.Hour + ":" + System.DateTime.Now.Minute);
     }
 
     /**
@@ -993,6 +1036,8 @@ public class GameMng : MonoBehaviour
         obj._anim.SetTrigger("isAttacking");
 
         addActMessage(string.Format("{0}님이 공격했습니다.", getUserName(obj._uniqueNumber)), posX, posY);
+
+        addLogMessage(getUserName(obj._uniqueNumber), "공격을 시도했습니다.");
 
         // 공격받는 대상의 HP 가 줄어들게 해줌
         obj = null;

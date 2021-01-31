@@ -164,6 +164,7 @@ public class UnitMng : MonoBehaviour
         GameMng.I._hextile.TilecodeClear(posX, posY);
 
         GameMng.I.addActMessage(string.Format("{0}님의 유닛이 이동했습니다.", GameMng.I.getUserName(GameMng.I._hextile.GetCell(posX, posY)._unitObj._uniqueNumber)), toX, toY);
+        GameMng.I.addLogMessage(GameMng.I.getUserName(GameMng.I._hextile.GetCell(posX, posY)._unitObj._uniqueNumber), "유닛이 이동했습니다.");
 
         while (isRun)
         {
@@ -237,6 +238,8 @@ public class UnitMng : MonoBehaviour
 
                 NetworkMng.getInstance.SendMsg(string.Format("CREATE_BUILT:{0}:{1}:{2}:{3}:{4}:{5}", GameMng.I.targetTile.PosX, GameMng.I.targetTile.PosZ, index, NetworkMng.getInstance.uniqueNumber, GameMng.I.selectedTile.PosX, GameMng.I.selectedTile.PosZ));
 
+                GameMng.I.addLogMessage(NetworkMng.getInstance.nickName, "건물을 생성하고 있습니다.");
+
                 // 일꾼이라면
                 if (unitindex == (int)UNIT.FOREST_WORKER || unitindex == (int)UNIT.DESERT_WORKER || unitindex == (int)UNIT.SEA_WORKER)
                 {
@@ -298,6 +301,7 @@ public class UnitMng : MonoBehaviour
         }
 
         GameMng.I.addActMessage(string.Format("{0}님의 건물이 지어지고 있습니다.", GameMng.I.getUserName(uniqueNumber)), posX, posY);
+        GameMng.I.addLogMessage(GameMng.I.getUserName(uniqueNumber), "건물이 지어지고 있습니다.");
     }
 
     /**

@@ -274,6 +274,12 @@ public class NetworkMng : MonoBehaviour
             // 현재 오브젝트를 찾아서 공격력 찾은 다음 대상 위치의 hp 를 깎음
             GameMng.I.attack(int.Parse(txt[1]), int.Parse(txt[2]), int.Parse(txt[3]), int.Parse(txt[4]), int.Parse(txt[5]));
         }
+        else if (txt[0].Equals("ATTACK_TURRET"))
+        {
+            // 오브젝트 x값, y값, 공격 대미지
+            // 공격한 터렛 오브젝트를 찾아서 범위 안의 유닛의 hp 를 깎음
+            GameMng.I.TurretAttack(int.Parse(txt[1]), int.Parse(txt[2]), int.Parse(txt[3]));
+        }
         else if (txt[0].Equals("CHAT"))
         {
             GameMng.I._chat.newMessage(txt[1], txt[2]);

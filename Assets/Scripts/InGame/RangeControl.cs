@@ -20,7 +20,7 @@ public class RangeControl : MonoBehaviour
         int count = 0;
         for (int i = 0; i < GameMng.I._hextile.cells.Length; i++)
         {
-            if (count > 18) break;
+            if (count >= moveRangeTr.Length) break;
 
             if (GameMng.I._hextile.cells[i].Distance <= distance && !GameMng.I._hextile.cells[i].Distance.Equals(0) && GameMng.I._hextile.cells[i]._code < (int)TILE.CAN_MOVE)
             {
@@ -51,7 +51,7 @@ public class RangeControl : MonoBehaviour
         int count = 0;
         for (int i = 0; i < GameMng.I._hextile.cells.Length; i++)
         {
-            if (count > 18) break;
+            if (count >= moveRangeTr.Length) { break; }
 
             if (GameMng.I._hextile.cells[i].Distance <= distance && !GameMng.I._hextile.cells[i].Distance.Equals(0))
             {

@@ -982,7 +982,6 @@ public class GameMng : MonoBehaviour
      */
     public void attack(int posX, int posY, int toX, int toY, int damage)
     {
-
         // 공격하는 대상이 공격하는 애니메이션을 취하도록 해줌
         DynamicObject obj = null;
         if (_hextile.GetCell(posX, posY)._unitObj != null) obj = _hextile.GetCell(posX, posY)._unitObj;
@@ -1014,9 +1013,13 @@ public class GameMng : MonoBehaviour
             }
         }
 
-        EffectSave(_hextile.GetCell(posX, posY)._unitObj._code, _hextile.GetCell(toX, toY).GetTileVec2.x, _hextile.GetCell(toX, toY).GetTileVec2.y);
+        if (_hextile.GetCell(posX, posY)._unitObj._code == (int)UNIT.FOREST_WITCH_0 + (int)(NetworkMng.getInstance.myTribe) * 6 ||
+            _hextile.GetCell(posX, posY)._unitObj._code == (int)UNIT.FOREST_WITCH_1 + (int)(NetworkMng.getInstance.myTribe) * 6)
+            EffectSave(_hextile.GetCell(posX, posY)._unitObj._code, _hextile.GetCell(toX, toY).GetTileVec2.x, _hextile.GetCell(toX, toY).GetTileVec2.y);
 
         obj._hp -= damage;
+        refreshMainUI();
+
         if (obj._hp <= 0)
         {
             // 내 성이 파괴되었다면 서버에게 말해줌
@@ -1031,6 +1034,41 @@ public class GameMng : MonoBehaviour
             _hextile.GetCell(toX, toY)._unitObj = null;
             _hextile.GetCell(toX, toY)._builtObj = null;
             _hextile.TilecodeClear(toX, toY);            // TODO : 코드 값 원래 값으로
+        }
+    }
+    /**
+    * @brief 터랫 공격
+    * @param posX 터렛의 posX
+    * @param posY 터렛의 posY
+    * @param damage 터렛의 대미지
+    */
+    public void TurretAttack(int posX, int posY, int damage)
+    {
+        Tile turrettile = null;
+        int count = 0;
+
+        turrettile = _hextile.GetCell(posX, posY);
+        _hextile.FindDistancesTo(turrettile);
+        for (int i = 0; i < _hextile.cells.Length; i++)
+        {
+            if (count >= 18) break;
+            if (_hextile.cells[i].Distance <= 2)
+            {
+                count++;
+                if (_hextile.cells[i]._unitObj != null)
+                {
+                    turrettile._builtObj.GetComponent<Turret>()._anim.SetTrigger("isAttacking");
+                    _hextile.cells[i]._unitObj._hp -= damage;
+                    refreshMainUI();
+                    if (_hextile.cells[i]._unitObj._hp <= 0)
+                    {
+                        // 파괴
+                        _hextile.cells[i]._unitObj.DestroyMyself();
+                        _hextile.cells[i]._unitObj = null;
+                        _hextile.TilecodeClear(_hextile.cells[i]);            // TODO : 코드 값 원래 값으로
+                    }
+                }
+            }
         }
     }
 

@@ -16,6 +16,7 @@ public class Turret : Built
         _code = (int)BUILT.ATTACK_BUILDING;
         _attackdistance = 2;
         maxCreateCount = 3;
+        attack = 5;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
 
         GameMng.I.AddDelegate(this.waitingCreate);
@@ -26,7 +27,7 @@ public class Turret : Built
         _name = string.Format("{0} 종족 터렛  (소유자 : {1})", GameMng.I.getUserTribe(_uniqueNumber), GameMng.I.getUserName(_uniqueNumber));
         _emoteSide.color = GetUserColor(_uniqueNumber);
 
-        switch((int)NetworkMng.getInstance.myTribe)
+        switch ((int)NetworkMng.getInstance.myTribe)
         {
             case 0:     // 숲 종족
                 _max_hp = 7;
@@ -91,39 +92,35 @@ public class Turret : Built
     {
         maintenance();
 
-        int around = 0;
-        if (GameMng.I.myTurn)
+        tilestate = gameObject.transform.parent.GetComponent<Tile>();
+        GameMng.I._hextile.FindDistancesTo(tilestate);
+        DynamicObject obj = null;
+
+        if ((GameMng.I.TurnCount % 2).Equals(0))
         {
-            tilestate = gameObject.transform.parent.GetComponent<Tile>();
-            GameMng.I._hextile.FindDistancesTo(tilestate);
-            DynamicObject obj = null;
+            NetworkMng.getInstance.SendMsg(string.Format("ATTACK_TURRET:{0}:{1}:{2}",
+            tilestate.PosX,
+            tilestate.PosZ,
+            attack));
+
+            _anim.SetTrigger("isAttacking");
             for (int i = 0; i < GameMng.I._hextile.cells.Length; i++)
             {
-                if (GameMng.I._hextile.cells[i].Distance <= _attackdistance && GameMng.I._hextile.cells[i]._unitObj != null)
+                if (GameMng.I._hextile.cells[i].Distance <= 2 && GameMng.I._hextile.cells[i]._unitObj != null && 
+                    !NetworkMng.getInstance.uniqueNumber.Equals(GameMng.I._hextile.cells[i]._unitObj._uniqueNumber))
                 {
-                    if (!GameMng.I._hextile.cells[i]._unitObj._uniqueNumber.Equals(NetworkMng.getInstance.uniqueNumber))
-                    {
-                        Debug.Log("around unit: " + around);
-                        around++;
-                        NetworkMng.getInstance.SendMsg(string.Format("ATTACK:{0}:{1}:{2}:{3}:{4}",
-                        tilestate.PosX,
-                        tilestate.PosZ,
-                        GameMng.I._hextile.cells[i].PosX,
-                        GameMng.I._hextile.cells[i].PosZ, attack));
-                        if (GameMng.I._hextile.cells[i]._unitObj != null) { obj = GameMng.I._hextile.cells[i]._unitObj; }
-                        _anim.SetTrigger("isAttacking");
+                    obj = GameMng.I._hextile.cells[i]._unitObj;
 
-                        obj._hp -= attack;
-                        if (obj._hp <= 0)
-                        {
-                            // 파괴
-                            obj.DestroyMyself();
-                            GameMng.I._hextile.GetCell(GameMng.I._hextile.cells[i].PosX, GameMng.I._hextile.cells[i].PosZ)._unitObj = null;
-                            GameMng.I._hextile.GetCell(GameMng.I._hextile.cells[i].PosX, GameMng.I._hextile.cells[i].PosZ)._builtObj = null;
-                            GameMng.I._hextile.TilecodeClear(GameMng.I._hextile.cells[i]);        // TODO : 코드 값 원래 값으로
-                        }
-                        obj = null;
+                    obj._hp -= attack;
+                    if (obj._hp <= 0)
+                    {
+                        // 파괴
+                        obj.DestroyMyself();
+                        GameMng.I._hextile.GetCell(GameMng.I._hextile.cells[i].PosX, GameMng.I._hextile.cells[i].PosZ)._unitObj = null;
+                        GameMng.I._hextile.GetCell(GameMng.I._hextile.cells[i].PosX, GameMng.I._hextile.cells[i].PosZ)._builtObj = null;
+                        GameMng.I._hextile.TilecodeClear(GameMng.I._hextile.cells[i]);        // TODO : 코드 값 원래 값으로
                     }
+                    obj = null;
                 }
             }
         }

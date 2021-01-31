@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class Turret : Built
 {
-    public int attack;              // 공격력
+    public static int attack;              // 공격력
 
     public Tile tilestate;          // 터렛이 올라가 있는 타일 정보
 
-    public int maintenanceCost = 0;   // 유지 비용
+    public static int maintenanceCost = 0;   // 유지 비용
 
     void Awake()
     {
@@ -32,16 +32,19 @@ public class Turret : Built
                 _max_hp = 7;
                 _hp = _max_hp;
                 attack = 5;
+                maintenanceCost = 2;
                 break;
             case 1:     // 물 종족
                 _max_hp = 7;
                 _hp = _max_hp;
                 attack = 5;
+                maintenanceCost = 3;
                 break;
             case 2:     // 사막 종족
                 _max_hp = 7;
                 _hp = _max_hp;
                 attack = 5;
+                maintenanceCost = 2;
                 break;
         }
     }

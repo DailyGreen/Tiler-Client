@@ -563,6 +563,13 @@ public class GameMng : MonoBehaviour
             //타일에 있는 건물의 코드의 따른 스프라이트 변경, 로고 text 켜고 끄기
             objImage.sprite = getObjSprite(tile._builtObj._code);
             NetworkMng.getInstance._soundGM.builtClick();
+            
+            if (obj._code == (int)BUILT.ATTACK_BUILDING)
+            {
+                damageText.text = Turret.attack.ToString();
+                maintCostText.text = Turret.maintenanceCost.ToString();
+                logoImage[2].sprite = costImg[0].sprite;
+            }
         }
 
         objectNameTxt.text = obj._name;

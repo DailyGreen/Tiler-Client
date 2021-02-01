@@ -412,7 +412,6 @@ public class GameMng : MonoBehaviour
         Color color;
 
         countDel();
-        refreshMainUI();
         UserListRefresh(uniqueNumber);
 
         // 유지비가 - 가 되었다면 디버프 행동 추가
@@ -449,6 +448,8 @@ public class GameMng : MonoBehaviour
             this.myTurn = true;
             this.turnDescText.text = "내 차례";
 
+            refreshMainUI();
+
             ColorUtility.TryParseHtmlString(CustomColor.TransColor(NetworkMng.getInstance.myColor), out color);
             turnDescImage.color = color;
 
@@ -463,8 +464,11 @@ public class GameMng : MonoBehaviour
 
             return;
         }
+
         cleanActList();
         this.myTurn = false;
+        refreshMainUI(false);
+
         for (int i = 0; i < NetworkMng.getInstance.v_user.Count; i++)
         {
             if (NetworkMng.getInstance.v_user[i].uniqueNumber.Equals(uniqueNumber))
@@ -492,18 +496,34 @@ public class GameMng : MonoBehaviour
 
         // 누르고 있던 오브젝트가 있다면 턴이 지나고 바꼈을 가능성이 있으니 새로고침 해주기
         DynamicObject obj = null;
-        if (selectedTile._unitObj != null) { obj = selectedTile._unitObj; }
-        else if (selectedTile._builtObj != null) { obj = selectedTile._builtObj; }
+        if (selectedTile._unitObj != null) { obj = selectedTile._unitObj; setMainInterface(); }
+        else if (selectedTile._builtObj != null) { 
+            obj = selectedTile._builtObj;  
+            if (obj._code.Equals(BUILT.ATTACK_BUILDING))
+                setMainInterface();
+            else
+                setMainInterface(true, false);
+        }
 
 
         // 내 턴이 아닐떄 건물이나 유닛이 어떤 행동을 했는지 새로고침
         if (obj != null)
         {
             objImage.sprite = getObjSprite(obj._code);
+            for (int i = 0; i < NetworkMng.getInstance.v_user.Count; i++)
+            {
+                if (NetworkMng.getInstance.v_user[i].uniqueNumber.Equals(obj._uniqueNumber))
+                {
+                    Color color;
+                    ColorUtility.TryParseHtmlString(CustomColor.TransColor((COLOR)NetworkMng.getInstance.v_user[i].color), out color);
+                    maskImage.color = color;
+                    break;
+                }
+            }
             objectNameTxt.text = obj._name;
             objectDescTxt.text = obj._desc;
             hpText.text = obj._hp + " / " + obj._max_hp;
-            setMainInterface();
+            
 
             if (onActList && myTurn)
             {
@@ -522,14 +542,15 @@ public class GameMng : MonoBehaviour
                 }
             }
         }
-        // 내 턴이 아닐때 타일에 어떤 반응이 있는지 새로고침
+        // 내 턴이 아닐때 타일에 어떤 반응이 있는지 새로고침 (빈타일임)
         else
         {
             // 이동했거나 사망했음. 빈타일임 (내가 한 행동이였다면 바꿀 필요가 없음)
             objImage.sprite = getObjSprite(selectedTile._code);
-            maskImage.color = Color.white;      // TODO : 오브젝트 주인꺼 색 뿌리기
+            maskImage.color = Color.white;
             objectNameTxt.text = selectedTile._name;
             objectDescTxt.text = selectedTile._desc;
+
             setMainInterface(false, false);
         }
     }
@@ -1095,6 +1116,7 @@ public class GameMng : MonoBehaviour
             if (obj._code.Equals(BUILT.CASTLE) && obj._uniqueNumber.Equals(NetworkMng.getInstance.uniqueNumber))
             {
                 NetworkMng.getInstance.SendMsg(string.Format("LOSE:{0}", NetworkMng.getInstance.uniqueNumber));
+                loseUI.SetActive(true);
             }
 
             // 파괴
@@ -1213,7 +1235,15 @@ public class GameMng : MonoBehaviour
     public void surrender()
     {
         NetworkMng.getInstance.SendMsg(string.Format("LOSE:{0}", NetworkMng.getInstance.uniqueNumber));
-        SceneManager.LoadScene("Lobby");    // TODO : Networkmange가 중복되서 버그남
+    }
+
+    /**
+     * @brief 게임에 져서 방을 나갈때 호출됨 LOSE : UI 에서 호출됨
+     */
+    public void exitGame()
+    {
+        Destroy(NetworkMng.getInstance.gameObject);
+        SceneManager.LoadScene("Lobby");
     }
 
     /**

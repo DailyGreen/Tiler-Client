@@ -346,16 +346,16 @@ public class NetworkMng : MonoBehaviour
             if (firstPlayerUniqueNumber != -1)
                 GameMng.I.UserExit(int.Parse(txt[1]));
 
-            int i;
-            for (i = 0; i < v_user.Count; i++)
-            {
-                if (v_user[i].uniqueNumber.Equals(int.Parse(txt[1])))
-                {
-                    break;
-                }
-            }
+            //int i;
+            //for (i = 0; i < v_user.Count; i++)
+            //{
+            //    if (v_user[i].uniqueNumber.Equals(int.Parse(txt[1])))
+            //    {
+            //        break;
+            //    }
+            //}
 
-            v_user.RemoveAt(i);
+            //v_user.RemoveAt(i);
 
             if (firstPlayerUniqueNumber == -1)    // 인게임이라면 사용안함
                 _roomGM.roomRefresh();

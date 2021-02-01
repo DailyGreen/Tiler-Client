@@ -70,7 +70,6 @@ public class GameMng : MonoBehaviour
     public bool myTurn = false;                     // 내 차례인지
     public int countHungry = 0;                     // 몇턴이나 굶었는지
 
-
     /**********
      * 게임 서브 매니저
      */
@@ -118,6 +117,8 @@ public class GameMng : MonoBehaviour
     UnityEngine.UI.Text goldText;               // 골드
     [SerializeField]
     UnityEngine.UI.Text foodText;               // 식량
+    [SerializeField]
+    UnityEngine.UI.Image foodImage;             // 식량 이미지
     [SerializeField]
     UnityEngine.UI.Text memText;                // 인원
     [SerializeField]
@@ -415,7 +416,11 @@ public class GameMng : MonoBehaviour
 
         // 유지비가 - 가 되었다면 디버프 행동 추가
         if (_food < 0)
+        {
             countHungry++;
+            if (_food > 0)
+                countHungry = 0;
+        }
 
         if (RandomCount == 0)
         {
@@ -589,6 +594,7 @@ public class GameMng : MonoBehaviour
 
             damageText.text = tile._unitObj._damage.ToString();
             maintCostText.text = tile._unitObj.maintenanceCost.ToString();
+            logoImage[2].sprite = foodImage.sprite;
         }
         else
         {

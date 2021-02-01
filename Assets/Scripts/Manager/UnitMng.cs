@@ -348,12 +348,15 @@ public class UnitMng : MonoBehaviour
                     if (nKind == 1)
                     {
                         GameMng.I.addGold(nResult);
+                        Debug.Log("골드를 " + nResult.ToString() + "만큼 얻음");
+                        GameMng.I.addLogMessage("시스템", string.Format("골드를 {0}만큼 획득했습니다.", nResult));
                     }
                     else if (nKind == 2)
                     {
                         GameMng.I.addFood(nResult);
+                        Debug.Log("식량을 " + nResult.ToString() + "만큼 얻음");
+                        GameMng.I.addLogMessage("시스템", string.Format("식량을 {0}만큼 획득했습니다.", nResult));
                     }
-
                     GameMng.I.targetTile._builtObj._hp -= 1;
                 }
                 if (GameMng.I.targetTile._builtObj._hp <= 0)

@@ -115,6 +115,8 @@ public class GameMng : MonoBehaviour
     [SerializeField]
     UnityEngine.UI.Text hpText;                 // HP 디테일
     [SerializeField]
+    UnityEngine.UI.Image DebuffImage;            // 디버프
+    [SerializeField]
     UnityEngine.UI.Text goldText;               // 골드
     [SerializeField]
     UnityEngine.UI.Text foodText;               // 식량
@@ -218,6 +220,8 @@ public class GameMng : MonoBehaviour
         _maxMem = 0;
 
         setMainInterface(false, false, false);
+
+        DebuffImage.enabled = false;
 
         if (NetworkMng.getInstance.uniqueNumber == NetworkMng.getInstance.firstPlayerUniqueNumber)
             myTurn = true;
@@ -417,9 +421,15 @@ public class GameMng : MonoBehaviour
 
         // 유지비가 - 가 되었다면 디버프 행동 추가
         if (_food < 0)
+        {
             countHungry++;
+            DebuffImage.enabled = true;
+        }
         else
+        {
             countHungry = 0;
+            DebuffImage.enabled = false;
+        }
 
         if (RandomCount == 0)
         {

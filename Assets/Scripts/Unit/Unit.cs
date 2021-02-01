@@ -55,6 +55,7 @@ public class Unit : DynamicObject
             int percent = Random.Range(1, 100);
             if (percent > 90)
             {
+                // 본인이 있던 타일 코드를 0으로 만들어줘야함
                 DestroyMyself();
             }
         }
@@ -72,6 +73,8 @@ public class Unit : DynamicObject
             // 체력 감소
             _hp -= 1;
         }
+        if (GameMng.I.countHungry >= 0)
+            _bActAccess = true;
     }
 
 

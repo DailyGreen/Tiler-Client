@@ -32,6 +32,10 @@ public class Desert_Worker : Worker
 
     void OnDestroy()
     {
+        if (buildingobj != null)
+        {
+            buildingobj.DestroyMyself();
+        }
         if (!(createCount > maxCreateCount - 1))
             GameMng.I.RemoveDelegate(waitingCreate);
         else

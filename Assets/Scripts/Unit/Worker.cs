@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Worker : Unit
 {
+    public Built buildingobj;       // 짓는 중인 건물 오브젝트
+
     public override void init()
     {
         _activity.Add(ACTIVITY.MOVE);

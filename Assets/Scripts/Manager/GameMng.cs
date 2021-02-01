@@ -119,13 +119,15 @@ public class GameMng : MonoBehaviour
     [SerializeField]
     UnityEngine.UI.Text foodText;               // 식량
     [SerializeField]
+    UnityEngine.UI.Image foodImage;             // 식량 이미지
+    [SerializeField]
     UnityEngine.UI.Text memText;                // 인원
     [SerializeField]
     UnityEngine.UI.Button[] actList;            // 행동
     [SerializeField]
     UnityEngine.UI.Text damageText;             // 데미지
     [SerializeField]
-    UnityEngine.UI.Text maintCostText;           // 유지 비용 UI
+    UnityEngine.UI.Text maintCostText;          // 유지 비용 UI
     [SerializeField]
     UnityEngine.UI.Image maskImage;             // 오브젝트 이미지 배경
     [SerializeField]
@@ -416,6 +418,8 @@ public class GameMng : MonoBehaviour
         // 유지비가 - 가 되었다면 디버프 행동 추가
         if (_food < 0)
             countHungry++;
+        else
+            countHungry = 0;
 
         if (RandomCount == 0)
         {
@@ -592,6 +596,7 @@ public class GameMng : MonoBehaviour
         }
         else
         {
+            logoImage[2].sprite = foodImage.sprite;
             obj = tile._builtObj;
             //타일에 있는 건물의 코드의 따른 스프라이트 변경, 로고 text 켜고 끄기
             objImage.sprite = getObjSprite(tile._builtObj._code);

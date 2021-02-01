@@ -10,7 +10,7 @@ public class Farm : Built
     {
         _name = "농장";
         _code = (int)BUILT.FARM;
-        maxCreateCount = 3;
+        maxCreateCount = 10;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
 
         GameMng.I.AddDelegate(this.waitingCreate);

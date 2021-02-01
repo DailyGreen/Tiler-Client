@@ -10,6 +10,7 @@ public class Turret : Built
 
     public static int maintenanceCost = 0;   // 유지 비용
 
+    public int _TurnCount = 0;
     void Awake()
     {
         _name = "터렛";
@@ -77,6 +78,7 @@ public class Turret : Built
             if (NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))
             {
                 init();
+                _TurnCount = 0;
                 GameMng.I.AddDelegate(maintenance);
             }
         }
@@ -95,38 +97,21 @@ public class Turret : Built
     {
         maintenance();
 
+        _TurnCount++;
+
         tilestate = gameObject.transform.parent.GetComponent<Tile>();
         GameMng.I._hextile.FindDistancesTo(tilestate);
-        DynamicObject obj = null;
 
-        if ((GameMng.I.TurnCount % 2).Equals(0))
+        if ((_TurnCount % 3).Equals(0))
         {
-            NetworkMng.getInstance.SendMsg(string.Format("ATTACK_TURRET:{0}:{1}:{2}:{3}",
+            _anim.SetTrigger("isAttacking");
+
+            NetworkMng.getInstance.SendMsg(string.Format("ATTACK_TURRET:{0}:{1}:{2}:{3}:{4}",
             tilestate.PosX,
             tilestate.PosZ,
             attack,
-            this._uniqueNumber));
-
-            _anim.SetTrigger("isAttacking");
-            for (int i = 0; i < GameMng.I._hextile.cells.Length; i++)
-            {
-                if (GameMng.I._hextile.cells[i].Distance <= 2 && GameMng.I._hextile.cells[i]._unitObj != null &&
-                    !NetworkMng.getInstance.uniqueNumber.Equals(GameMng.I._hextile.cells[i]._unitObj._uniqueNumber))
-                {
-                    obj = GameMng.I._hextile.cells[i]._unitObj;
-
-                    obj._hp -= attack;
-                    if (obj._hp <= 0)
-                    {
-                        // 파괴
-                        obj.DestroyMyself();
-                        GameMng.I._hextile.GetCell(GameMng.I._hextile.cells[i].PosX, GameMng.I._hextile.cells[i].PosZ)._unitObj = null;
-                        GameMng.I._hextile.GetCell(GameMng.I._hextile.cells[i].PosX, GameMng.I._hextile.cells[i].PosZ)._builtObj = null;
-                        GameMng.I._hextile.TilecodeClear(GameMng.I._hextile.cells[i]);        // TODO : 코드 값 원래 값으로
-                    }
-                    obj = null;
-                }
-            }
+            this._uniqueNumber,
+            _TurnCount));
         }
     }
 

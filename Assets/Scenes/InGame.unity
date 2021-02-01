@@ -1002,7 +1002,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: d85230f48e532db46a69e7c925e1abc9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 889e02caa7115154b9a0d61e192a2951, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -7583,6 +7583,7 @@ MonoBehaviour:
   hpText: {fileID: 1183078788406832961}
   goldText: {fileID: 1183078788979769994}
   foodText: {fileID: 1395890009}
+  foodImage: {fileID: 83585397}
   memText: {fileID: 1772453970}
   actList:
   - {fileID: 1183078789254342768}
@@ -12831,7 +12832,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2006621125}
   m_HandleRect: {fileID: 2006621124}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

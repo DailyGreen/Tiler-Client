@@ -50,23 +50,27 @@ public class Unit : DynamicObject
     {
         GameMng.I.minFood(maintenanceCost);
 
-        if (GameMng.I.countHungry > (NetworkMng.getInstance.v_user.Count * 3))
+        if (GameMng.I.countHungry > (NetworkMng.getInstance.v_user.Count * 9))
         {
-            // Çàµ¿ ºÒ´É
-            _bActAccess = false;
-        }
-        else if (GameMng.I.countHungry > 10)
-        {
-
+            int percent = Random.Range(1, 100);
+            if (percent > 90)
+            {
+                DestroyMyself();
+            }
         }
         else if (GameMng.I.countHungry > (NetworkMng.getInstance.v_user.Count * 6))
         {
-            // ·£´ý »ç¸Á (È®·ü %)
-            int diePercent = Random.Range(1, 100);
-            if (diePercent > 90)
+            // ·£´ý Çàµ¿ºÒ´É (È®·ü %)
+            int percent = Random.Range(1, 100);
+            if (percent > 80)
             {
-                // »ç¸Á
+                _bActAccess = false;
             }
+        }
+        else if (GameMng.I.countHungry > (NetworkMng.getInstance.v_user.Count * 3))
+        {
+            // Ã¼·Â °¨¼Ò
+            _hp -= 1;
         }
     }
 

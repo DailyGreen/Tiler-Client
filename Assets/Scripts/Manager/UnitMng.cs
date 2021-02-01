@@ -169,11 +169,8 @@ public class UnitMng : MonoBehaviour
 
         while (isRun)
         {
-            if (GameMng.I._hextile.GetCell(posX, posY)._unitObj._hp <= 0) break;
             if (Vector2.Distance(GameMng.I._hextile.GetCell(posX, posY)._unitObj.transform.localPosition, GameMng.I._hextile.GetCell(toX, toY).transform.localPosition) >= 0.01f)
             {
-                Debug.Log(posX);
-                Debug.Log(posY + "ASDFASDFASDFADFSAFD");
                 GameMng.I._hextile.GetCell(posX, posY)._unitObj.transform.localPosition = Vector2.Lerp(GameMng.I._hextile.GetCell(posX, posY)._unitObj.transform.localPosition, GameMng.I._hextile.GetCell(toX, toY).transform.localPosition, GameMng.I.unitSpeed * Time.deltaTime);        //타일 간 부드러운 이동
                 yield return null;
             }
@@ -249,6 +246,7 @@ public class UnitMng : MonoBehaviour
                 {
                     GameMng.I._UnitGM.reversalUnit(GameMng.I.selectedTile._unitObj.transform, GameMng.I.targetTile.transform);
                     GameMng.I.selectedTile._unitObj.GetComponent<Worker>().working();
+                    GameMng.I.selectedTile._unitObj.GetComponent<Worker>().buildingobj = GameMng.I.targetTile._builtObj;
                 }
 
                 GameMng.I.cleanSelected();
@@ -302,6 +300,7 @@ public class UnitMng : MonoBehaviour
         {
             GameMng.I._UnitGM.reversalUnit(GameMng.I._hextile.GetCell(byX, byY)._unitObj.transform, GameMng.I._hextile.GetCell(posX, posY).transform);
             GameMng.I._hextile.GetCell(byX, byY)._unitObj.GetComponent<Worker>().working();
+            GameMng.I._hextile.GetCell(byX, byY)._unitObj.GetComponent<Worker>().buildingobj = GameMng.I._hextile.GetCell(posX, posY)._builtObj;
         }
 
         GameMng.I.addActMessage(string.Format("{0}님의 건물이 지어지고 있습니다.", GameMng.I.getUserName(uniqueNumber)), posX, posY);

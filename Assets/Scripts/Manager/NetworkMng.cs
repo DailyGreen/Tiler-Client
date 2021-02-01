@@ -287,30 +287,45 @@ public class NetworkMng : MonoBehaviour
         else if (txt[0].Equals("PLUNDER"))
         {
             Debug.Log(txt[1] + "," + txt[2] + "," + txt[3] + "," + txt[4]);
-            // 공격한 사람 고유번호, 공격당한 사람 고유번호, 약달한 골드
-            switch (int.Parse(txt[1]))
+            // 공격한 사람 고유번호, 공격당한 사람 고유번호, 약달한 자원, 약탈한 자원종류, 공격당한 posX, 공격당한 posY
+            string attackername = GameMng.I.getUserName(int.Parse(txt[2]));
+            switch (int.Parse(txt[4]))
             {
                 case 0:
                     if (uniqueNumber.Equals(int.Parse(txt[1])))
                     {
+                        GameMng.I.addActMessage(string.Format("{0}에게 골드를 {1} 약탈했습니다.", attackername, txt[3]), int.Parse(txt[5]), int.Parse(txt[6]));
+                        GameMng.I.addLogMessage(attackername, string.Format("에게 골드를 {0} 약탈했습니다.", txt[3]));
                         GameMng.I.addGold(int.Parse(txt[3]));
                     }
                     else if (uniqueNumber.Equals(int.Parse(txt[2])))
                     {
+                        GameMng.I.addActMessage(string.Format("{0}에게 골드를 {1} 약탈당했습니다.", attackername, txt[3]), int.Parse(txt[5]), int.Parse(txt[6]));
+                        GameMng.I.addLogMessage(attackername, string.Format("에게 골드를 {0} 약탈당했습니다.", txt[3]));
                         GameMng.I.minGold(int.Parse(txt[3]));
                     }
                     break;
                 case 1:
                     if (uniqueNumber.Equals(int.Parse(txt[1])))
                     {
+                        GameMng.I.addActMessage(string.Format("{0}에게 식량을 {1} 약탈했습니다.", attackername, txt[3]), int.Parse(txt[5]), int.Parse(txt[6]));
+                        GameMng.I.addLogMessage(attackername, string.Format("에게 식량을 {0} 약탈했습니다.", txt[3]));
                         GameMng.I.addFood(int.Parse(txt[3]));
                     }
                     else if (uniqueNumber.Equals(int.Parse(txt[2])))
                     {
+                        GameMng.I.addActMessage(string.Format("{0}에게 식량을 {1} 약탈당했습니다.", attackername, txt[3]), int.Parse(txt[5]), int.Parse(txt[6]));
+                        GameMng.I.addLogMessage(attackername, string.Format("에게 식량을 {0} 약탈당했습니다.", txt[3]));
                         GameMng.I.minFood(int.Parse(txt[3]));
                     }
                     break;
             }
+        }
+        else if (txt[0].Equals("DIE_UNIT"))
+        {
+            GameMng.I._hextile.GetCell(int.Parse(txt[1]), int.Parse(txt[2]))._unitObj.DestroyMyself();
+            GameMng.I._hextile.GetCell(int.Parse(txt[1]), int.Parse(txt[2]))._unitObj = null;
+            GameMng.I._hextile.TilecodeClear(int.Parse(txt[1]), int.Parse(txt[2]));
         }
         else if (txt[0].Equals("DESTROY_BUILT"))
         {
@@ -346,16 +361,16 @@ public class NetworkMng : MonoBehaviour
             if (firstPlayerUniqueNumber != -1)
                 GameMng.I.UserExit(int.Parse(txt[1]));
 
-            int i;
-            for (i = 0; i < v_user.Count; i++)
-            {
-                if (v_user[i].uniqueNumber.Equals(int.Parse(txt[1])))
-                {
-                    break;
-                }
-            }
+            //int i;
+            //for (i = 0; i < v_user.Count; i++)
+            //{
+            //    if (v_user[i].uniqueNumber.Equals(int.Parse(txt[1])))
+            //    {
+            //        break;
+            //    }
+            //}
 
-            v_user.RemoveAt(i);
+            //v_user.RemoveAt(i);
 
             if (firstPlayerUniqueNumber == -1)    // 인게임이라면 사용안함
                 _roomGM.roomRefresh();

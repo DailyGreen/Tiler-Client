@@ -72,8 +72,11 @@ public class Turret : Built
 
             GameMng.I.RemoveDelegate(this.waitingCreate);
 
-            GameMng.I._hextile.GetCell(SaveX, SaveY)._unitObj.GetComponent<Worker>()._bActAccess = true;
-            GameMng.I._hextile.GetCell(SaveX, SaveY)._unitObj.GetComponent<Worker>()._anim.SetBool("isWorking", false);
+            Worker unitobj;
+            unitobj = GameMng.I._hextile.GetCell(SaveX, SaveY)._unitObj.GetComponent<Worker>();
+            unitobj._bActAccess = true;
+            unitobj._anim.SetBool("isWorking", false);
+            unitobj.buildingobj = null;
 
             if (NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))
             {
@@ -104,8 +107,6 @@ public class Turret : Built
 
         if ((_TurnCount % 3).Equals(0))
         {
-            _anim.SetTrigger("isAttacking");
-
             NetworkMng.getInstance.SendMsg(string.Format("ATTACK_TURRET:{0}:{1}:{2}:{3}:{4}",
             tilestate.PosX,
             tilestate.PosZ,

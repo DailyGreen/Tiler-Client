@@ -14,6 +14,8 @@ public class Unit : DynamicObject
 
     public string _unitDesc;            // 유닛 생성 시 나오는 설명
 
+    public int PosX, PosZ;
+
     /**
      * @brief 유닛 생성 대기 및 생성 함수
      */
@@ -55,8 +57,9 @@ public class Unit : DynamicObject
             int percent = Random.Range(1, 100);
             if (percent > 90)
             {
-                // 본인이 있던 타일 코드를 0으로 만들어줘야함
                 DestroyMyself();
+                GameMng.I._hextile.GetCell(PosX, PosZ)._unitObj = null;
+                GameMng.I._hextile.TilecodeClear(PosX, PosZ);
             }
         }
         else if (GameMng.I.countHungry > (NetworkMng.getInstance.v_user.Count * 6))
@@ -75,6 +78,13 @@ public class Unit : DynamicObject
         }
         if (GameMng.I.countHungry >= 0)
             _bActAccess = true;
+
+        if (_hp < 1)
+        {
+            DestroyMyself();
+            GameMng.I._hextile.GetCell(PosX, PosZ)._unitObj = null;
+            GameMng.I._hextile.TilecodeClear(PosX, PosZ);
+        }
     }
 
 

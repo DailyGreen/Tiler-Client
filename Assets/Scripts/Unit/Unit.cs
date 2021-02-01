@@ -30,12 +30,12 @@ public class Unit : DynamicObject
             if (this._code != (int)UNIT.FOREST_WORKER && this._code != (int)UNIT.SEA_WORKER && this._code != (int)UNIT.DESERT_WORKER)
             {
                 GameMng.I._hextile.GetCell(SaveX, SaveY)._builtObj.GetComponent<Built>()._bActAccess = true;
-                GameMng.I._hextile.GetCell(SaveX, SaveY)._builtObj._anim.SetTrigger("isComplete");
 
                 GameMng.I._hextile.GetCell(SaveX, SaveY)._builtObj.GetComponent<MillitaryBase>().CreatingUnitobj = null;
             }
             _desc = _unitDesc;
 
+            GameMng.I._hextile.GetCell(SaveX, SaveY)._builtObj._anim.SetTrigger("isComplete");
             _anim.SetTrigger("isSpawn");
 
             if (NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))

@@ -312,6 +312,12 @@ public class NetworkMng : MonoBehaviour
                     break;
             }
         }
+        else if (txt[0].Equals("DIE_UNIT"))
+        {
+            GameMng.I._hextile.GetCell(int.Parse(txt[1]), int.Parse(txt[2]))._unitObj.DestroyMyself();
+            GameMng.I._hextile.GetCell(int.Parse(txt[1]), int.Parse(txt[2]))._unitObj = null;
+            GameMng.I._hextile.TilecodeClear(int.Parse(txt[1]), int.Parse(txt[2]));
+        }
         else if (txt[0].Equals("DESTROY_BUILT"))
         {
             GameMng.I._BuiltGM.DestroyBuilt(int.Parse(txt[1]), int.Parse(txt[2]));

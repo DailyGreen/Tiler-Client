@@ -60,6 +60,7 @@ public class Unit : DynamicObject
                 DestroyMyself();
                 GameMng.I._hextile.GetCell(PosX, PosZ)._unitObj = null;
                 GameMng.I._hextile.TilecodeClear(PosX, PosZ);
+                NetworkMng.getInstance.SendMsg(string.Format("DIE_UNIT:{0}:{1}", PosX, PosZ));
             }
         }
         else if (GameMng.I.countHungry > (NetworkMng.getInstance.v_user.Count * 6))
@@ -84,6 +85,7 @@ public class Unit : DynamicObject
             DestroyMyself();
             GameMng.I._hextile.GetCell(PosX, PosZ)._unitObj = null;
             GameMng.I._hextile.TilecodeClear(PosX, PosZ);
+            NetworkMng.getInstance.SendMsg(string.Format("DIE_UNIT:{0}:{1}", PosX, PosZ));
         }
     }
 

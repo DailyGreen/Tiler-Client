@@ -61,8 +61,11 @@ public class Mine : Built
 
             GameMng.I.RemoveDelegate(this.waitingCreate);
 
-            GameMng.I._hextile.GetCell(SaveX, SaveY)._unitObj.GetComponent<Worker>()._bActAccess = true;
-            GameMng.I._hextile.GetCell(SaveX, SaveY)._unitObj.GetComponent<Worker>()._anim.SetBool("isWorking", false);
+            Worker unitobj;
+            unitobj = GameMng.I._hextile.GetCell(SaveX, SaveY)._unitObj.GetComponent<Worker>();
+            unitobj._bActAccess = true;
+            unitobj._anim.SetBool("isWorking", false);
+            unitobj.buildingobj = null;
 
             // ³»²¨¶ó¸é
             if (NetworkMng.getInstance.uniqueNumber.Equals(_uniqueNumber))

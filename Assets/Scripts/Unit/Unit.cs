@@ -12,6 +12,8 @@ public class Unit : DynamicObject
 
     public int maintenanceCost = 0;
 
+    public int PosX, PosZ;
+
     public string _unitDesc;            // 유닛 생성 시 나오는 설명
 
     /**
@@ -28,10 +30,10 @@ public class Unit : DynamicObject
             if (this._code != (int)UNIT.FOREST_WORKER && this._code != (int)UNIT.SEA_WORKER && this._code != (int)UNIT.DESERT_WORKER)
             {
                 GameMng.I._hextile.GetCell(SaveX, SaveY)._builtObj.GetComponent<Built>()._bActAccess = true;
-                GameMng.I._hextile.GetCell(SaveX, SaveY)._builtObj._anim.SetTrigger("isComplete");
 
                 GameMng.I._hextile.GetCell(SaveX, SaveY)._builtObj.GetComponent<MillitaryBase>().CreatingUnitobj = null;
             }
+            GameMng.I._hextile.GetCell(SaveX, SaveY)._builtObj._anim.SetTrigger("isComplete");
             _desc = _unitDesc;
 
             _anim.SetTrigger("isSpawn");
@@ -56,6 +58,9 @@ public class Unit : DynamicObject
             if (percent > 90)
             {
                 DestroyMyself();
+                GameMng.I._hextile.GetCell(PosX, PosZ)._unitObj = null;
+                GameMng.I._hextile.TilecodeClear(PosX, PosZ);
+                NetworkMng.getInstance.SendMsg(string.Format("DIE_UNIT:{0}:{1}", PosX, PosZ));
             }
         }
         else if (GameMng.I.countHungry > (NetworkMng.getInstance.v_user.Count * 6))
@@ -71,6 +76,17 @@ public class Unit : DynamicObject
         {
             // 체력 감소
             _hp -= 1;
+        }
+
+        if (GameMng.I.countHungry >= 0)
+            _bActAccess = true;
+
+        if (_hp < 1)
+        {
+            DestroyMyself();
+            GameMng.I._hextile.GetCell(PosX, PosZ)._unitObj = null;
+            GameMng.I._hextile.TilecodeClear(PosX, PosZ);
+            NetworkMng.getInstance.SendMsg(string.Format("DIE_UNIT:{0}:{1}", PosX, PosZ));
         }
     }
 

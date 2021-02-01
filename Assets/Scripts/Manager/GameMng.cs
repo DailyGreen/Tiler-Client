@@ -99,8 +99,7 @@ public class GameMng : MonoBehaviour
     [SerializeField]
     Sprite[] objSprite;                         // UI 이미지 적용을 위한 스프라이트 
     //0:광산 1: 농장 2: 터렛 3: 성 4: 풀 5: 모래 6: 흙 7: 화성? 8: 돌 9: 바다 10: 일꾼
-    [SerializeField]
-    GameObject mainBarObj;                      // 메인 바 UI
+    public GameObject mainBarObj;                      // 메인 바 UI
     [SerializeField]
     GameObject loseUI;                          // 패배 UI
     public GameObject winUI;                    // 승리 UI
@@ -114,6 +113,8 @@ public class GameMng : MonoBehaviour
     UnityEngine.UI.Text objectDescTxt;          // 선택 오브젝트 디테일
     [SerializeField]
     UnityEngine.UI.Text hpText;                 // HP 디테일
+    [SerializeField]
+    UnityEngine.UI.Image debuffImg;             // 디버프 이미지
     [SerializeField]
     UnityEngine.UI.Text goldText;               // 골드
     [SerializeField]
@@ -172,6 +173,8 @@ public class GameMng : MonoBehaviour
     GameObject myTurnEffect;                    // 내 턴 이펙트    
     [SerializeField]
     UnityEngine.UI.Text logsText;               // 로그 텍스트
+    [SerializeField]
+    GameObject turnSkipBT;                      // 턴 스킵 버튼
 
     // ---- 맵의 가로 세로 크기 읽기
     public int GetMapWidth
@@ -214,13 +217,20 @@ public class GameMng : MonoBehaviour
     public void init()
     {
         _gold = 100;
+        _food = 100;
         _nowMem = 0;
         _maxMem = 0;
+
+        goldText.text = _gold.ToString();
+        foodText.text = _food.ToString();
 
         setMainInterface(false, false, false);
 
         if (NetworkMng.getInstance.uniqueNumber == NetworkMng.getInstance.firstPlayerUniqueNumber)
+        {
             myTurn = true;
+            turnSkipBT.SetActive(true);
+        }
 
         // 턴제 함수에 빈 함수 넣어줌 (안 넣어주면 초기 실행시 에러나기 때문)
         AddDelegate(SampleTurnFunc);
@@ -230,6 +240,8 @@ public class GameMng : MonoBehaviour
 
         audioSlider.value = NetworkMng.getInstance._soundGM.audioVolume;
         effectSlider.value = NetworkMng.getInstance._soundGM.effectVolume;
+
+        debuffImg.enabled = false;
 
         // 누구 턴인지 색 변경
         Color color;
@@ -412,19 +424,23 @@ public class GameMng : MonoBehaviour
         Color color;
 
         countDel();
-        refreshMainUI();
         UserListRefresh(uniqueNumber);
 
         // 유지비가 - 가 되었다면 디버프 행동 추가
         if (_food < 0)
+        {
             countHungry++;
+            debuffImg.enabled = true;
+        }
         else
+        {
             countHungry = 0;
-
+            debuffImg.enabled = false;
+        }
         if (RandomCount == 0)
         {
             // 1~10턴 중에 랜덤
-            RandomCount = Random.Range(1, 11);
+            RandomCount = Random.Range(1, 51);
         }
         else
         {
@@ -448,6 +464,7 @@ public class GameMng : MonoBehaviour
         {
             this.myTurn = true;
             this.turnDescText.text = "내 차례";
+            refreshMainUI();
 
             ColorUtility.TryParseHtmlString(CustomColor.TransColor(NetworkMng.getInstance.myColor), out color);
             turnDescImage.color = color;
@@ -458,13 +475,17 @@ public class GameMng : MonoBehaviour
                 NetworkMng.getInstance.SendMsg(string.Format("SELECTING:{0}:{1}", selectedTile.PosX, selectedTile.PosZ));
 
             myTurnEffect.SetActive(true);
+            turnSkipBT.SetActive(true);
 
             NetworkMng.getInstance._soundGM.myTurnEffect();
 
             return;
         }
+
         cleanActList();
         this.myTurn = false;
+        refreshMainUI(false);
+
         for (int i = 0; i < NetworkMng.getInstance.v_user.Count; i++)
         {
             if (NetworkMng.getInstance.v_user[i].uniqueNumber.Equals(uniqueNumber))
@@ -475,6 +496,7 @@ public class GameMng : MonoBehaviour
                 turnDescImage.color = color;
 
                 myTurnEffect.SetActive(false);
+                turnSkipBT.SetActive(false);
 
                 break;
             }
@@ -492,18 +514,33 @@ public class GameMng : MonoBehaviour
 
         // 누르고 있던 오브젝트가 있다면 턴이 지나고 바꼈을 가능성이 있으니 새로고침 해주기
         DynamicObject obj = null;
-        if (selectedTile._unitObj != null) { obj = selectedTile._unitObj; }
-        else if (selectedTile._builtObj != null) { obj = selectedTile._builtObj; }
-
+        if (selectedTile._unitObj != null) { obj = selectedTile._unitObj; setMainInterface(); }
+        else if (selectedTile._builtObj != null)
+        {
+            obj = selectedTile._builtObj;
+            if (obj._code.Equals(BUILT.ATTACK_BUILDING))
+                setMainInterface();
+            else
+                setMainInterface(true, false);
+        }
 
         // 내 턴이 아닐떄 건물이나 유닛이 어떤 행동을 했는지 새로고침
         if (obj != null)
         {
             objImage.sprite = getObjSprite(obj._code);
+            for (int i = 0; i < NetworkMng.getInstance.v_user.Count; i++)
+            {
+                if (NetworkMng.getInstance.v_user[i].uniqueNumber.Equals(obj._uniqueNumber))
+                {
+                    Color color;
+                    ColorUtility.TryParseHtmlString(CustomColor.TransColor((COLOR)NetworkMng.getInstance.v_user[i].color), out color);
+                    maskImage.color = color;
+                    break;
+                }
+            }
             objectNameTxt.text = obj._name;
             objectDescTxt.text = obj._desc;
             hpText.text = obj._hp + " / " + obj._max_hp;
-            setMainInterface();
 
             if (onActList && myTurn)
             {
@@ -522,12 +559,12 @@ public class GameMng : MonoBehaviour
                 }
             }
         }
-        // 내 턴이 아닐때 타일에 어떤 반응이 있는지 새로고침
+        // 내 턴이 아닐때 타일에 어떤 반응이 있는지 새로고침 (빈타일 일때)
         else
         {
             // 이동했거나 사망했음. 빈타일임 (내가 한 행동이였다면 바꿀 필요가 없음)
             objImage.sprite = getObjSprite(selectedTile._code);
-            maskImage.color = Color.white;      // TODO : 오브젝트 주인꺼 색 뿌리기
+            maskImage.color = Color.white;
             objectNameTxt.text = selectedTile._name;
             objectDescTxt.text = selectedTile._desc;
             setMainInterface(false, false);
@@ -884,7 +921,25 @@ public class GameMng : MonoBehaviour
             actList[i].onClick.RemoveAllListeners();
             actList[i].gameObject.SetActive(false);
         }
-        setMainInterface(false);
+
+        if (selectedTile != null)
+        {
+            if (selectedTile._builtObj != null)
+            {
+                if (selectedTile._code == (int)BUILT.ATTACK_BUILDING)
+                {
+                    setMainInterface();
+                }
+                else
+                {
+                    setMainInterface(true, false);
+                }
+            }
+            else if (selectedTile._unitObj != null)
+            {
+                setMainInterface();
+            }
+        }
 
         if (myTurn)
             mainBarObj.SetActive(false);
@@ -1070,17 +1125,17 @@ public class GameMng : MonoBehaviour
         else if (_hextile.GetCell(toX, toY)._builtObj != null) obj = _hextile.GetCell(toX, toY)._builtObj;
         else return;
 
-        if (_hextile.GetCell(toX, toY)._builtObj != null)
+        if (_hextile.GetCell(toX, toY)._builtObj != null && obj._uniqueNumber.Equals(NetworkMng.getInstance.uniqueNumber))
         {
-            if (obj._uniqueNumber.Equals(NetworkMng.getInstance.uniqueNumber) && _hextile.GetCell(toX, toY)._code.Equals((int)BUILT.MINE))
+            if (_hextile.GetCell(toX, toY)._code.Equals((int)BUILT.MINE))
             {
-                NetworkMng.getInstance.SendMsg(string.Format("PLUNDER:{0}:{1}:{2}:{3}",
-                    _hextile.GetCell(posX, posY)._unitObj._uniqueNumber, _hextile.GetCell(toX, toY)._builtObj._uniqueNumber, _gold * (damage * 2) / 100, 1));
+                NetworkMng.getInstance.SendMsg(string.Format("PLUNDER:{0}:{1}:{2}:{3}:{4}:{5}",
+                    _hextile.GetCell(posX, posY)._unitObj._uniqueNumber, _hextile.GetCell(toX, toY)._builtObj._uniqueNumber, _gold * (damage * 2) / 100, 0, toX, toY));
             }
-            else
+            else if (_hextile.GetCell(toX, toY)._code.Equals((int)BUILT.FARM))
             {
-                NetworkMng.getInstance.SendMsg(string.Format("PLUNDER:{0}:{1}:{2}:{3}",
-                    _hextile.GetCell(posX, posY)._unitObj._uniqueNumber, _hextile.GetCell(toX, toY)._builtObj._uniqueNumber, _food * (damage * 2) / 100, 1));
+                NetworkMng.getInstance.SendMsg(string.Format("PLUNDER:{0}:{1}:{2}:{3}:{4}:{5}",
+                    _hextile.GetCell(posX, posY)._unitObj._uniqueNumber, _hextile.GetCell(toX, toY)._builtObj._uniqueNumber, _food * (damage * 2) / 100, 1, toX, toY));
             }
         }
 
@@ -1095,6 +1150,7 @@ public class GameMng : MonoBehaviour
             if (obj._code.Equals(BUILT.CASTLE) && obj._uniqueNumber.Equals(NetworkMng.getInstance.uniqueNumber))
             {
                 NetworkMng.getInstance.SendMsg(string.Format("LOSE:{0}", NetworkMng.getInstance.uniqueNumber));
+                loseUI.SetActive(true);
             }
 
             // 파괴
@@ -1213,7 +1269,15 @@ public class GameMng : MonoBehaviour
     public void surrender()
     {
         NetworkMng.getInstance.SendMsg(string.Format("LOSE:{0}", NetworkMng.getInstance.uniqueNumber));
-        SceneManager.LoadScene("Lobby");    // TODO : Networkmange가 중복되서 버그남
+    }
+
+    /**
+     * @brief 게임에 져서 방을 나갈때 호출됨 LOSE : UI 에서 호출됨
+     */
+    public void exitGame()
+    {
+        Destroy(NetworkMng.getInstance.gameObject);
+        SceneManager.LoadScene("Lobby");
     }
 
     /**
@@ -1230,6 +1294,15 @@ public class GameMng : MonoBehaviour
     public void changeEffectVolume(float vol)
     {
         NetworkMng.getInstance._soundGM.changeEffectVolume(vol);
+    }
+
+    /**
+     * @brief 자신의 턴을 넘기는 함수
+     */
+    public void myTurnSkipBT()
+    {
+        NetworkMng.getInstance.SendMsg("TURN");
+        myTurn = false;
     }
 
     /**

@@ -16,7 +16,6 @@ public class Forest_Worker : Worker
         _attackdistance = 1;
         maxCreateCount = 2;
         maintenanceCost = 1;
-        _damage = 0;
         _desc = "생성까지 " + (maxCreateCount - createCount) + "턴 남음";
 
         GameMng.I._BuiltGM.act = ACTIVITY.NONE;

@@ -64,6 +64,8 @@ public class BuiltMng : MonoBehaviour
                 GameMng.I.targetTile._unitObj = Child.GetComponent<Unit>();
                 GameMng.I.targetTile._unitObj.SaveX = GameMng.I.selectedTile.PosX;              // 생성하는 유닛에게 있는 위치 저장 변수에 해당 건물 위치값을 저장해줌
                 GameMng.I.targetTile._unitObj.SaveY = GameMng.I.selectedTile.PosZ;
+                GameMng.I.targetTile._unitObj.PosX = GameMng.I.targetTile.PosX;              // 생성하는 유닛에게 있는 본인위치 저장 변수에 유닛이 생성된 타일 위치값을 저장해줌
+                GameMng.I.targetTile._unitObj.PosZ = GameMng.I.targetTile.PosZ;
                 GameMng.I.targetTile._code = index;
                 GameMng.I.targetTile._unitObj._uniqueNumber = NetworkMng.getInstance.uniqueNumber;
 
@@ -228,6 +230,6 @@ public class BuiltMng : MonoBehaviour
     {
         GameMng.I._hextile.GetCell(posX, posY)._builtObj.DestroyMyself();
         GameMng.I._hextile.GetCell(posX, posY)._builtObj = null;
-        GameMng.I._hextile.GetCell(posX, posY)._code = (int)TILE.GRASS;
+        GameMng.I._hextile.TilecodeClear(GameMng.I._hextile.GetCell(posX, posY));
     }
 }

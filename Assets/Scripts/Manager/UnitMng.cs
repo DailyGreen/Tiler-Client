@@ -58,6 +58,7 @@ public class UnitMng : MonoBehaviour
 
             GameMng.I.cleanActList();
             GameMng.I.cleanSelected();
+            GameMng.I.mainBarObj.SetActive(false);
         }
     }
 
@@ -90,6 +91,9 @@ public class UnitMng : MonoBehaviour
             if (GameMng.I.hit.collider.tag.Equals("Tile") && GameMng.I.distanceOfTiles <= movedis && Tile.isEmptyTile(GameMng.I.targetTile))
             {
                 act = ACTIVITY.ACTING;
+
+                GameMng.I.selectedTile._unitObj.PosX = GameMng.I.targetTile.PosX;
+                GameMng.I.selectedTile._unitObj.PosZ = GameMng.I.targetTile.PosZ;
 
                 reversalUnit(GameMng.I.selectedTile._unitObj.transform, GameMng.I.targetTile.transform);
 
@@ -343,18 +347,20 @@ public class UnitMng : MonoBehaviour
                 if (GameMng.I.targetTile._builtObj._code == (int)BUILT.AIRDROP)
                 {
                     int nKind = Random.Range(1, 3);            // 1: °ñµå,  2: ½Ä·®
-                    int nResult = Random.Range(20, 60);
+                    int nResult = Random.Range(300, 600);
 
                     if (nKind == 1)
                     {
                         GameMng.I.addGold(nResult);
+                        GameMng.I.addLogMessage("½Ã½ºÅÛ", string.Format("°ñµå¸¦ {0}¸¸Å­ È¹µæÇß½À´Ï´Ù.", nResult));
                     }
                     else if (nKind == 2)
                     {
                         GameMng.I.addFood(nResult);
+                        GameMng.I.addLogMessage("½Ã½ºÅÛ", string.Format("½Ä·®À» {0}¸¸Å­ È¹µæÇß½À´Ï´Ù.", nResult));
                     }
 
-                    GameMng.I.targetTile._builtObj._hp -= 1;
+                    //GameMng.I.targetTile._builtObj._hp -= 1;
                 }
                 if (GameMng.I.targetTile._builtObj._hp <= 0)
                 {

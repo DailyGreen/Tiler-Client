@@ -175,6 +175,8 @@ public class GameMng : MonoBehaviour
     UnityEngine.UI.Text logsText;               // 로그 텍스트
     [SerializeField]
     GameObject turnSkipBT;                      // 턴 스킵 버튼
+    [SerializeField]
+    GameObject debufFoodIcon;                   // 음식 부족 디버프 아이콘
 
     // ---- 맵의 가로 세로 크기 읽기
     public int GetMapWidth
@@ -430,12 +432,16 @@ public class GameMng : MonoBehaviour
         if (_food < 0)
         {
             countHungry++;
-            debuffImg.enabled = true;
+            //debuffImg.enabled = true;
+            debuffImg.color = Color.white;
+            debufFoodIcon.SetActive(true);
         }
         else
         {
             countHungry = 0;
-            debuffImg.enabled = false;
+            //debuffImg.enabled = false;
+            debuffImg.color = Color.clear;
+            debufFoodIcon.SetActive(false);
         }
         if (RandomCount == 0)
         {
@@ -1037,10 +1043,12 @@ public class GameMng : MonoBehaviour
     {
         hpText.enabled = showHP;
         logoImage[0].enabled = showHP;
+        
         damageText.enabled = showDamage;
         logoImage[1].enabled = showDamage;
         maintCostText.enabled = showDamage;    // 유지비는 대미지와 마찬가지로 유닛만 가지고 있음
         logoImage[2].enabled = showDamage;
+        debuffImg.enabled = showDamage;
 
         objImage.enabled = showObj;
         objectNameTxt.enabled = showObj;

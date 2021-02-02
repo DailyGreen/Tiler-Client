@@ -20371,7 +20371,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1747131141066029
 GameObject:
   m_ObjectHideFlags: 0
@@ -22348,8 +22348,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c25d767c67a25994dac97c8416427fa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  URL: 
-  URL2: 
+  URL: https://github.com/DailyGreen
+  URL2: https://github.com/DailyGreen
 --- !u!114 &114011441427129987
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23758,15 +23758,23 @@ MonoBehaviour:
     m_FontStyle: 0
     m_BestFit: 1
     m_MinSize: 0
-    m_MaxSize: 32
+    m_MaxSize: 26
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "DEVELOPED BY MICHSKY\n\nTHANKS TO ALL MY SUPPORTERS \u2665\n\nDID YOU
-    LIKE THIS PACKAGE?\nYOU CAN SUBSCRIBE MY\nYOUTUBE CHANNEL FOR MORE."
+  m_Text: '- DAILYGREEN -
+
+
+    This game is not intended for commercial use, and
+    all resources used are not self-produced.
+
+    
+
+    It is designed for simple
+    study and is open source.'
 --- !u!114 &114189227426035977
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26600,14 +26608,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.1764706, g: 0.1764706, b: 0.1764706, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 34152d83f6ec7e046862b82e6452ef9d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3cab8a70963338a428049eff1ed263d3, type: 3}
   m_Type: 3
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -27895,7 +27903,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: d6dc5516bbfb4c542bd09a0b3e87c85d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 25b40af6fadd8f14187f70c1f5ed4c56, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -33005,10 +33013,10 @@ RectTransform:
   m_Father: {fileID: 224785291873104275}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -165, y: 35.00002}
-  m_SizeDelta: {x: -390, y: -129.99997}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -200, y: 20}
+  m_SizeDelta: {x: 150, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224039476612632523
 RectTransform:
@@ -34190,10 +34198,10 @@ RectTransform:
   m_Father: {fileID: 224785291873104275}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -70, y: 0}
+  m_SizeDelta: {x: 800, y: 450}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224291927622225799
 RectTransform:
@@ -34270,8 +34278,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -185, y: 30.050003}
-  m_SizeDelta: {x: 587, y: 359.9}
+  m_AnchoredPosition: {x: -158.1, y: 25.950012}
+  m_SizeDelta: {x: 483.6, y: 351.69995}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224293850507315689
 RectTransform:

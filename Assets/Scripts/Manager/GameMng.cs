@@ -1190,7 +1190,7 @@ public class GameMng : MonoBehaviour
             if (_hextile.cells[i].Distance <= 2)
             {
                 count++;
-                if (_hextile.cells[i]._unitObj != null && !_hextile.cells[i]._unitObj._uniqueNumber.Equals(uniqenum))
+                if (_hextile.cells[i]._unitObj != null && !_hextile.cells[i]._unitObj._uniqueNumber.Equals(uniqenum) && turrettile._builtObj.GetComponent<Turret>() != null)
                 {
                     turrettile._builtObj.GetComponent<Turret>()._anim.SetTrigger("isAttacking");
                     _hextile.cells[i]._unitObj._hp -= damage;

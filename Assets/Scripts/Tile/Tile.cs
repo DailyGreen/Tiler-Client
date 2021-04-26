@@ -16,6 +16,8 @@ public class Tile : Object
     [SerializeField]
     Sprite[] tileSprite;
     [SerializeField]
+    Sprite[] tiledecoSprite;
+    [SerializeField]
     SpriteRenderer tileSpriteRend;
 
     public Unit _unitObj;
@@ -25,8 +27,8 @@ public class Tile : Object
     {
         tile = this.GetComponent<GameObject>();
 
-        if (this._code >= (int)TILE.GRASS_START) { this.tileSpriteRend.sprite = tileSprite[this.tileuniquecode - (int)TILE.GRASS_START]; Debug.Log(this._code); }
-        else if (this._code > (int)TILE.CAN_MOVE && this._code < (int)BUILT.CASTLE) { this.tileSpriteRend.sprite = tileSprite[this._code - 1]; }
+        if (this.tileuniquecode >= (int)TILE.GRASS_TREE) { this.tileSpriteRend.sprite = tiledecoSprite[this.tileuniquecode - (int)TILE.GRASS_TREE]; }
+        else if (this._code >= (int)TILE.GRASS_START && this._code < (int)TILE.GRASS_TREE) { this.tileSpriteRend.sprite = tileSprite[this._code - (int)TILE.GRASS_START]; }
         else if (this._code < (int)TILE.CAN_MOVE) { this.tileSpriteRend.sprite = tileSprite[this._code]; }
 
         _name = "µ¶µµ´Â";

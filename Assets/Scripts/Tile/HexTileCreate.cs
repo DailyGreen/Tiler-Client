@@ -90,7 +90,7 @@ public class HexTileCreate : MonoBehaviour
                 cells[i] = child.GetComponent<Tile>();
 
                 // mapinfo.txt  에 start_point 코드일때 starttile 에 타일 스크립트 넣어줌
-                if (tilestate._code >= (int)TILE.GRASS_START)
+                if (tilestate._code >= (int)TILE.GRASS_START && tilestate._code < (int)TILE.GRASS_TREE)
                 {
                     starttile[index] = cells[i];
                     index++;

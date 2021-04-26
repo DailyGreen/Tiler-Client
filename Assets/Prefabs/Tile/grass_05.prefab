@@ -132,17 +132,25 @@ MonoBehaviour:
   _name: 
   _desc: 
   _activity: 
-  posX: 25
-  posY: -74
-  posZ: 50
+  posX: 0
+  posY: 0
+  posZ: 0
   distance: 0
-  tileuniquecode: 70
+  tileuniquecode: 0
   tileSprite:
   - {fileID: 21300000, guid: 3ef21efafde12d740babff416570ade2, type: 3}
   - {fileID: 21300000, guid: 94a80911aec957f4b8e56f8f1740842d, type: 3}
   - {fileID: 21300000, guid: 29bd7f6048d04e741900e369fef496bb, type: 3}
-  - {fileID: 21300000, guid: 289202d4dbe7e764d903b5ec7b1c908d, type: 3}
   - {fileID: 21300000, guid: c17dbb4a160abb4488f0253064625821, type: 3}
+  tiledecoSprite:
+  - {fileID: 21300000, guid: ce44b67118439c145aa68bbeecf92d7a, type: 3}
+  - {fileID: 21300000, guid: 589ad35d2372fc24a8cb804d15c6f87f, type: 3}
+  - {fileID: 21300000, guid: 7df0c622fc0fc3a4f8b44340018c9ad0, type: 3}
+  - {fileID: 21300000, guid: 51564a1d82ed53b4da8c6568136a951c, type: 3}
+  - {fileID: 21300000, guid: e3aa99260b442b14087a2eeb08ac0306, type: 3}
+  - {fileID: 21300000, guid: a92c6ecca99317b43a9c42907227c12e, type: 3}
+  - {fileID: 21300000, guid: f22b932707676a54faf6433035a2ec93, type: 3}
+  - {fileID: 21300000, guid: b284e4999e5db844283cbdcfba1aad8a, type: 3}
   - {fileID: 21300000, guid: 2a9a942a3dc771241a81022e8bfc1f7b, type: 3}
   - {fileID: 21300000, guid: 8ba4a4c5c1f9a3b4b8e3acfbe550e8b5, type: 3}
   - {fileID: 21300000, guid: 6cfdce3bc722d974c8f01704ff5f19da, type: 3}

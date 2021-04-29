@@ -19,9 +19,8 @@ public enum TILE
     GRASS = 0,
     SAND,
     DIRT,
-    MARS,
     STONE,
-    CAN_MOVE,           // 이전까지 움직일수 있는 타일
+    CAN_MOVE,
     GRASS_START = 'A',
     SAND_START = 'B',
     DIRT_START = 'C',
@@ -36,7 +35,7 @@ public enum TILE
     STONE_DECO2 = 'L',
     SEA_01 = 'M',
     SEA_02 = 'N',
-    SEA_03 = 'O',
+    SEA_03 = 'O'
 }
 
 /*

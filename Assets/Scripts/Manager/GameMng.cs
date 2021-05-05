@@ -15,7 +15,7 @@ public class GameMng : MonoBehaviour
      */
     [HideInInspector]
     public int _gold = 0;
-    [HideInInspector]
+    [SerializeField]
     public int _food = 0;
     [HideInInspector]
     public int _nowMem = 0;
@@ -219,7 +219,7 @@ public class GameMng : MonoBehaviour
     public void init()
     {
         _gold = 100;
-        _food = 100;
+        _food = 0;
         _nowMem = 0;
         _maxMem = 0;
 
@@ -438,7 +438,7 @@ public class GameMng : MonoBehaviour
         }
         else
         {
-            countHungry = 0;
+            countHungry = -1;
             //debuffImg.enabled = false;
             debuffImg.color = Color.clear;
             debufFoodIcon.SetActive(false);
@@ -1335,9 +1335,9 @@ public class GameMng : MonoBehaviour
             case (int)TILE.SEA_01:
                 return objSprite[9];
             case (int)TILE.SEA_02:
-                return objSprite[9];
+                return objSprite[38];
             case (int)TILE.SEA_03:
-                return objSprite[9];
+                return objSprite[39];
             case (int)UNIT.FOREST_WORKER:
                 return objSprite[12];
             case (int)UNIT.FOREST_SOLDIER_0:
@@ -1374,6 +1374,22 @@ public class GameMng : MonoBehaviour
                 return objSprite[28];
             case (int)UNIT.DESERT_WITCH_1:
                 return objSprite[29];
+            case (int)TILE.GRASS_TREE:
+                return objSprite[30];
+            case (int)TILE.GRASS_STONE:
+                return objSprite[31];
+            case (int)TILE.SAND_TREE:
+                return objSprite[32];
+            case (int)TILE.SAND_STONE:
+                return objSprite[33];
+            case (int)TILE.DIRT_TREE:
+                return objSprite[34];
+            case (int)TILE.DIRT_STONE:
+                return objSprite[35];
+            case (int)TILE.STONE_DECO1:
+                return objSprite[36];
+            case (int)TILE.STONE_DECO2:
+                return objSprite[37];
             case (int)BUILT.MINE:
                 setMainInterface(true, false);
                 return objSprite[0];

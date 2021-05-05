@@ -27,9 +27,9 @@ public class Tile : Object
     {
         tile = this.GetComponent<GameObject>();
 
-        if (this.tileuniquecode >= (int)TILE.GRASS_TREE) { this.tileSpriteRend.sprite = tiledecoSprite[this.tileuniquecode - (int)TILE.GRASS_TREE]; }
-        else if (this._code >= (int)TILE.GRASS_START && this._code < (int)TILE.GRASS_TREE) { this.tileSpriteRend.sprite = tileSprite[this._code - (int)TILE.GRASS_START]; }
-        else if (this._code < (int)TILE.CAN_MOVE) { this.tileSpriteRend.sprite = tileSprite[this._code]; }
+        if (this.tileuniquecode >= (int)TILE.GRASS_START && this.tileuniquecode < (int)TILE.GRASS_TREE) { this.tileSpriteRend.sprite = tileSprite[this.tileuniquecode - (int)TILE.GRASS_START]; }
+        else if (this.tileuniquecode >= (int)TILE.GRASS_TREE) { this.tileSpriteRend.sprite = tiledecoSprite[this.tileuniquecode - (int)TILE.GRASS_TREE]; }
+        else if (this.tileuniquecode < (int)TILE.CAN_MOVE) { this.tileSpriteRend.sprite = tileSprite[this._code]; }
 
         _name = "독도는";
         _desc = "우리땅";

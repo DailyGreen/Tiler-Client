@@ -35,7 +35,8 @@ public enum TILE
     STONE_DECO2 = 'L',
     SEA_01 = 'M',
     SEA_02 = 'N',
-    SEA_03 = 'O'
+    SEA_03 = 'O',
+    MARS = -1
 }
 
 /*

@@ -16,6 +16,8 @@ public class Unit : DynamicObject
 
     public string _unitDesc;            // 유닛 생성 시 나오는 설명
 
+    public bool _actdebuff = false;
+
     /**
      * @brief 유닛 생성 대기 및 생성 함수
      */
@@ -63,13 +65,14 @@ public class Unit : DynamicObject
                 NetworkMng.getInstance.SendMsg(string.Format("DIE_UNIT:{0}:{1}", PosX, PosZ));
             }
         }
-        else if (GameMng.I.countHungry > (NetworkMng.getInstance.v_user.Count * 6))
+        else if (GameMng.I.countHungry > (NetworkMng.getInstance.v_user.Count * 6) && !_actdebuff)
         {
             // 랜덤 행동불능 (확률 %)
             int percent = Random.Range(1, 100);
             if (percent > 80)
             {
                 _bActAccess = false;
+                _actdebuff = true;
             }
         }
         else if (GameMng.I.countHungry > (NetworkMng.getInstance.v_user.Count * 3))
@@ -78,8 +81,11 @@ public class Unit : DynamicObject
             _hp -= 1;
         }
 
-        if (GameMng.I.countHungry >= 0)
+        if (GameMng.I.countHungry < 0 && _actdebuff)
+        { 
             _bActAccess = true;
+            _actdebuff = false;
+        }
 
         if (_hp < 1)
         {

@@ -227,6 +227,7 @@ public class UnitMng : MonoBehaviour
             if (GameMng.I._gold >= cost)
             {
                 GameMng.I.selectedTile._unitObj._bActAccess = false;
+                Debug.Log("1" + GameMng.I.selectedTile._unitObj._bActAccess + "unit " + GameMng.I.selectedTile._unitObj);
 
                 GameObject Child = Instantiate(builtObj[index - 200], GameMng.I.targetTile.transform) as GameObject;
                 GameMng.I.targetTile._builtObj = Child.GetComponent<Built>();

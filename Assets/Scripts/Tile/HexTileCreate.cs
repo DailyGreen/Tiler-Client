@@ -73,38 +73,59 @@ public class HexTileCreate : MonoBehaviour
     void CreateHexTilePostion()
     {
         cells = new Tile[GameMng.I.GetMapHeight * GameMng.I.GetMapWidth];
-        for (int y = 0; y < GameMng.I.GetMapHeight; y++)
+        for (int y = -4; y < GameMng.I.GetMapHeight + 4; y++)
         {
-            tilestate.PosZ = y;
-            mapReadChar = mapreadlines[y].ToCharArray();
-            for (int x = 0; x < GameMng.I.GetMapWidth; x++)
+            if (y >= 0 && y < GameMng.I.GetMapWidth)
             {
-                tilestate.PosX = x - y / 2;
-                tilestate.PosY = tilestate.PosY;
-                if (mapReadChar[x] >= (char)TILE.GRASS_START) { tilestate._code = (int)mapReadChar[x]; }
-                else { tilestate._code = (int)Char.GetNumericValue(mapReadChar[x]); }
-                tilestate.tileuniquecode = tilestate._code;
-               
-                GameObject child = Instantiate(hextile) as GameObject;
-                child.transform.parent = parentObject.transform;
-                cells[i] = child.GetComponent<Tile>();
+                tilestate.PosZ = y;
+                mapReadChar = mapreadlines[y].ToCharArray();
+            }
+            for (int x = -4; x < GameMng.I.GetMapWidth + 4; x++)
+            {
+                if (x >= 0 && x < GameMng.I.GetMapWidth && y >= 0 && y < GameMng.I.GetMapWidth)
+                {
+                    tilestate.PosX = x - y / 2;
+                    tilestate.PosY = tilestate.PosY;
+                    if (mapReadChar[x] >= (char)TILE.GRASS_START) { tilestate._code = (int)mapReadChar[x]; }
+                    else { tilestate._code = (int)Char.GetNumericValue(mapReadChar[x]); }
+                    tilestate.tileuniquecode = tilestate._code;
 
-                // mapinfo.txt  에 start_point 코드일때 starttile 에 타일 스크립트 넣어줌
-                if (tilestate._code >= (int)TILE.GRASS_START && tilestate._code < (int)TILE.GRASS_TREE)
-                {
-                    starttile[index] = cells[i];
-                    index++;
-                }
-                child.name = x.ToString() + "," + y.ToString();
-                if (y % 2 == 0)
-                {
-                    child.transform.position = new Vector2(x * tileXOffset, y * tileYOffset);
+                    GameObject child = Instantiate(hextile) as GameObject;
+                    child.transform.parent = parentObject.transform;
+                    cells[i] = child.GetComponent<Tile>();
+
+                    // mapinfo.txt  에 start_point 코드일때 starttile 에 타일 스크립트 넣어줌
+                    if (tilestate._code >= (int)TILE.GRASS_START && tilestate._code < (int)TILE.GRASS_TREE)
+                    {
+                        starttile[index] = cells[i];
+                        index++;
+                    }
+                    child.name = x.ToString() + "," + y.ToString();
+                    if (y % 2 == 0)
+                    {
+                        child.transform.position = new Vector2(x * tileXOffset, y * tileYOffset);
+                    }
+                    else
+                    {
+                        child.transform.position = new Vector2(x * tileXOffset + tileXOffset / 2, y * tileYOffset);
+                    }
+                    SetNeighborTile(x, y, i++);
                 }
                 else
                 {
-                    child.transform.position = new Vector2(x * tileXOffset + tileXOffset / 2, y * tileYOffset);
+                    GameObject child = Instantiate(hextile) as GameObject;
+                    child.transform.parent = parentObject.transform;
+                    child.GetComponent<Tile>().tileuniquecode = (int)TILE.GRASS_TREE;
+                    child.name = x.ToString() + "," + y.ToString();
+                    if (y % 2 == 0)
+                    {
+                        child.transform.position = new Vector2(x * tileXOffset, y * tileYOffset);
+                    }
+                    else
+                    {
+                        child.transform.position = new Vector2(x * tileXOffset + tileXOffset / 2, y * tileYOffset);
+                    }
                 }
-                SetNeighborTile(x, y, i++);
             }
 
         }

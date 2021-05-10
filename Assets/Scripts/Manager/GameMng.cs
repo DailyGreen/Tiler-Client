@@ -219,7 +219,7 @@ public class GameMng : MonoBehaviour
     public void init()
     {
         _gold = 100;
-        _food = 0;
+        _food = 100;
         _nowMem = 0;
         _maxMem = 0;
 
